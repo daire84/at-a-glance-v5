@@ -4,6 +4,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="/static/css/calendar.css">
+<link rel="stylesheet" href="/static/css/version-manager.css">
 {% endblock %}
 
 {% block content %}
@@ -34,6 +35,9 @@
             {}
         {% endif %}
     </script>
+
+    <!-- Version Manager will be inserted here by JavaScript -->
+    <div id="version-manager"></div>
 
     {% include 'components/_project_header.html' %}
 
@@ -132,6 +136,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/version-manager.js"></script>
 <script src="/static/js/calendar-dragdrop.js"></script>
 <script src="/static/js/calendar.js"></script>
 <script>

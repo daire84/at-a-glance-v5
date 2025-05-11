@@ -1,11 +1,11 @@
 # routes/main.py
 import os
 import json
-from flask import Blueprint, render_template, redirect, url_for, flash, send_from_directory # <-- Add this line back
+from flask import Blueprint, render_template, redirect, url_for, flash, send_from_directory, request
 
-from utils.decorators import viewer_required # Absolute import
-from utils.helpers import get_project, get_project_calendar, DATA_DIR, logger, get_projects # Absolute import
-from utils.calendar_generator import calculate_department_counts, calculate_location_counts # Absolute import
+from utils.decorators import viewer_required
+from utils.helpers import get_project, get_project_calendar, DATA_DIR, logger, get_projects, get_project_versions
+from utils.calendar_generator import calculate_department_counts, calculate_location_counts
 
 main_bp = Blueprint('main', __name__)
 
@@ -23,9 +23,45 @@ def viewer(project_id):
     project = get_project(project_id)
     if not project:
         flash('Project not found', 'error')
-        return redirect(url_for('main.index')) # Use blueprint name
+        return redirect(url_for('main.index'))
 
-    calendar_data = get_project_calendar(project_id)
+    version_id = request.args.get('version')
+    
+    # Check if project is versioned
+    if project.get('isVersioned'):
+        versions = get_project_versions(project_id)
+        
+        # Get specific version if requested
+        if version_id:
+            version = next((v for v in versions if v['id'] == version_id), None)
+            
+            if version:
+                calendar_data = version.get('calendarData', {"days": []})
+            else:
+                flash('Version not found', 'error')
+                return redirect(url_for('main.viewer', project_id=project_id))
+        else:
+            # Get the latest published version
+            published_version = next(
+                (v for v in versions if v.get('isLatestPublished')), 
+                None
+            )
+            
+            if published_version:
+                calendar_data = published_version.get('calendarData', {"days": []})
+                version_id = published_version['id']
+            else:
+                # No published version yet
+                return render_template('viewer.html', 
+                    project=project, 
+                    calendar=None,
+                    no_published_version=True,
+                    versions=[],
+                    locations=[]
+                )
+    else:
+        # Fallback to existing behavior for non-versioned projects
+        calendar_data = get_project_calendar(project_id)
 
     # --- Load supporting data ---
     departments = []
@@ -64,10 +100,20 @@ def viewer(project_id):
     calendar_data = calculate_department_counts(calendar_data)
     calendar_data = calculate_location_counts(calendar_data)
 
-    # Note: Avoid saving calendar data here just for viewing
-    # save_project_calendar(project_id, calendar_data)
+    # Get all versions for the dropdown (only published ones)
+    all_versions = []
+    if project.get('isVersioned'):
+        all_versions = [v for v in versions if v.get('isPublished')]
+        # Sort by version number
+        all_versions.sort(key=lambda v: v.get('versionNumber', '0.0'))
 
-    return render_template('viewer.html', project=project, calendar=calendar_data, locations=locations)
+    return render_template('viewer.html', 
+        project=project, 
+        calendar=calendar_data, 
+        locations=locations,
+        versions=all_versions,
+        current_version_id=version_id
+    )
 
 @main_bp.route('/health')
 # @viewer_required # Apply if needed

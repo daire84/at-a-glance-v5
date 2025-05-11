@@ -3,6 +3,7 @@ import os
 import json
 import uuid
 import logging
+import shutil
 from datetime import datetime
 # Import necessary functions from calendar_generator directly
 # Adjust based on actual functions needed by these helpers
@@ -14,6 +15,9 @@ BASE_DIR = os.path.dirname(UTILS_DIR) # Project root (/app)
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 PROJECTS_DIR = os.path.join(DATA_DIR, 'projects')
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
+VERSIONS_FILE = 'versions.json'
+WORKSPACE_FILE = 'workspace.json'
+VERSION_DATA_DIR = 'versions'
 
 # Setup logger for helpers
 logger = logging.getLogger(__name__)
@@ -93,34 +97,55 @@ def save_project(project):
         logger.error(f"Error saving project {project.get('id', 'N/A')}: {str(e)}")
         raise # Re-raise the exception so route can handle it
 
+# Update the existing get_project_calendar function to use workspace
 def get_project_calendar(project_id):
-    """Get calendar data for a project"""
-    if not project_id: return {"days": []}
-    try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
-        calendar_file = os.path.join(project_dir, 'calendar.json')
+    """
+    Get calendar data for a project (from workspace)
+    """
+    workspace = get_project_workspace(project_id)
+    if workspace:
+        return workspace.get('calendarData', {"days": []})
+    else:
+        # Fallback to existing behavior for non-versioned projects
+        try:
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            calendar_file = os.path.join(project_dir, 'calendar.json')
 
-        if os.path.exists(calendar_file):
-            with open(calendar_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return {"days": []} # Return empty structure if no file
-    except Exception as e:
-        logger.error(f"Error getting calendar for project {project_id}: {str(e)}")
-        return {"days": []}
+            if os.path.exists(calendar_file):
+                with open(calendar_file, 'r') as f:
+                    return json.load(f)
+            return {"days": []}
+        except Exception as e:
+            logger.error(f"Error getting calendar for project {project_id}: {str(e)}")
+            return {"days": []}
 
+# Update the save_project_calendar function to save to workspace
 def save_project_calendar(project_id, calendar_data):
-    """Save calendar data for a project"""
-    if not project_id: raise ValueError("Project ID is required to save calendar")
+    """Save calendar data for a project (to workspace)"""
+    if not project_id:
+        raise ValueError("Project ID is required to save calendar")
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
-        os.makedirs(project_dir, exist_ok=True) # Ensure directory exists
-        calendar_file = os.path.join(project_dir, 'calendar.json')
+        # Check if project is versioned
+        project = get_project(project_id)
+        if project and project.get('isVersioned'):
+            # Save to workspace
+            workspace = get_project_workspace(project_id)
+            if workspace:
+                workspace['calendarData'] = calendar_data
+                save_project_workspace(project_id, workspace)
+                logger.info(f"Calendar data for project {project_id} saved to workspace")
+                return calendar_data
+        else:
+            # Fallback to existing behavior for non-versioned projects
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            os.makedirs(project_dir, exist_ok=True)
+            calendar_file = os.path.join(project_dir, 'calendar.json')
 
-        with open(calendar_file, 'w', encoding='utf-8') as f:
-            json.dump(calendar_data, f, indent=2, ensure_ascii=False)
+            with open(calendar_file, 'w', encoding='utf-8') as f:
+                json.dump(calendar_data, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Calendar data for project {project_id} saved successfully")
-        return calendar_data # Return the saved data
+            logger.info(f"Calendar data for project {project_id} saved successfully")
+            return calendar_data
     except Exception as e:
         logger.error(f"Error saving calendar data for project {project_id}: {str(e)}")
         raise
@@ -284,3 +309,358 @@ def save_global_data(filename, data):
     except Exception as e:
         logger.error(f"Error saving global data file {filename}: {e}")
         raise # Re-raise exception
+
+def migrate_project_to_versioned_structure(project_id):
+    """
+    Migrate an existing project to the new versioned structure
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if not os.path.exists(project_dir):
+            logger.error(f"Project directory not found: {project_id}")
+            return False
+            
+        # Load existing project data
+        main_file = os.path.join(project_dir, 'main.json')
+        calendar_file = os.path.join(project_dir, 'calendar.json')
+        
+        if not os.path.exists(main_file):
+            logger.error(f"Project main.json not found: {project_id}")
+            return False
+            
+        with open(main_file, 'r') as f:
+            project_data = json.load(f)
+            
+        # Load existing calendar data if it exists
+        calendar_data = {}
+        if os.path.exists(calendar_file):
+            with open(calendar_file, 'r') as f:
+                calendar_data = json.load(f)
+                
+        # Create version structure
+        version_id = str(uuid.uuid4())
+        version_data = {
+            "id": version_id,
+            "versionNumber": "1.0",
+            "notes": "Initial version (migrated from v4)",
+            "createdAt": datetime.utcnow().isoformat() + 'Z',
+            "publishedAt": datetime.utcnow().isoformat() + 'Z',
+            "isPublished": True,
+            "isLatestPublished": True
+        }
+        
+        # Create versions file
+        versions_file = os.path.join(project_dir, 'versions.json')
+        versions_data = {
+            "versions": [
+                {
+                    **version_data,
+                    "calendarData": calendar_data
+                }
+            ],
+            "latestPublishedId": version_id
+        }
+        
+        with open(versions_file, 'w') as f:
+            json.dump(versions_data, f, indent=2)
+            
+        # Create workspace file from current calendar data
+        workspace_file = os.path.join(project_dir, 'workspace.json')
+        workspace_data = {
+            "baseVersionId": version_id,
+            "lastModified": datetime.utcnow().isoformat() + 'Z',
+            "calendarData": calendar_data,
+            "isDraft": False
+        }
+        
+        with open(workspace_file, 'w') as f:
+            json.dump(workspace_data, f, indent=2)
+            
+        # Update project metadata to indicate versioned structure
+        project_data['isVersioned'] = True
+        project_data['currentWorkspaceVersion'] = version_id
+        
+        with open(main_file, 'w') as f:
+            json.dump(project_data, f, indent=2)
+            
+        logger.info(f"Successfully migrated project {project_id} to versioned structure")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error migrating project {project_id}: {str(e)}")
+        return False
+
+
+def get_project_versions(project_id):
+    """
+    Get all versions for a project
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        versions_file = os.path.join(project_dir, 'versions.json')
+        
+        if not os.path.exists(versions_file):
+            return []
+            
+        with open(versions_file, 'r') as f:
+            data = json.load(f)
+            
+        return data.get('versions', [])
+        
+    except Exception as e:
+        logger.error(f"Error getting versions for project {project_id}: {str(e)}")
+        return []
+
+
+def get_project_workspace(project_id):
+    """
+    Get the current workspace for a project
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        workspace_file = os.path.join(project_dir, 'workspace.json')
+        
+        if not os.path.exists(workspace_file):
+            # If no workspace exists, try to create one from calendar.json
+            calendar_file = os.path.join(project_dir, 'calendar.json')
+            if os.path.exists(calendar_file):
+                with open(calendar_file, 'r') as f:
+                    calendar_data = json.load(f)
+                    
+                workspace_data = {
+                    "baseVersionId": None,
+                    "lastModified": datetime.utcnow().isoformat() + 'Z',
+                    "calendarData": calendar_data,
+                    "isDraft": True
+                }
+                
+                with open(workspace_file, 'w') as f:
+                    json.dump(workspace_data, f, indent=2)
+                    
+                return workspace_data
+            else:
+                return {
+                    "baseVersionId": None,
+                    "lastModified": datetime.utcnow().isoformat() + 'Z',
+                    "calendarData": {"days": []},
+                    "isDraft": True
+                }
+                
+        with open(workspace_file, 'r') as f:
+            return json.load(f)
+            
+    except Exception as e:
+        logger.error(f"Error getting workspace for project {project_id}: {str(e)}")
+        return None
+
+
+def save_project_workspace(project_id, workspace_data):
+    """
+    Save the workspace for a project
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        workspace_file = os.path.join(project_dir, 'workspace.json')
+        
+        # Update last modified timestamp
+        workspace_data['lastModified'] = datetime.utcnow().isoformat() + 'Z'
+        workspace_data['isDraft'] = True
+        
+        with open(workspace_file, 'w') as f:
+            json.dump(workspace_data, f, indent=2)
+            
+        logger.info(f"Saved workspace for project {project_id}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error saving workspace for project {project_id}: {str(e)}")
+        return False
+
+
+def create_project_version(project_id, version_number, notes=None):
+    """
+    Create a new version from the current workspace
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        versions_file = os.path.join(project_dir, 'versions.json')
+        workspace_file = os.path.join(project_dir, 'workspace.json')
+        
+        # Get current workspace
+        if not os.path.exists(workspace_file):
+            logger.error(f"No workspace found for project {project_id}")
+            return None
+            
+        with open(workspace_file, 'r') as f:
+            workspace_data = json.load(f)
+            
+        # Get existing versions
+        versions_data = {"versions": [], "latestPublishedId": None}
+        if os.path.exists(versions_file):
+            with open(versions_file, 'r') as f:
+                versions_data = json.load(f)
+                
+        # Check if version number already exists
+        for version in versions_data['versions']:
+            if version.get('versionNumber') == version_number:
+                logger.error(f"Version {version_number} already exists for project {project_id}")
+                return None
+                
+        # Create new version
+        version_id = str(uuid.uuid4())
+        new_version = {
+            "id": version_id,
+            "versionNumber": version_number,
+            "notes": notes or "",
+            "createdAt": datetime.utcnow().isoformat() + 'Z',
+            "publishedAt": None,
+            "isPublished": False,
+            "isLatestPublished": False,
+            "calendarData": workspace_data.get('calendarData', {})
+        }
+        
+        # Add to versions list
+        versions_data['versions'].append(new_version)
+        
+        # Save versions file
+        with open(versions_file, 'w') as f:
+            json.dump(versions_data, f, indent=2)
+            
+        # Update workspace to reference this version
+        workspace_data['baseVersionId'] = version_id
+        workspace_data['isDraft'] = False
+        save_project_workspace(project_id, workspace_data)
+        
+        logger.info(f"Created version {version_number} for project {project_id}")
+        return new_version
+        
+    except Exception as e:
+        logger.error(f"Error creating version for project {project_id}: {str(e)}")
+        return None
+
+def publish_project_version(project_id, version_id):
+    """
+    Publish a specific version of a project
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        versions_file = os.path.join(project_dir, 'versions.json')
+        
+        if not os.path.exists(versions_file):
+            logger.error(f"No versions file found for project {project_id}")
+            return False
+            
+        with open(versions_file, 'r') as f:
+            versions_data = json.load(f)
+            
+        # Find the version to publish
+        version_to_publish = None
+        for version in versions_data['versions']:
+            # Unpublish any currently published version
+            if version['isLatestPublished']:
+                version['isLatestPublished'] = False
+                
+            # Find the version to publish
+            if version['id'] == version_id:
+                version_to_publish = version
+                
+        if not version_to_publish:
+            logger.error(f"Version {version_id} not found for project {project_id}")
+            return False
+            
+        # Mark version as published
+        version_to_publish['isPublished'] = True
+        version_to_publish['isLatestPublished'] = True
+        version_to_publish['publishedAt'] = datetime.utcnow().isoformat() + 'Z'
+        
+        # Update latest published ID
+        versions_data['latestPublishedId'] = version_id
+        
+        # Save updated versions
+        with open(versions_file, 'w') as f:
+            json.dump(versions_data, f, indent=2)
+            
+        logger.info(f"Published version {version_id} for project {project_id}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error publishing version for project {project_id}: {str(e)}")
+        return False
+
+# Add these functions to your helpers.py file
+
+def check_workspace_changes(project_id):
+    """
+    Check if workspace has unsaved changes compared to latest version
+    """
+    try:
+        workspace = get_project_workspace(project_id)
+        if not workspace:
+            return False
+            
+        versions = get_project_versions(project_id)
+        if not versions:
+            return True  # No versions means workspace has changes
+            
+        # Get latest version
+        latest_version = sorted(versions, key=lambda x: x.get('createdAt', ''), reverse=True)[0]
+        
+        # Compare calendar data
+        workspace_calendar = workspace.get('calendarData', {})
+        version_calendar = latest_version.get('calendarData', {})
+        
+        # Simple comparison - could be made more sophisticated
+        return json.dumps(workspace_calendar, sort_keys=True) != json.dumps(version_calendar, sort_keys=True)
+        
+    except Exception as e:
+        logger.error(f"Error checking workspace changes: {str(e)}")
+        return False
+
+
+def get_published_versions(project_id):
+    """
+    Get only published versions for a project (for viewer)
+    """
+    try:
+        all_versions = get_project_versions(project_id)
+        published_versions = [v for v in all_versions if v.get('isPublished', False)]
+        
+        # Sort by publish date, most recent first
+        published_versions.sort(key=lambda x: x.get('publishedAt', ''), reverse=True)
+        
+        return published_versions
+        
+    except Exception as e:
+        logger.error(f"Error getting published versions for project {project_id}: {str(e)}")
+        return []
+
+
+def get_latest_published_version(project_id):
+    """
+    Get the latest published version for a project
+    """
+    try:
+        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        versions_file = os.path.join(project_dir, 'versions.json')
+        
+        if not os.path.exists(versions_file):
+            return None
+            
+        with open(versions_file, 'r') as f:
+            versions_data = json.load(f)
+            
+        latest_published_id = versions_data.get('latestPublishedId')
+        if not latest_published_id:
+            return None
+            
+        # Find the version
+        for version in versions_data.get('versions', []):
+            if version['id'] == latest_published_id:
+                return version
+                
+        return None
+        
+    except Exception as e:
+        logger.error(f"Error getting latest published version for project {project_id}: {str(e)}")
+        return None
+

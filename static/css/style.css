@@ -806,3 +806,77 @@ footer {
   }
   /* Add more print-specific overrides as needed */
 }
+
+/* Add these notification styles to your static/css/style.css file */
+
+/* ============================================= */
+/* === NOTIFICATION STYLES ======================= */
+/* ============================================= */
+
+.notification-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  max-width: 400px;
+}
+
+.notification {
+  background-color: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slide-in 0.3s ease-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.notification.success {
+  border-color: var(--success-color);
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+.notification.error {
+  border-color: var(--error-color);
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.notification.warning {
+  border-color: var(--warning-color);
+  background-color: rgba(241, 196, 15, 0.1);
+}
+
+.notification.info {
+  border-color: var(--accent-color);
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.notification .close-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.5;
+  padding: 0.2rem;
+  line-height: 1;
+  margin-left: 1rem;
+}
+
+.notification .close-button:hover {
+  opacity: 1;
+}
+
+@keyframes slide-in {
+  from {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}

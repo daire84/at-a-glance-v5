@@ -3,14 +3,56 @@
 {% block title %}{{ project.title or 'Untitled Project' }} - Schedule, At a Glance!{% endblock %}
 
 {% block styles %}
-{# Use url_for for static files #}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+<style>
+    .version-selector {
+        margin-bottom: 1rem;
+        padding: 0.8rem;
+        background-color: var(--background-alt);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .version-selector label {
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    
+    .version-selector select {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    
+    .no-published-version {
+        text-align: center;
+        padding: 3rem;
+        background-color: var(--background-alt);
+        border-radius: 6px;
+        margin: 2rem auto;
+        max-width: 600px;
+    }
+    
+    .no-published-version h3 {
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+    
+    .no-published-version p {
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-{# Used admin-header and admin-actions classes for consistency, adjust if needed #}
 <div class="admin-header">
-    {# Maybe add the Project Title here? e.g., <h2>{{ project.title }} Viewer</h2> #}
     <div class="admin-actions">
         <button onclick="window.print();" class="print-button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -20,108 +62,127 @@
             </svg>
             Print
         </button>
-        {# Show Edit Calendar link only if user is admin #}
         {% if session.get('user_role') == 'admin' %}
-            {# Points to 'admin_calendar' function in 'admin' blueprint, passing project_id #}
             <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button">Edit Calendar</a>
         {% endif %}
-        {# Points to 'index' function in 'main' blueprint (Viewer Dashboard/Project List) #}
         <a href="{{ url_for('main.index') }}" class="button secondary">Back to Dashboard</a>
     </div>
 </div>
 
-{# --- Include Shared Components --- #}
-{# Ensure project, calendar, locations variables are available from the route #}
-{% if calendar and calendar.days %}
-<div class="calendar-container viewer-mode"> {# Keep viewer-mode class #}
-
-    {% include 'components/_project_header.html' %}
-    {% include 'components/_filter_panel.html' %} {# Include if viewers should also filter #}
-    {% include 'components/_department_counters.html' %}
-    {% include 'components/_location_areas.html' %}
-    {% include 'components/_location_counters.html' %}
-    {% include 'components/_calendar_mobile_controls.html' %}
-
-    <div class="calendar-table-wrapper">
-        <table class="calendar-table">
-            {# Include table header component if you made one, or keep it here #}
-             <thead>
-                <tr>
-                    <th class="date-col">Date</th>
-                    <th class="day-col">Day</th>
-                    <th class="main-unit-col">Main Unit</th>
-                    <th class="extras-col">E</th>
-                    <th class="featured-extras-col">FE</th>
-                    <th class="location-col">Location</th>
-                    <th class="sequence-col">Sequence</th>
-                    <th class="departments-col">Department Tags</th>
-                    <th class="notes-col">Notes</th>
-                    <th class="second-unit-col">Second Unit</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for day in calendar.days %}
-                {# Ensure this row structure matches the one in calendar.html if not using includes #}
-                {# Remember to use url_for('admin.admin_day', ...) if making rows clickable for admins #}
-                <tr class="calendar-row {% if day.dayType %}{{ day.dayType }}{% elif day.isWeekend %}weekend{% elif day.isHoliday %}holiday{% elif day.isHiatus %}hiatus{% elif day.isPrep %}prep{% elif day.isShootDay %}shoot{% endif %} {% if day.locationAreaId %}has-area-color{% endif %}"
-                data-date="{{ day.date }}"
-                data-area="{{ day.locationArea }}"
-                {% if day.locationAreaId and calendar.locationAreas %}
-                style="--row-area-color: {% for area in calendar.locationAreas %}{% if area.id == day.locationAreaId %}{{ area.color }}{% endif %}{% endfor %};"
-                data-color="{% for area in calendar.locationAreas %}{% if area.id == day.locationAreaId %}{{ area.color }}{% endif %}{% endfor %}"
-                {% endif %}
-                >
-                    {# Include table cell contents here - identical to calendar.html #}
-                    <td class="date-cell">
-                        <div class="date-display">{{ day.date }}</div>
-                        <div class="date-day">{{ day.dayOfWeek }}</div>
-                    </td>
-                    <td class="day-cell">{{ day.shootDay if day.shootDay else '' }}</td>
-                    <td class="main-unit-cell">{{ day.mainUnit }}</td>
-                    <td class="extras-cell">{{ day.extras if day.extras > 0 else '' }}</td>
-                    <td class="featured-extras-cell">{{ day.featuredExtras if day.featuredExtras > 0 else '' }}</td>
-                    <td class="location-cell">
-                        {% if day.location %}
-                            <div class="location-name">{{ day.location }}</div>
-                            {% if day.locationArea %}
-                                <div class="location-area">{{ day.locationArea }}</div>
-                            {% endif %}
-                        {% endif %}
-                    </td>
-                    <td class="sequence-cell">{{ day.sequence }}</td>
-                    <td class="departments-cell">
-                        {% for dept in day.departments %}
-                        {# Add logic here to style tags based on dept colors if desired #}
-                        <span class="department-tag">{{ dept }}</span>
-                        {% endfor %}
-                    </td>
-                    <td class="notes-cell">{{ day.notes }}</td>
-                    <td class="second-unit-cell">
-                        {% if day.secondUnit %}
-                        <div class="second-unit-content">
-                            <div class="second-unit-description">{{ day.secondUnit }}</div>
-                            {% if day.secondUnitLocation %}
-                            <div class="second-unit-location">{{ day.secondUnitLocation }}</div>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% if no_published_version %}
+    <div class="no-published-version">
+        <h3>No Published Version Available</h3>
+        <p>This project doesn't have any published versions yet.</p>
+        {% if session.get('user_role') == 'admin' %}
+            <p>Admins can access the calendar editor to create and publish versions.</p>
+            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button">Go to Calendar Editor</a>
+        {% else %}
+            <p>Please check back later or contact the project administrator.</p>
+        {% endif %}
     </div>
-</div>
+{% elif calendar and calendar.days %}
+    <div class="calendar-container viewer-mode">
+        {% if versions and project.isVersioned %}
+            <div class="version-selector">
+                <label for="version-select">Version:</label>
+                <select id="version-select" onchange="changeVersion(this.value)">
+                    {% for version in versions %}
+                        <option value="{{ version.id }}" 
+                            {% if version.id == current_version_id %}selected{% endif %}>
+                            Version {{ version.versionNumber }}
+                            {% if version.isLatestPublished %}(Latest){% endif %}
+                            - {{ version.publishedAt.split('T')[0] if version.publishedAt else 'Not published' }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+
+        {% include 'components/_project_header.html' %}
+        {% include 'components/_filter_panel.html' %}
+        {% include 'components/_department_counters.html' %}
+        {% include 'components/_location_areas.html' %}
+        {% include 'components/_location_counters.html' %}
+        {% include 'components/_calendar_mobile_controls.html' %}
+
+        <div class="calendar-table-wrapper">
+            <table class="calendar-table">
+                <thead>
+                    <tr>
+                        <th class="date-col">Date</th>
+                        <th class="day-col">Day</th>
+                        <th class="main-unit-col">Main Unit</th>
+                        <th class="extras-col">E</th>
+                        <th class="featured-extras-col">FE</th>
+                        <th class="location-col">Location</th>
+                        <th class="sequence-col">Sequence</th>
+                        <th class="departments-col">Department Tags</th>
+                        <th class="notes-col">Notes</th>
+                        <th class="second-unit-col">Second Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in calendar.days %}
+                    <tr class="calendar-row {% if day.dayType %}{{ day.dayType }}{% elif day.isWeekend %}weekend{% elif day.isHoliday %}holiday{% elif day.isHiatus %}hiatus{% elif day.isPrep %}prep{% elif day.isShootDay %}shoot{% endif %} {% if day.locationAreaId %}has-area-color{% endif %}"
+                    data-date="{{ day.date }}"
+                    data-area="{{ day.locationArea }}"
+                    {% if day.locationAreaId and calendar.locationAreas %}
+                    style="--row-area-color: {% for area in calendar.locationAreas %}{% if area.id == day.locationAreaId %}{{ area.color }}{% endif %}{% endfor %};"
+                    data-color="{% for area in calendar.locationAreas %}{% if area.id == day.locationAreaId %}{{ area.color }}{% endif %}{% endfor %}"
+                    {% endif %}
+                    >
+                        <td class="date-cell">
+                            <div class="date-display">{{ day.date }}</div>
+                            <div class="date-day">{{ day.dayOfWeek }}</div>
+                        </td>
+                        <td class="day-cell">{{ day.shootDay if day.shootDay else '' }}</td>
+                        <td class="main-unit-cell">{{ day.mainUnit }}</td>
+                        <td class="extras-cell">{{ day.extras if day.extras > 0 else '' }}</td>
+                        <td class="featured-extras-cell">{{ day.featuredExtras if day.featuredExtras > 0 else '' }}</td>
+                        <td class="location-cell">
+                            {% if day.location %}
+                                <div class="location-name">{{ day.location }}</div>
+                                {% if day.locationArea %}
+                                    <div class="location-area">{{ day.locationArea }}</div>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="sequence-cell">{{ day.sequence }}</td>
+                        <td class="departments-cell">
+                            {% for dept in day.departments %}
+                            <span class="department-tag">{{ dept }}</span>
+                            {% endfor %}
+                        </td>
+                        <td class="notes-cell">{{ day.notes }}</td>
+                        <td class="second-unit-cell">
+                            {% if day.secondUnit %}
+                            <div class="second-unit-content">
+                                <div class="second-unit-description">{{ day.secondUnit }}</div>
+                                {% if day.secondUnitLocation %}
+                                <div class="second-unit-location">{{ day.secondUnitLocation }}</div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% else %}
-    {# Included empty state #}
-    {% include 'components/_empty_calendar.html' %} {# Example include #}
+    {% include 'components/_empty_calendar.html' %}
 {% endif %}
 
 {% endblock %}
 
 {% block scripts %}
-{# Use url_for for static JS files if any are specific to viewer #}
-{# e.g., <script src="{{ url_for('static', filename='js/viewer.js') }}"></script> #}
-{# Include calendar.js if filtering/mobile controls are used #}
 <script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+<script>
+    function changeVersion(versionId) {
+        if (versionId) {
+            window.location.href = `/viewer/{{ project.id }}?version=${versionId}`;
+        }
+    }
+</script>
 {% endblock %}

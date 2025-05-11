@@ -6,7 +6,7 @@ import shutil
 from flask import Blueprint, jsonify, request # <-- Ensure this line is correct
 
 from utils.decorators import admin_required # Absolute import
-from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, PROJECTS_DIR, logger, update_all_projects_department_counts, recalculate_shoot_days # Absolute import
+from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, PROJECTS_DIR, logger, update_all_projects_department_counts, recalculate_shoot_days, get_project_versions, create_project_version, publish_project_version, get_project_workspace, save_project_workspace, migrate_project_to_versioned_structure # Absolute import
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -66,16 +66,36 @@ def api_project(project_id):
 def api_project_calendar(project_id):
     """Get or update project calendar"""
     if request.method == 'GET':
+        # Check if project is versioned
+        project = get_project(project_id)
+        if project and project.get('isVersioned'):
+            workspace = get_project_workspace(project_id)
+            if workspace:
+                return jsonify(workspace.get('calendarData', {"days": []}))
+        
+        # Fallback to existing behavior
         calendar_data = get_project_calendar(project_id)
         return jsonify(calendar_data)
     elif request.method == 'POST':
         try:
             calendar_data = request.get_json()
+            
+            # Check if project is versioned
+            project = get_project(project_id)
+            if project and project.get('isVersioned'):
+                # Save to workspace
+                workspace = get_project_workspace(project_id)
+                if workspace:
+                    workspace['calendarData'] = calendar_data
+                    save_project_workspace(project_id, workspace)
+                    return jsonify(calendar_data)
+            
+            # Fallback to existing behavior
             result = save_project_calendar(project_id, calendar_data)
             return jsonify(result)
         except Exception as e:
-             logger.error(f"API Error saving calendar for {project_id}: {e}")
-             return jsonify({'error': str(e)}), 500
+            logger.error(f"Error saving calendar for {project_id}: {e}")
+            return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/projects/<project_id>/calendar/generate', methods=['POST'])
 @admin_required
@@ -696,3 +716,140 @@ def api_special_date(project_id, special_date_id):
              return jsonify({'error': str(e)}), 500
 
 # Note: Serve static can stay in app.py or move to main_bp
+
+# Add these new routes to your routes/api.py file after the existing routes
+
+# --- Version API Routes ---
+@api_bp.route('/projects/<project_id>/versions', methods=['GET'])
+@admin_required
+def api_project_versions(project_id):
+    """List all versions for a project"""
+    try:
+        versions = get_project_versions(project_id)
+        return jsonify(versions)
+    except Exception as e:
+        logger.error(f"Error getting versions for project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/projects/<project_id>/versions/<version_id>', methods=['GET'])
+@admin_required
+def api_project_version(project_id, version_id):
+    """Get a specific version"""
+    try:
+        versions = get_project_versions(project_id)
+        version = next((v for v in versions if v['id'] == version_id), None)
+        
+        if not version:
+            return jsonify({'error': 'Version not found'}), 404
+            
+        return jsonify(version)
+    except Exception as e:
+        logger.error(f"Error getting version {version_id} for project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/projects/<project_id>/versions', methods=['POST'])
+@admin_required
+def api_create_project_version(project_id):
+    """Create a new version from current workspace"""
+    try:
+        data = request.get_json()
+        version_number = data.get('versionNumber')
+        notes = data.get('notes', '')
+        
+        if not version_number:
+            return jsonify({'error': 'Version number is required'}), 400
+            
+        # Check if version number already exists
+        existing_versions = get_project_versions(project_id)
+        if any(v['versionNumber'] == version_number for v in existing_versions):
+            return jsonify({'error': 'Version number already exists'}), 400
+            
+        new_version = create_project_version(project_id, version_number, notes)
+        
+        if not new_version:
+            return jsonify({'error': 'Failed to create version'}), 500
+            
+        return jsonify(new_version), 201
+        
+    except Exception as e:
+        logger.error(f"Error creating version for project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/projects/<project_id>/versions/<version_id>/publish', methods=['POST'])
+@admin_required
+def api_publish_project_version(project_id, version_id):
+    """Publish a specific version"""
+    try:
+        success = publish_project_version(project_id, version_id)
+        
+        if not success:
+            return jsonify({'error': 'Failed to publish version'}), 500
+            
+        return jsonify({'success': True, 'published': True})
+        
+    except Exception as e:
+        logger.error(f"Error publishing version {version_id} for project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/projects/<project_id>/workspace', methods=['GET'])
+@admin_required
+def api_get_workspace(project_id):
+    """Get current workspace"""
+    try:
+        workspace = get_project_workspace(project_id)
+        
+        if not workspace:
+            return jsonify({'error': 'No workspace found'}), 404
+            
+        return jsonify(workspace)
+        
+    except Exception as e:
+        logger.error(f"Error getting workspace for project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/projects/<project_id>/workspace', methods=['PUT'])
+@admin_required
+def api_update_workspace(project_id):
+    """Update workspace calendar data"""
+    try:
+        data = request.get_json()
+        workspace = get_project_workspace(project_id)
+        
+        if not workspace:
+            return jsonify({'error': 'No workspace found'}), 404
+            
+        # Update only the calendar data
+        workspace['calendarData'] = data
+        
+        success = save_project_workspace(project_id, workspace)
+        
+        if not success:
+            return jsonify({'error': 'Failed to save workspace'}), 500
+            
+        return jsonify({'success': True})
+        
+    except Exception as e:
+        logger.error(f"Error updating workspace for project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/projects/<project_id>/migrate-to-versioned', methods=['POST'])
+@admin_required
+def api_migrate_project(project_id):
+    """Migrate a project to versioned structure"""
+    try:
+        success = migrate_project_to_versioned_structure(project_id)
+        
+        if not success:
+            return jsonify({'error': 'Failed to migrate project'}), 500
+            
+        return jsonify({'success': True, 'migrated': True})
+        
+    except Exception as e:
+        logger.error(f"Error migrating project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
