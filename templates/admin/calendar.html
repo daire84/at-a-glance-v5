@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar Editor - Schedule, At a Glance!{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/calendar.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h2>Calendar Editor - {{ project.title or 'Untitled Project' }}</h2>
+    <div class="admin-actions">
+        <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="button">Edit Project Details</a>
+        <a href="{{ url_for('admin.admin_dates', project_id=project.id) }}" class="button">Special Dates</a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="button">Locations</a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="button">Departments</a>
+        <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="button secondary">View Calendar</a>
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+    </div>
+</div>
+
+{% if calendar and calendar.days %}
+<div class="calendar-container admin-calendar">
+    <input type="hidden" id="project-id" value="{{ project.id }}">
+    <!-- Hidden element for department data -->
+    <script id="department-data" type="application/json">
+        {% if calendar.departments %}
+            {
+                {% for dept in calendar.departments %}
+                "{{ dept.code }}": "{{ dept.color }}"{% if not loop.last %},{% endif %}
+                {% endfor %}
+            }
+        {% else %}
+            {}
+        {% endif %}
+    </script>
+
+    {% include 'components/_project_header.html' %}
+
+    <!-- Calendar Filter Panel -->
+    {% include 'components/_filter_panel.html' %}
+
+    <div class="calendar-actions">
+        <h3>Shoot Days</h3>
+        <div class="action-buttons">
+            <button class="button" id="regenerate-calendar">Regenerate Calendar</button>
+        </div>
+    </div>
+
+    {% include 'components/_department_counters.html' %}
+
+    {% include 'components/_location_areas.html' %}
+
+    {% include 'components/_location_counters.html' %}
+
+    {% include 'components/_calendar_mobile_controls.html' %}
+    
+    <div class="calendar-table-wrapper">
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th class="date-col">Date</th>
+                    <th class="day-col">Day</th>
+                    <th class="main-unit-col">Main Unit</th>
+                    <th class="extras-col">E</th>
+                    <th class="featured-extras-col">FE</th>
+                    <th class="location-col">Location</th>
+                    <th class="sequence-col">Sequence</th>
+                    <th class="departments-col">Department Tags</th>
+                    <th class="notes-col">Notes</th>
+                    <th class="second-unit-col">Second Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in calendar.days %}
+                <tr class="calendar-row {% if day.dayType %}{{ day.dayType }}{% elif day.isWeekend %}weekend{% elif day.isHoliday %}holiday{% elif day.isHiatus %}hiatus{% elif day.isPrep %}prep{% elif day.isShootDay %}shoot{% endif %} {% if day.locationArea %}has-area-color{% endif %}" 
+                data-date="{{ day.date }}" 
+                data-area="{{ day.locationArea }}"
+                {# Use locationAreaId for more reliable color lookup #}
+                {% if day.locationAreaId and calendar.locationAreas %}
+                style="--row-area-color: {% for area in calendar.locationAreas %}{% if area.id == day.locationAreaId %}{{ area.color }}{% endif %}{% endfor %};"
+                {# data-color attribute might not be needed if using CSS variable, but update it too #}
+                data-color="{% for area in calendar.locationAreas %}{% if area.id == day.locationAreaId %}{{ area.color }}{% endif %}{% endfor %}"
+                {% endif %}
+                >
+                    <td class="date-cell">
+                        <div class="date-display">{{ day.date }}</div>
+                        <div class="date-day">{{ day.dayOfWeek }}</div>
+                    </td>
+                    <td class="day-cell">{{ day.shootDay if day.shootDay else '' }}</td>
+                    <td class="main-unit-cell">{{ day.mainUnit }}</td>
+                    <td class="extras-cell">{{ day.extras if day.extras > 0 else '' }}</td>
+                    <td class="featured-extras-cell">{{ day.featuredExtras if day.featuredExtras > 0 else '' }}</td>
+                    <td class="location-cell">
+                        {% if day.location %}
+                            <div class="location-name">{{ day.location }}</div>
+                            {% if day.locationArea %}
+                                <div class="location-area">{{ day.locationArea }}</div>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="sequence-cell">{{ day.sequence }}</td>
+                    <td class="departments-cell">
+                        {% for dept in day.departments %}
+                        <span class="department-tag">{{ dept }}</span>
+                        {% endfor %}
+                    </td>
+                    <td class="notes-cell">{{ day.notes }}</td>
+                    <td class="second-unit-cell">
+                        {% if day.secondUnit %}
+                        <div class="second-unit-content">
+                            <div class="second-unit-description">{{ day.secondUnit }}</div>
+                            {% if day.secondUnitLocation %}
+                            <div class="second-unit-location">{{ day.secondUnitLocation }}</div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Calendar data is not available for this project.</p>
+    <p>Click "Regenerate Calendar" to create the calendar based on project dates.</p>
+    <button class="button" id="regenerate-calendar">Regenerate Calendar</button>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/calendar-dragdrop.js"></script>
+<script src="/static/js/calendar.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add click handler for regenerate calendar button
+        const regenerateBtn = document.getElementById("regenerate-calendar");
+        if (regenerateBtn) {
+            regenerateBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                
+                // Show confirmation dialog
+                if (confirm("WARNING: Regenerating the calendar will reset all day information to defaults based on project dates. This cannot be undone. Are you sure you want to proceed?")) {
+                    // Show loading state
+                    this.textContent = "Generating...";
+                    this.disabled = true;
+                    
+                    // Call the API to regenerate calendar
+                    fetch("/api/projects/{{ project.id }}/calendar/generate", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to regenerate calendar");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Reload page to show updated calendar
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        alert("Error: " + error.message);
+                        this.textContent = "Regenerate Calendar";
+                        this.disabled = false;
+                    });
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

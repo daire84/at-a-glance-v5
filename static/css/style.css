@@ -1,0 +1,808 @@
+/**
+ * =============================================================================
+ * Global Stylesheet (style.css)
+ * =============================================================================
+ *
+ * Purpose: Defines the core look and feel, layout, variables, resets,
+ * and global utility classes for the entire application.
+ * Includes base styles for typography, headers, footers, buttons,
+ * project cards, flash messages, etc.
+ *
+ * Organization:
+ * - CSS Variables (:root)
+ * - CSS Resets
+ * - Base Body & Container Styles
+ * - Main Header & Navigation Styles
+ * - Main Content Area Styles
+ * - Admin Header & Tabs Styles
+ * - Project List & Card Styles (Global Base)
+ * - Button Styles (Global Base)
+ * - Print Button Specifics
+ * - Mobile Menu Toggle (Placeholder/Hide)
+ * - Empty State Styles
+ * - Flash Message Styles (Global)
+ * - Hero Section Styles
+ * - Footer Styles
+ * - Responsive Styles (@media)
+ * - Print Styles (@media print)
+ * - Navigation Styles (Moved from base.html)
+ *
+ * Key Techniques Used:
+ * - CSS Variables for theming.
+ * - Basic CSS Reset.
+ * - Flexbox for layout (header, nav, actions).
+ * - Grid for project card layout.
+ * - `rem` and `px` units.
+ * - Transitions for hover effects.
+ * - Media Queries for responsiveness and print.
+ */
+
+/* Theme CSS Variables - Replace your current :root variables in static/css/style.css */
+
+:root {
+  /* Base Theme - Dark Mode by Default */
+  
+  /* Base colors */
+  --primary-color: #5b5b5c;        /* Slate blue-gray */
+  --primary-light: #514f54;        /* Lighter blue-gray */
+  --primary-dark: #656a6c;         /* Darker blue-gray */
+  --accent-color: #0b5fb3;         /* Muted blue */
+  --accent-light: #3e8fd1;         /* Lightened accent */
+  --accent-dark: #8a8c8d;          /* Darker muted blue */
+  
+  /* Text colors */
+  --text-color: #e0e2e7;           /* Light gray text */
+  --text-light: #a0a4ad;           /* Medium-light gray for secondary text */
+  --text-dark: #323233;            /* Dark text for special cases */
+  
+  /* Background colors */
+  --background-color: #1e1e20;     /* Dark background */
+  --background-alt: #2a2a2c;       /* Slightly lighter background */
+  
+  /* Other UI colors */
+  --border-color: #444548;         /* Dark theme borders */
+  --header-text-color: #ffffff;    /* White header text */
+  --title-text-color: #fb203d;     /* Red title color */
+  --page-title-color: white;       /* Will change with theme */
+
+  /* Status colors */
+  --success-color: #7eb58d;        /* Muted green */
+  --error-color: #d64c4c;          /* Muted red */
+  --warning-color: #e6a954;        /* Muted orange */
+}
+
+/* Light Theme Variables */
+body.light-theme {
+  /* Base colors */
+  --primary-color: #546e7a;        /* Blue-gray */
+  --primary-light: #78909c;        /* Lighter blue-gray */
+  --primary-dark: #37474f;         /* Darker blue-gray */
+  --accent-color: #29b6f6;         /* Bright blue */
+  --accent-light: #4fc3f7;         /* Lightened accent */
+  --accent-dark: #0288d1;          /* Darker blue */
+  
+  /* Text colors */
+  --text-color: #37474f;           /* Dark text */
+  --text-light: #546e7a;           /* Medium dark for secondary text */
+  --text-dark: #263238;            /* Very dark text for emphasis */
+  
+  /* Background colors */
+  --background-color: #f5f7f8;     /* Light background */
+  --background-alt: #ffffff;       /* White background */
+  
+  /* Other UI colors */
+  --border-color: #cfd8dc;         /* Light borders */
+  --header-text-color: #ffffff;    /* Keep white text for headers */
+  --title-text-color: #fb203d;     /* Keep red title color */
+  
+  /* Status colors - slightly muted for light theme */
+  --success-color: #4caf50;        /* Green */
+  --error-color: #f44336;          /* Red */
+  --warning-color: #ff9800;        /* Orange */
+}
+/* === CSS RESET === */
+/* Basic reset to remove default browser styling inconsistencies */
+*, *::before, *::after {
+  box-sizing: border-box; /* Consistent box model */
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ul, ol {
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+}
+
+/* === BASE BODY & CONTAINER STYLES === */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* System font stack */
+  line-height: 1.4;  /* Reduced line height for compactness */
+  color: var(--text-color); /* Default text color */
+  background-color: var(--background-color); /* Default background color */
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+  display: flex; /* Use flexbox for sticky footer layout */
+  flex-direction: column; /* Stack header, main, footer vertically */
+  font-size: 14px;  /* Reduced base font size */
+}
+
+/* Global container for centering content */
+.container {
+  width: 100%; /* Full width */
+  max-width: 1200px; /* Maximum width of content area */
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 0 0.75rem;  /* Reduced horizontal padding */
+}
+
+/* === MAIN HEADER & NAVIGATION STYLES === */
+/* Styles for the main site header */
+.main-header {
+  background-color: var(--primary-color); /* Header background */
+  color: var(--header-text-color); /* Ensure header text is white/light */
+  padding: 0.75rem 0;  /* Reduced vertical padding */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: relative; /* Needed for potential absolute positioning inside (e.g., mobile menu) */
+}
+
+/* Align header content */
+.main-header .container {
+  display: flex; /* Arrange items horizontally */
+  justify-content: space-between; /* Push logo/title and nav apart */
+  align-items: center; /* Align items vertically */
+}
+
+/* Header title style */
+.main-header h1 {
+  font-size: 1.3rem;  /* Reduced title size */
+  font-weight: 500; /* Medium weight */
+  color: var(--header-text-color);
+}
+
+/* Main navigation container */
+.main-nav {
+  display: flex; /* Use flex for horizontal layout */
+  justify-content: flex-end; /* Align nav items to the right */
+}
+
+.main-nav ul {
+  list-style: none; /* Remove bullet points */
+  padding: 0;       /* Remove default left padding */
+  margin: 0;        /* Remove default margins */
+  display: flex;    /* Arrange items horizontally */
+  align-items: center; /* Align items vertically in the center */
+  gap: 1em;         /* Add space between navigation items */
+}
+
+.main-nav li {
+  /* No specific styles needed for basic horizontal layout */
+  /* Ensure button li aligns well */
+  display: flex;
+  align-items: center;
+}
+
+.main-nav ul li a {
+  color: var(--header-text-color);
+}
+
+.main-nav a {
+  text-decoration: none; /* Remove underline */
+  color: var(--text-color); /* Use your theme's text color, or specify one like #333 */
+  padding: 0.5em 0;    /* Add some vertical padding */
+  transition: color 0.2s ease; /* Smooth transition for hover */
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: var(--accent-light); /* Use your theme's primary/accent color, or specify one */
+  /* Optional: Add underline back on hover */
+  text-decoration: underline;
+}
+
+/* Navigation list */
+.nav-list {
+  list-style: none; /* Remove default bullet points */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Arrange list items horizontally */
+  align-items: center; /* Align items vertically */
+}
+
+/* Individual navigation item */
+.nav-item {
+  margin-left: 1.5rem; /* Space between nav items */
+}
+
+/* Navigation link style */
+.nav-link { /* Applied to <a> tags */
+  color: var(--Top-text-color); /* Link color */
+  text-decoration: none; /* Remove underline */
+  padding: 0.4rem 0.8rem;  /* Reduced padding */
+  transition: background-color 0.3s, color 0.2s ease; /* Smooth hover effects */
+  border-radius: 4px; /* Slightly rounded corners for hover background */
+  font-size: 0.9rem;  /* Smaller font size for nav links */
+  position: relative; /* For potential pseudo-elements like underlines */
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
+  color: var(--accent-color); /* Change text color on hover */
+}
+
+/* Styles for navigation dropdowns (if implemented) */
+.nav-dropdown {
+  position: relative; /* Container for absolute positioned menu */
+}
+
+.nav-dropdown-toggle {
+  display: flex; /* Align icon with text */
+  align-items: center;
+  cursor: pointer; /* Indicate interactivity */
+  background: none; /* Remove default button styles */
+  border: none;
+  color: inherit; /* Use surrounding text color */
+  padding: 0.4rem 0.8rem; /* Match nav-link padding */
+  font-size: 0.9rem; /* Match nav-link font size */
+}
+
+/* Style the theme toggle button to blend in */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5em; /* Adjust padding to match links if needed */
+  font-size: 1.2em; /* Adjust icon size */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color); /* Match link color */
+}
+
+.theme-toggle-btn:hover,
+.theme-toggle-btn:focus {
+    color: var(--primary-color); /* Match link hover color */
+}
+
+.theme-icon {
+  font-size: 1.1em;
+}
+
+/* Add styles for the actual dropdown menu, icons etc. as needed */
+
+/* === MAIN CONTENT AREA STYLES === */
+/* Styles for the <main> element */
+main {
+  flex: 1; /* Allow main content to grow and push footer down */
+  padding: 1.5rem 0;  /* Reduced vertical padding */
+}
+
+/* Global heading styles (can be overridden by more specific rules) */
+h2 {
+  margin-bottom: 1.2rem;  /* Reduced space below h2 */
+  color: var(--Top-text-color); /* Use header text color */
+  font-size: 1.4rem;  /* Reduced size */
+}
+
+h3 {
+  margin-bottom: 0.8rem;  /* Reduced space below h3 */
+  color: var(--title-text-color); /* Specific title color */
+  font-size: 1.2rem;  /* Reduced size */
+}
+
+/* === ADMIN HEADER & TABS STYLES === */
+/* Header specific to admin sections */
+/* Admin header and tabs styling fixes */
+.admin-header h2 {
+  color: var(--page-title-color);
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.admin-tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.admin-tabs a {
+  padding: 0.6rem 1rem;
+  color: var(--header-text-color); /* Changed from --Top-text-color to ensure visibility */
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.2s, border-bottom-color 0.2s;
+}
+
+/* Add this new rule after the existing .admin-tabs a selector */
+body.light-theme .admin-tabs a {
+  color: var(--text-color); /* Dark text in light mode */
+}
+
+.admin-tabs a.active,
+.admin-tabs a:hover {
+  color: var(--accent-light); /* Changed from --accent-color for better visibility */
+  border-bottom-color: var(--accent-light);
+}
+
+/* Container for action buttons within admin sections */
+.admin-actions {
+  display: flex; /* Arrange buttons horizontally */
+  gap: 0.5rem;  /* Reduced space between buttons */
+}
+
+/* === PROJECT LIST & CARD STYLES (GLOBAL BASE) === */
+/* Container for a list of projects */
+.project-list {
+  margin-top: 1.5rem;  /* Reduced space above list */
+}
+
+/* Grid layout for project cards */
+.project-grid {
+  display: grid; /* Enable grid layout */
+  /* Create responsive columns: fill space, min 250px wide */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;  /* Reduced gap between cards */
+  margin-top: 0.8rem;  /* Reduced space above grid */
+}
+
+/* Individual project card */
+.project-card {
+  background-color: var(--background-alt); /* Use alt background */
+  border-radius: 6px;  /* Reduced corner rounding */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);  /* Reduced shadow */
+  overflow: hidden; /* Ensure content stays within rounded corners */
+  transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effects */
+  display: flex; /* Use flexbox for vertical layout */
+  flex-direction: column; /* Stack header, body, footer vertically */
+}
+
+.project-card:hover {
+  transform: translateY(-3px);  /* Slight lift effect */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);  /* Enhanced shadow */
+}
+
+/* Header section of the project card */
+.project-card-header {
+  display: flex; /* Arrange items horizontally */
+  justify-content: space-between; /* Push title and tag apart */
+  align-items: center; /* Align vertically */
+  padding: 0.8rem;  /* Reduced padding */
+  background-color: var(--primary-light); /* Use light primary color */
+  color: white; /* White text */
+}
+
+.project-card-header h4 {
+  margin: 0; /* Remove default margin */
+  font-size: 1.1rem;  /* Reduced title size */
+  font-weight: 500; /* Medium weight */
+}
+
+/* Version tag within the card header */
+.version-tag {
+  font-size: 0.75rem;  /* Reduced size */
+  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  padding: 0.2rem 0.4rem;  /* Reduced padding */
+  border-radius: 3px;  /* Reduced rounding */
+}
+
+/* Body section of the project card */
+.project-card-body {
+  padding: 0.8rem;  /* Reduced padding */
+  flex-grow: 1; /* Allow body to take up available space */
+}
+
+.project-card-body p {
+  margin-bottom: 0.4rem;  /* Reduced space below paragraphs */
+  font-size: 0.9rem;  /* Reduced text size */
+}
+
+/* Timestamp within the card body */
+.project-card-body .updated-at {
+  font-size: 0.8rem;  /* Reduced size */
+  color: var(--text-light); /* Use light text color */
+  margin-top: 0.4rem;  /* Reduced space above */
+}
+
+/* Footer section of the project card */
+.project-card-footer {
+  padding: 0.8rem;  /* Reduced padding */
+  border-top: 1px solid var(--border-color); /* Separator line */
+  display: flex; /* Arrange items horizontally */
+  justify-content: flex-end; /* Align items (buttons) to the right */
+  margin-top: auto; /* Push footer to bottom if body content is short */
+}
+
+/* Container for groups of buttons */
+.button-group {
+  display: flex; /* Arrange buttons horizontally */
+  gap: 0.4rem;  /* Reduced space between buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+}
+
+/* === BUTTON STYLES (GLOBAL BASE) === */
+/* Base style for all buttons */
+.button {
+  display: inline-block; /* Allow setting padding/margin */
+  background-color: var(--accent-color); /* Use accent color */
+  color: white; /* White text */
+  padding: 0.4rem 0.8rem;  /* Reduced padding */
+  border-radius: 3px;  /* Reduced rounding */
+  text-decoration: none; /* Remove underline for <a> tags styled as buttons */
+  border: none; /* Remove default border */
+  cursor: pointer; /* Indicate clickable */
+  font-size: 0.85rem;  /* Reduced font size */
+  transition: background-color 0.3s; /* Smooth hover effect */
+  text-align: center; /* Center text */
+  line-height: 1.4; /* Ensure consistent line height */
+}
+
+.button:hover {
+  background-color: var(--accent-dark); /* Darken on hover */
+}
+
+/* Secondary button style */
+.button.secondary {
+  background-color: var(--primary-light); /* Use light primary color */
+}
+
+.button.secondary:hover {
+  background-color: var(--primary-dark); /* Darken on hover */
+}
+
+/* Danger button style */
+.button.danger {
+  background-color: var(--error-color); /* Use error color */
+}
+
+.button.danger:hover {
+  background-color: #c43c3c;  /* Darker muted red */
+}
+
+/* Small button variant */
+.button.small {
+  padding: 0.2rem 0.4rem;  /* Further reduced padding */
+  font-size: 0.8rem;  /* Further reduced font size */
+}
+
+/* === PRINT BUTTON SPECIFICS === */
+/* Specific style for the print button */
+.print-button {
+  display: inline-flex; /* Use inline-flex for icon alignment */
+  align-items: center; /* Align icon and text vertically */
+  gap: 0.4rem;  /* Reduced space between icon and text */
+  background-color: var(--primary-light); /* Button background */
+  color: white; /* Button text color */
+  padding: 0.4rem 0.8rem;  /* Button padding */
+  border-radius: 3px;  /* Button rounding */
+  text-decoration: none; /* Remove underline */
+  border: none; /* Remove border */
+  cursor: pointer; /* Indicate clickable */
+  font-size: 0.85rem;  /* Button font size */
+  transition: background-color 0.3s; /* Smooth hover */
+}
+
+.print-button:hover {
+  background-color: var(--primary-dark); /* Darken on hover */
+}
+
+/* Style for SVG icons inside the print button */
+.print-button svg {
+  width: 16px;  /* Icon width */
+  height: 16px; /* Icon height */
+  fill: currentColor; /* Make SVG color match text color */
+}
+
+/* === MOBILE MENU TOGGLE === */
+/* Hide mobile menu toggle by default on larger screens */
+/* The !important might be necessary depending on specificity conflicts */
+
+* Mobile menu toggle button styling */
+.mobile-menu-toggle {
+  display: none; /* Hidden by default */
+  background: none;
+  border: none;
+  color: var(--header-text-color);
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+  z-index: 1001; /* Ensure it's above other elements */
+}
+
+.mobile-menu-toggle:hover,
+.mobile-menu-toggle:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-toggle .menu-icon {
+  display: block;
+}
+
+/* === EMPTY STATE STYLES === */
+/* Styles for displaying messages when a list is empty */
+.empty-state {
+  background-color: var(--background-alt); /* Use alt background */
+  border-radius: 6px;  /* Reduced rounding */
+  padding: 1.5rem;  /* Reduced padding */
+  text-align: center; /* Center text */
+  margin: 1.2rem 0;  /* Reduced vertical margin */
+  border: 1px dashed var(--border-color); /* Optional dashed border */
+}
+
+.empty-state p {
+  margin-bottom: 0.6rem;  /* Reduced space below paragraph */
+  font-size: 0.9rem;  /* Smaller font */
+  color: var(--text-light); /* Lighter text color */
+}
+
+.empty-state p:last-child {
+  margin-bottom: 0; /* Remove margin from last paragraph */
+}
+
+/* === FLASH MESSAGE STYLES (GLOBAL) === */
+/* Container for flash messages */
+.flash-messages {
+  margin-bottom: 1.2rem;  /* Reduced space below messages */
+  list-style: none; /* Remove bullets if using a list */
+  padding: 0; /* Remove default padding */
+}
+
+/* Individual flash message */
+.flash-message {
+  padding: 0.8rem;  /* Reduced padding */
+  border-radius: 3px;  /* Reduced rounding */
+  margin-bottom: 0.4rem;  /* Reduced space between messages */
+  position: relative; /* For positioning close button */
+  font-size: 0.9rem;  /* Smaller font */
+  border: 1px solid transparent; /* Base border */
+  border-left-width: 3px; /* Thicker left border for emphasis */
+}
+
+/* Success message style */
+.flash-message.success {
+  background-color: #e8f5e9; /* Light green background */
+  color: #2e7d32; /* Dark green text */
+  border-left-color: var(--success-color); /* Green left border */
+}
+
+/* Error message style */
+.flash-message.error {
+  background-color: #ffebee; /* Light red background */
+  color: #c62828; /* Dark red text */
+  border-left-color: var(--error-color); /* Red left border */
+}
+
+/* Warning message style */
+.flash-message.warning {
+  background-color: #fff3e0; /* Light orange background */
+  color: #ef6c00; /* Dark orange text */
+  border-left-color: var(--warning-color); /* Orange left border */
+}
+
+/* Close button within flash message */
+.flash-message .close-button {
+  position: absolute; /* Position relative to flash-message */
+  top: 0.4rem;  /* Reduced distance from top */
+  right: 0.4rem; /* Reduced distance from right */
+  background: none; /* No background */
+  border: none; /* No border */
+  font-size: 1.2rem;  /* Reduced button size */
+  cursor: pointer; /* Indicate clickable */
+  color: inherit; /* Use message text color */
+  opacity: 0.5; /* Semi-transparent */
+  padding: 0.2rem; /* Small clickable area */
+  line-height: 1; /* Prevent extra spacing */
+}
+
+.flash-message .close-button:hover {
+  opacity: 1; /* Fully opaque on hover */
+}
+
+/* === HERO SECTION STYLES === */
+/* Styles for large introductory sections */
+.hero {
+  text-align: center; /* Center text */
+  margin-bottom: 2rem;  /* Reduced space below */
+  padding: 1rem 0; /* Add some vertical padding */
+}
+
+.hero h2 {
+  font-size: 1.8rem;  /* Reduced size */
+  margin-bottom: 0.4rem;  /* Reduced space below */
+}
+
+.hero .subtitle {
+  font-size: 1.1rem;  /* Reduced size */
+  color: var(--text-light); /* Lighter text color */
+}
+
+.mobile-menu-toggle {
+  display: none; /* Hidden by default */
+}
+
+/* === FOOTER STYLES === */
+footer {
+  background-color: var(--primary-color); /* Footer background */
+  color: white; /* Footer text color */
+  padding: 0.8rem 0;  /* Reduced vertical padding */
+  text-align: center; /* Center text */
+  margin-top: auto; /* Stick to bottom (works with body display:flex) */
+  font-size: 0.9rem;  /* Smaller font */
+}
+
+/* === RESPONSIVE STYLES === */
+/* For smaller screens, show the menu toggle and adjust nav */
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: block !important; /* Important to override any inline styles */
+  }
+  
+  .main-nav {
+    display: none; /* Hide nav by default on mobile */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    z-index: 1000;
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .main-nav.active {
+    display: block; /* Show when active */
+  }
+  
+  .main-nav ul {
+    /* Override desktop styles for mobile menu */
+    display: none; /* Hide the nav list initially */
+    flex-direction: column; /* Stack items vertically */
+    position: absolute; /* Position it absolutely */
+    top: 60px; /* Position below the header (adjust as needed) */
+    right: 0;
+    background-color: var(--background-color, white); /* Correct background */
+    border: 1px solid var(--border-color, #ccc);
+    padding: 1em;
+    gap: 0; /* Adjust gap for vertical */
+    z-index: 1000; /* Ensure it's above other content */
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .main-nav.active ul { /* Add 'active' class via JS */
+    display: flex;
+  }
+
+  .main-nav li {
+    width: 100%; /* Make list items full width */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .main-nav ul li {
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .main-nav a {
+    display: block; /* Make links take full width of li */
+    padding: 0.75em 1em; /* Adjust padding for touch targets */
+    text-align: left;
+    width: 100%;
+    color: var(--text-color); /* Use your theme's text color, or specify one like #333 */
+  }
+
+  .main-nav ul li:last-child {
+    border-bottom: none;
+  }
+  
+  .main-nav ul li a {
+    display: block; /* Make links take full width of li */
+    padding: 0.75em 1em; /* Adjust padding for touch targets */
+    text-align: left;
+    color: var(--text-color); /* Apply the THEME text color, overriding the global --header-text-color */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Keep your separator */
+  }
+
+  /* Stack admin header items vertically */
+  .admin-header {
+    flex-direction: column; /* Stack vertically */
+    align-items: flex-start; /* Align items to the left */
+    gap: 0.8rem;  /* Reduced gap between items */
+  }
+
+  /* Make admin actions take full width and wrap */
+  .admin-actions {
+    width: 100%; /* Take full width */
+    justify-content: flex-start; /* Align buttons to the left */
+    flex-wrap: wrap; /* Allow buttons to wrap */
+  }
+
+  /* Make project grid single column */
+  .project-grid {
+    grid-template-columns: 1fr; /* Single column */
+  }
+
+  /* Display the mobile menu toggle button */
+  /* The !important might be necessary depending on specificity conflicts */
+  body .mobile-menu-toggle {
+      display: block !important;
+  }
+
+  /* Hide desktop navigation */
+  .main-nav {
+      /* Add styles here to hide .main-nav and potentially show a mobile version */
+      /* display: none; */
+  }
+
+  .mobile-menu-toggle {
+    display: block; /* Show the toggle button */
+    /* Style the button (background, border, color etc.) */
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001; /* Above the menu */
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  /* Styles applied only when printing */
+
+  /* Hide elements not relevant for print */
+  .main-header,
+  .admin-header .admin-actions, /* Hide only actions, keep title? */
+  .admin-tabs, /* Hide admin tabs */
+  .button, /* Hide general buttons */
+  .print-button, /* Hide the print button itself */
+  .project-card-footer, /* Hide card actions */
+  .flash-messages,
+  .mobile-menu-toggle,
+  footer {
+    display: none !important; /* Hide completely */
+  }
+
+  /* Adjust container for full print width */
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  /* Basic print typography and background */
+  body {
+    background-color: white !important; /* Force white background */
+    color: black !important; /* Force black text */
+    font-size: 10pt;  /* Set base print font size */
+    font-family: serif; /* Use a serif font for better print readability */
+    -webkit-print-color-adjust: exact; /* Ensure colors/backgrounds print */
+    print-color-adjust: exact;
+  }
+
+  /* Add page breaks after major components if needed */
+  /* Example: Ensure each calendar prints starting on a new page */
+  /* .calendar-container {
+    page-break-before: always;
+  } */
+
+  /* Adjust specific component styles for print */
+  h2, h3 {
+    color: black !important; /* Ensure headings are black */
+  }
+
+  .project-card {
+    box-shadow: none; /* Remove shadow */
+    border: 1px solid #ccc; /* Add simple border */
+    page-break-inside: avoid; /* Try to keep cards intact */
+  }
+
+  .project-card-header {
+    background-color: #eee !important; /* Light gray background */
+    color: black !important; /* Black text */
+  }
+
+  a {
+      text-decoration: none; /* Remove underlines from links */
+      color: inherit !important; /* Make links use surrounding text color */
+  }
+  /* Add more print-specific overrides as needed */
+}

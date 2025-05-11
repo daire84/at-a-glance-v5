@@ -1,0 +1,88 @@
+/**
+ * =============================================================================
+ * Admin Dashboard Stylesheet (dashboard.css)
+ * =============================================================================
+ *
+ * Purpose: Contains styles specific to the admin dashboard page layout and
+ * components, such as overriding project card styles for the admin
+ * context or styling dashboard-specific elements like stats boxes.
+ *
+ * Organization:
+ * - Admin Project Card Overrides/Enhancements
+ * - Dashboard Stats Boxes
+ * - Other Dashboard-Specific Layouts (Add as needed)
+ *
+ * Assumes global styles (style.css), button styles, and potentially
+ * other component styles (like project cards base) are already loaded.
+ */
+
+/* === ADMIN PROJECT CARD OVERRIDES/ENHANCEMENTS === */
+/* Apply styles specifically to project cards within an .admin-projects container */
+.admin-projects .project-card {
+    transition: all 0.2s ease; /* Smooth transition for hover effects */
+    /* Add base styles here ONLY if they differ significantly from global .project-card */
+    /* background-color: var(--background-alt); */
+    /* padding: 1rem; */
+    /* border: 1px solid var(--border-color); */
+}
+
+.admin-projects .project-card:hover {
+    /* Add a visual indicator on hover, specific to the admin view */
+    border-left: 3px solid var(--accent-color);
+    transform: none; /* Optionally disable the global lift effect */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* Subtle shadow adjustment */
+}
+
+/* Styles for the footer area within admin project cards */
+.admin-projects .project-card-footer {
+    /* Customize padding or border if needed */
+    /* padding: 0.8rem; */
+    /* border-top: 1px solid var(--border-color); */
+}
+
+/* Ensure buttons in the admin card footer are spaced out */
+.admin-projects .project-card-footer .button-group {
+    width: 100%; /* Make group take full width */
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space out buttons */
+    margin-top: 0.5rem; /* Adjusted spacing */
+    gap: 0.5rem; /* Space between buttons if they wrap */
+}
+
+/* === DASHBOARD STATS BOXES === */
+/* Container for displaying key statistics */
+.dashboard-stats {
+    display: grid; /* Use grid layout */
+    /* Responsive columns: fill space, min 150px wide */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem; /* Space between stat boxes */
+    margin-bottom: 2rem; /* Space below stats section */
+}
+
+/* Individual statistics box */
+.stat-box {
+    background-color: var(--background-alt, white); /* Use alt background */
+    padding: 1rem; /* Inner padding */
+    border-radius: 5px; /* Slightly rounded corners */
+    text-align: center; /* Center text */
+    border: 1px solid var(--border-color); /* Subtle border */
+}
+
+/* Style for the large statistic value */
+.stat-value {
+    font-size: 1.5rem; /* Large font size */
+    font-weight: bold; /* Bold weight */
+    display: block; /* Ensure it takes its own line */
+    color: var(--primary-color); /* Use primary color */
+    margin-bottom: 0.25rem; /* Small space below value */
+}
+
+/* Style for the label describing the statistic */
+.stat-label {
+    font-size: 0.9rem; /* Smaller font size */
+    color: var(--text-light); /* Lighter text color */
+}
+
+/* Add any other styles specific to the admin dashboard page */
+
+/* --- End Admin Dashboard Styles --- */

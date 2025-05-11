@@ -1,0 +1,1328 @@
+/**
+ * =============================================================================
+ * Calendar Stylesheet - Refactored & Enhanced Comments (Updated)
+ * =============================================================================
+ *
+ * Purpose: Styles for a production calendar interface, including project info,
+ * script details, counter boards, main calendar table, modals,
+ * filters, and print-specific layouts.
+ *
+ * Organization:
+ * - Global Container Styles
+ * - Project Information Header
+ * - Script Information Section
+ * - Calendar Actions (Buttons etc.)
+ * - Counter/Area "Boards" (Departments, Locations, Areas) - Consolidated
+ * - Calendar Table (Layout, Columns, Rows, Cells)
+ * - Specific Row Types (Weekend, Prep, Shoot etc.)
+ * - Cell Content Styling (Dates, Tags, etc.)
+ * - Admin Mode Drag & Drop Styles
+ * - Loading Indicator
+ * - Viewer Mode Adjustments
+ * - Filter Panel Styles
+ * - Print-Specific Styles (@media print)
+ * - Responsive Styles (@media max-width)
+ *
+ * Key Techniques Used:
+ * - CSS Variables (e.g., `var(--primary-color)`) for themeability.
+ * - Flexbox (`display: flex`) for arranging items in rows/columns.
+ * - Grid (`display: grid`) for creating flexible grid layouts.
+ * - `rem` units for scalable sizing.
+ * - `color-mix()` for blending colors dynamically.
+ * - Transitions for smooth hover effects.
+ * - Media Queries (`@media`) for responsive design and print styles.
+ * - `auto-fit` and `minmax()` in grid layout.
+ *
+ * Dependencies:
+ * - Assumes global styles (style.css) are loaded for variables, base styles.
+ * - Assumes common modal styles (modals.css) are loaded.
+ * - Assumes common form styles (forms.css) are loaded (for .form-check if needed).
+ */
+
+/* === GLOBAL CONTAINER STYLES === */
+.calendar-container {
+  background-color: var(--background-alt, white); /* Use alt background */
+  color: var(--text-color);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === PROJECT INFO HEADER === */
+.project-info-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.project-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.project-title {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 0.8rem;
+  justify-content: space-between;
+}
+
+.meta-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-bottom: 0.15rem;
+}
+
+.meta-value {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.version-badge {
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* === SCRIPT INFO === */
+.script-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  background-color: var(--background-alt); /* Consider var(--background-alt) or similar */
+  padding: 0.6rem 0.8rem;
+  border-radius: 3px;
+  margin-top: 0.8rem;
+  justify-content: space-between;
+  border: 1px solid var(--border-color); /* Add subtle border */
+}
+
+.script-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.script-label {
+  font-weight: 500;
+  color: var(--accent-light); /* Brighter blue for better visibility */
+  font-size: 0.85rem;
+}
+
+.script-value {
+  color: var(--text-color);
+  font-size: 0.85rem;
+}
+
+.script-color-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* === CALENDAR ACTIONS === */
+.calendar-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ========================================================================== */
+/* === COUNTER/AREA "BOARDS" (Departments, Locations, Areas) - CONSOLIDATED === */
+/* ========================================================================== */
+.department-counters,
+.location-counters,
+.location-areas {
+  margin-bottom: 1.2rem;
+  background-color: var(--background-alt);
+  border-color: var(--border-color);
+  padding: 0.8rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color); /* Add subtle border */
+}
+
+.counter-title,
+.areas-title {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--title-text-color);
+}
+
+.counter-grid,
+.area-tags {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.7rem 0.5rem;
+  color: var(--text-dark);
+}
+
+.counter-item,
+.area-tag {
+  border-radius: 3px;
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 3rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid rgba(0,0,0,0.05); /* Add subtle border */
+}
+
+.counter-item:hover,
+.area-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.counter-label {
+  font-size: 0.7rem;
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.counter-value,
+.area-count {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* ============================================= */
+/* === CALENDAR TABLE - CORE STYLES ========== */
+/* ============================================= */
+.calendar-table-wrapper {
+  overflow-x: auto;  /* Keep existing horizontal scroll */
+  overflow-y: auto;  /* Add vertical scroll */
+  max-height: 70vh;  /* Set a maximum height (70% of viewport height) */
+  border: 1px solid var(--border-color);  /* Add border for visual clarity */
+  border-radius: 6px;  /* Match your design aesthetic */
+  position: relative;  /* Establish positioning context */
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #dee2e6;
+  font-size: 0.85rem;
+  border-color: var(--border-color);
+}
+
+/* Ensure the table header sticks properly */
+.calendar-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Shadow effect for scrolled header - will be toggled by JS */
+.calendar-table thead.scrolled th {
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid #dee2e6;
+  border-color: var(--border-color);
+  color: var(--text-color);
+  padding: 0.3rem;
+  vertical-align: top;
+  text-align: left;
+  font-size: 0.75rem;
+}
+
+/* Add this rule to increase border contrast in light mode */
+body.light-theme .calendar-table th,
+body.light-theme .calendar-table td {
+  border-color: #ccc; /* Darker border for light mode */
+}
+
+/* Update table header styles to use variables */
+.calendar-table th {
+  background-color: var(--table-header-bg, var(--primary-color));
+  color: var(--table-header-color, white);
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 0.4rem 0.5rem;
+  /* Add a subtle bottom border for better visual separation */
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* Ensure tbody takes up enough space to enable scrolling */
+.calendar-table tbody {
+  min-height: 300px; /* Minimum height to enable scrolling */
+}
+
+/* === COLUMN WIDTHS - REFINED === */
+.date-col { width: 80px; }
+.day-col { width: 30px; text-align: center; }
+.main-unit-col { width: 170px; }
+.extras-col, .featured-extras-col { width: 25px; text-align: center; }
+.location-col { width: 110px; }
+.sequence-col { width: 70px; }
+.departments-col { width: 110px; }
+.notes-col { width: 160px; }
+.second-unit-col { width: 90px; }
+
+/* === SECOND UNIT COLUMN STYLES === */
+.second-unit-cell {
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.second-unit-description {
+  font-weight: 500;
+}
+
+.second-unit-location {
+  font-size: 0.7rem;
+  color: var(--text-dark);
+  font-style: italic;
+}
+
+.hide-col-second-unit .second-unit-col,
+.hide-col-second-unit .second-unit-cell {
+  display: none;
+}
+
+/* === ROW STYLING - COLOR CODED === */
+.calendar-row {
+  /* max-height: 3.5rem; */ /* Removing max-height allows content to define height */
+  min-height: 3.5rem; /* Set a minimum height instead */
+  transition: background-color 0.2s;
+  --row-area-color: transparent;
+}
+
+.calendar-row.has-area-color {
+  background-color: color-mix(in srgb, var(--row-area-color) 15%, white);
+}
+
+.calendar-row:hover {
+  background-color: color-mix(in srgb, var(--row-area-color) 25%, var(--background-color));
+}
+
+/* Update your existing row background color definitions */
+.calendar-row.weekend {
+  background-color: var(--weekend-color, color-mix(in srgb, #3c3c3c 75%, var(--row-area-color, var(--background-alt))));
+}
+.calendar-row.prep {
+  background-color: var(--prep-color, color-mix(in srgb, #2e3e2e 75%, var(--row-area-color, var(--background-alt))));
+}
+.calendar-row.shoot {
+  background-color: var(--shoot-color, color-mix(in srgb, #2e3e4e 75%, var(--row-area-color, var(--background-alt))));
+}
+.calendar-row.hiatus {
+  background-color: var(--hiatus-color, color-mix(in srgb, #4e2e2e 75%, var(--row-area-color, var(--background-alt))));
+}
+.calendar-row.holiday {
+  background-color: var(--holiday-color, color-mix(in srgb, #4e3e2e 75%, var(--row-area-color, var(--background-alt))));
+}
+.calendar-row.working-weekend {
+  background-color: var(--working-weekend-color, color-mix(in srgb, #2e4e2e 75%, var(--row-area-color, var(--background-alt))));
+}
+
+.calendar-row.working-weekend .date-cell::after {
+  content: "Working";
+  display: block;
+  font-size: 0.65rem;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 1px 3px;
+  border-radius: 2px;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 50px;
+}
+
+.week-number {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--accent-color);
+  background-color: rgba(var(--accent-color-rgb, 11, 95, 179), 0.15);
+  border-radius: 2px;
+  padding: 1px 3px;
+  display: inline-block;
+  margin-top: 3px;
+}
+
+.calendar-row.filtered-hidden {
+  display: none;
+}
+
+/* Make location area colors more specific */
+.calendar-row.has-area-color.weekend,
+.calendar-row.has-area-color.prep,
+.calendar-row.has-area-color.shoot,
+.calendar-row.has-area-color.hiatus,
+.calendar-row.has-area-color.holiday,
+.calendar-row.has-area-color.working-weekend {
+  background-color: color-mix(in srgb, var(--row-area-color) 30%, var(--background-alt));
+}
+
+/* Override the standard row colors when an area is present */
+body .calendar-row.has-area-color.weekend,
+body .calendar-row.has-area-color.prep,
+body .calendar-row.has-area-color.shoot,
+body .calendar-row.has-area-color.hiatus,
+body .calendar-row.has-area-color.holiday,
+body .calendar-row.has-area-color.working-weekend {
+  background-color: color-mix(in srgb, var(--row-area-color) 40%, var(--weekend-color));
+}
+
+/* === CELL CONTENT STYLING - COMPACT === */
+.date-cell {
+  font-weight: 500;
+}
+
+.date-display {
+  color: var(--text-color);
+  margin-bottom: 0.15rem;
+  font-size: 0.75rem;
+}
+
+.date-day {
+  font-size: 0.7rem;
+  color: var(--text-light);
+}
+
+.date-description {
+  color: var(--text-light);
+  font-size: 0.7rem;
+}
+
+.day-cell {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.main-unit-cell {
+  font-weight: 500;
+  font-size: 0.8rem; /* Slightly smaller for more content */
+  white-space: pre-line;
+  line-height: 1.3; /* Slightly increased line height */
+  color: var(--text-color);
+}
+
+/* Main Unit Textarea Styling */
+textarea#mainUnit {
+  font-family: inherit; /* Match your form font */
+  font-size: 0.95rem; /* Match your input text size */
+  line-height: 1.4; /* Better line spacing */
+  min-height: 2.5rem; /* Minimum height */
+  resize: vertical; /* Allow vertical resizing only */
+  padding: 0.75rem; /* Match your input padding */
+  width: 100%; /* Full width */
+  background-color: #f8f9fa; /* Match your input background */
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+/* Ensure consistent styling with your other inputs */
+textarea#mainUnit:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.25);
+  outline: none;
+}
+
+.extras-cell,
+.featured-extras-cell {
+  font-weight: 500;
+  text-align: center;
+}
+
+.location-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  vertical-align: middle; /* Keep middle alignment */
+}
+
+.location-name {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--text-color);
+}
+
+.location-area {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.notes-cell {
+  font-size: 0.75rem;
+  line-height: 1.3; /* Slightly increased line height */
+  white-space: pre-line;
+}
+
+/* === DEPARTMENT TAGS - COMPACT === */
+.departments-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  align-items: flex-start;
+  /* max-height: 2.8rem; */ /* Remove max-height to allow wrapping */
+  /* overflow-y: auto; */ /* Remove scroll */
+}
+
+.department-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 0.07rem 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1;
+  /* Background/color set dynamically */
+}
+
+/* === ADMIN MODE SPECIFICS === */
+.admin-calendar .calendar-row {
+  cursor: pointer;
+}
+.admin-calendar .calendar-row.shoot {
+  cursor: grab;
+}
+.admin-calendar .calendar-row.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+.admin-calendar .calendar-row.drop-target {
+  box-shadow: inset 0 0 0 2px var(--accent-color);
+}
+
+/* === LOADING OVERLAY === */
+.loading-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.spinner {
+  width: 50px; height: 50px;
+  border: 5px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* === VIEWER MODE SPECIFICS === */
+.viewer-mode .calendar-table th {
+  position: sticky; top: 0; z-index: 10;
+}
+
+/* Note: Special Dates List styles (.date-item, .date-info, etc.) removed */
+/* Assuming these are handled by dates.css or within a modal */
+
+/* Note: Modal styles (.modal, .modal-content, etc.) removed. */
+/* Rely on common styles from modals.css */
+
+/* Note: Form Checkbox styles (.form-check) removed. */
+/* Rely on common styles from forms.css */
+
+/* === FILTER PANEL STYLES === */
+.filter-panel {
+  background-color: var(--background-alt);
+  border-color: var(--border-color);
+  border-radius: 6px;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.filter-panel h4 {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: var(--title-text-color);
+}
+
+.filter-section {
+  margin-bottom: 0.8rem;
+}
+
+.filter-section h5 {
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.filter-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 100px;
+}
+.filter-toggle input[type="checkbox"] { /* Basic checkbox alignment */
+    margin-right: 0.4rem;
+}
+
+.toggle-label {
+  /* margin-left: 0.4rem; *//* Removed as checkbox now has margin */
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-top: 0.8rem; /* Add spacing above stats */
+  padding-top: 0.8rem; /* Add padding above stats */
+  border-top: 1px solid var(--border-color); /* Separator */
+  border-top-color: var(--border-color);
+
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.8rem;
+  gap: 0.5rem; /* Add gap between filter buttons */
+}
+
+/* ============================================= */
+/* === PRINT STYLES ============================ */
+/* ============================================= */
+
+/* Enhanced @media print section with location area color fixes */
+
+@media print {
+  /* Global color adjustment for printing */
+  html, body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important; /* Modern browsers */
+    color: #323233 !important; /* Dark text */
+    background-color: white !important;
+  }
+  
+  /* Reset all colors to light theme for printing */
+  .calendar-container {
+    box-shadow: none; 
+    padding: 0.5cm; 
+    width: 100%; 
+    margin: 0;
+    border: none; 
+    background-color: white !important;
+    color: #323233 !important;
+  }
+  
+  .project-info-header {
+    margin-bottom: 0.3cm; 
+    padding-bottom: 0.2cm; 
+    border-bottom: 1pt solid #ccc;
+    page-break-inside: avoid; 
+    display: block; 
+    width: 100%;
+    background-color: white !important;
+    border-bottom-color: #cfd8dc !important;
+  }
+  
+  .project-header-top {
+    display: flex !important; 
+    width: 100%; 
+    flex-direction: row !important;
+    justify-content: space-between !important; 
+    align-items: center !important;
+    margin-bottom: 0.2cm;
+  }
+  
+  .project-title {
+    font-size: 12pt; 
+    font-weight: bold; 
+    color: #546e7a !important; /* Blue-gray */
+  }
+  
+  .project-meta {
+    display: flex !important; 
+    flex-direction: row !important; 
+    flex-wrap: wrap !important;
+    gap: 0.3cm !important; 
+    margin-bottom: 0.2cm !important;
+    justify-content: space-between !important; 
+    width: 100% !important;
+  }
+  
+  .meta-group {
+    display: flex !important; 
+    flex-direction: column !important;
+    min-width: 2cm !important; 
+    flex: 0 0 auto !important;
+  }
+  
+  .meta-label { 
+    font-size: 6pt; 
+    margin-bottom: 1pt; 
+    color: #666 !important; 
+  }
+  
+  .meta-value { 
+    font-size: 8pt; 
+    font-weight: 500; 
+    color: #333 !important;
+  }
+
+  /* Light-themed information blocks */
+  .script-info,
+  .department-counters,
+  .location-counters,
+  .location-areas {
+    border: 0.5pt solid #ddd !important; 
+    background-color: #f8f9fa !important;
+    padding: 0.15cm !important;
+    margin-bottom: 0.2cm !important;
+    page-break-inside: avoid !important;
+    width: 100% !important;
+    color: #333 !important;
+  }
+  
+  .script-item { 
+    display: flex !important; 
+    align-items: center !important; /* Ensure vertical alignment */
+    margin-right: 0.2cm !important; 
+    flex: 0 0 auto !important;
+    line-height: 1 !important; /* Consistent line height */
+  }
+  
+  .script-label { 
+    font-weight: 500 !important; 
+    color: #165dd8 !important; 
+    font-size: 8pt !important;
+    margin-bottom: 0 !important; /* Remove any bottom margin */
+    padding: 0 !important; /* Remove any padding */
+  }
+  
+  .script-value { 
+    font-size: 8pt !important; 
+    color: #000000 !important;
+    font-weight: 500 !important;
+    margin-bottom: 0 !important; /* Remove any bottom margin */
+    padding: 0 !important; /* Remove any padding */
+    vertical-align: baseline !important; /* Align text baselines */
+  }
+  
+  /* Uniform title sizing for all counter sections */
+  .counter-title, 
+  .areas-title,
+  .location-counters h4 { 
+    font-size: 10pt !important; 
+    margin-bottom: 0.1cm !important; 
+    color: #546e7a !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Fix counter grid layout and make uniform */
+  .counter-grid, 
+  .area-tags {
+    display: grid !important; 
+    grid-template-columns: repeat(8, 1fr) !important;
+    grid-template-rows: auto !important; 
+    gap: 0.1cm !important; 
+    width: 100% !important;
+  }
+  
+  /* Better counter item styling to match viewer */
+  .counter-item, 
+  .area-tag {
+    min-height: 2rem !important;
+    padding: 0.1cm !important; 
+    border-radius: 2pt !important;
+    display: flex !important; 
+    flex-direction: column !important; 
+    margin: 0 !important;
+    border: 0.5pt solid rgba(0,0,0,0.1) !important; 
+    color: #333 !important;
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* Preserve background colors in print */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* Fixed sizes for counter labels */
+  .counter-label { 
+    font-size: 7pt !important; 
+    margin-bottom: 3pt !important; 
+    white-space: nowrap !important; 
+    overflow: hidden !important; 
+    text-overflow: ellipsis !important;
+    color: #333 !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Fixed sizes for counter values */
+  .counter-value, 
+  .area-count { 
+    font-size: 10pt !important; 
+    font-weight: 600 !important; 
+    color: #000 !important;
+  }
+
+  /* Calendar table styles */
+  .calendar-table-wrapper { 
+    overflow: visible; 
+  }
+  
+  .calendar-table { 
+    font-size: 9pt; 
+    width: 100% !important; 
+    page-break-inside: auto; 
+    border-color: #ddd !important;
+  }
+  
+  /* Fix cell padding and ensure all columns are visible */
+  .calendar-table th, 
+  .calendar-table td { 
+    padding: 3pt; 
+    font-size: 8pt; 
+    border: 0.5pt solid #ddd !important;
+    color: #333 !important;
+    display: table-cell !important; /* Ensure all cells are visible */
+  }
+  
+  /* Ensure column headers are visible and styled correctly */
+  .calendar-table th { 
+    background-color: #546e7a !important; 
+    color: white !important; 
+    font-weight: 500 !important;
+    text-align: left !important;
+    padding: 5pt 3pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* Ensure the extras and featured extras columns are visible */
+  .extras-col, .featured-extras-col,
+  .extras-cell, .featured-extras-cell {
+    display: table-cell !important;
+    text-align: center !important;
+  }
+  
+  /* Fix column widths to match viewer */
+  .date-col { width: 80px !important; }
+  .day-col { width: 30px !important; text-align: center !important; }
+  .main-unit-col { width: 170px !important; }
+  .extras-col, .featured-extras-col { width: 25px !important; text-align: center !important; }
+  .location-col { width: 110px !important; }
+  .sequence-col { width: 70px !important; }
+  .departments-col { width: 110px !important; }
+  .notes-col { width: 160px !important; }
+  .second-unit-col { width: 90px !important; }
+  
+  /* Row colors for light theme printing */
+  .calendar-row { 
+    background-color: white !important; 
+  }
+  
+  /* ENHANCED: Fix for location area colors - multiple approaches to ensure browser compatibility */
+  .calendar-row.has-area-color { 
+    /* Use multiple approaches for maximum compatibility */
+    background-color: var(--row-area-color, transparent) !important;
+    /* Use attribute selector as backup */
+    background-color: attr(data-color) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* High-specificity selectors for standard row types */
+  .calendar-table tbody tr.calendar-row.weekend:not(.has-area-color) { 
+    background-color: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .calendar-table tbody tr.calendar-row.prep:not(.has-area-color) { 
+    background-color: #e0ffe0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .calendar-table tbody tr.calendar-row.shoot:not(.has-area-color) { 
+    background-color: #e0f0ff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .calendar-table tbody tr.calendar-row.hiatus:not(.has-area-color) { 
+    background-color: #ffe0e0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .calendar-table tbody tr.calendar-row.holiday:not(.has-area-color) { 
+    background-color: #fff0e0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .calendar-table tbody tr.calendar-row.working-weekend:not(.has-area-color) { 
+    background-color: #e0f0e0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* CRITICAL: Ensure location area colors take precedence over standard row types */
+  .calendar-table tbody tr.calendar-row.has-area-color.weekend,
+  .calendar-table tbody tr.calendar-row.has-area-color.prep,
+  .calendar-table tbody tr.calendar-row.has-area-color.shoot,
+  .calendar-table tbody tr.calendar-row.has-area-color.hiatus,
+  .calendar-table tbody tr.calendar-row.has-area-color.holiday,
+  .calendar-table tbody tr.calendar-row.has-area-color.working-weekend {
+    /* Inline style precedence without using invalid attr function */
+    background-color: var(--row-area-color, transparent) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* Fixed date cell display - Make date visible and properly formatted */
+  .date-cell {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 2pt !important;
+  }
+  
+  .date-display {
+    color: #000 !important;
+    font-weight: 500 !important;
+    font-size: 8pt !important;
+    margin-bottom: 2pt !important;
+    display: block !important;
+  }
+  
+  .date-day {
+    color: #444 !important;
+    font-size: 7pt !important;
+    display: block !important;
+  }
+  
+  /* Fixed day cell formatting - Center the day number properly */
+  .day-cell {
+    font-size: 8pt !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Improved main unit cell formatting */
+  .main-unit-cell {
+    font-weight: 500 !important;
+    font-size: 8pt !important;
+    line-height: 1.3 !important;
+    color: #000 !important;
+  }
+  
+  /* Fixed extras cell formatting */
+  .extras-cell,
+  .featured-extras-cell {
+    font-weight: 500 !important;
+    text-align: center !important;
+    font-size: 8pt !important;
+    color: #000 !important;
+  }
+  
+  /* Fixed location cell styling */
+  .location-cell {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2pt !important;
+  }
+  
+  .location-name {
+    font-weight: 500 !important;
+    font-size: 8pt !important;
+    color: #000 !important;
+    display: block !important;
+  }
+  
+  .location-area {
+    font-size: 7pt !important;
+    color: #1e1d1d !important;
+    font-style: italic !important;
+    display: block !important;
+  }
+  
+  /* Fix department tags for printing */
+  .departments-cell { 
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2pt !important; 
+    max-height: none !important; 
+    overflow: visible !important;
+    padding: 2pt !important;
+  }
+  
+  .department-tag { 
+    padding: 1pt 3pt !important; 
+    font-size: 6pt !important;
+    font-weight: 600 !important;
+    border: 0.5pt solid rgba(0,0,0,0.2) !important;
+    border-radius: 2pt !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  /* Better notes cell styling */
+  .notes-cell {
+    font-size: 7pt !important;
+    line-height: 1.3 !important;
+    color: #000 !important;
+  }
+  
+  /* Hide various UI elements in print */
+  .calendar-actions, 
+  .filter-panel, 
+  .loading-overlay, 
+  .admin-calendar .calendar-row,
+  .zoom-controls,
+  .scroll-hint,
+  .theme-toggle-btn {
+    display: none !important;
+  }
+  
+  /* Page layout settings */
+  @page { 
+    size: landscape; 
+    margin: 0.5cm; 
+  }
+  
+  .calendar-row { 
+    page-break-inside: avoid; 
+  }
+  
+  .calendar-table thead { 
+    display: table-header-group; 
+  }
+  
+  /* Special class for when preparing to print - adds by JS */
+  body.preparing-to-print .calendar-row.has-area-color {
+    background-color: var(--row-area-color, transparent) !important;
+  }
+}
+/* End @media print */
+
+/* ============================================= */
+/* === RESPONSIVE STYLES ======================= */
+/* ============================================= */
+/* Enhanced Mobile Responsive Styles for Calendar 
+   Add these to your static/css/calendar.css file */
+
+/* Improved mobile breakpoint handling */
+@media (max-width: 768px) {
+  /* General sizing adjustments */
+  .calendar-table th, 
+  .calendar-table td {
+    padding: 0.2rem; /* Further reduced padding */
+    font-size: 0.7rem; /* Smaller font size */
+  }
+  
+  /* Adjust project info header for mobile */
+  .project-meta {
+    gap: 0.3rem; /* Tighter spacing */
+  }
+  
+  .meta-group {
+    min-width: 0; /* Allow groups to be smaller */
+    flex-basis: calc(50% - 0.15rem); /* Two columns layout */
+  }
+  
+  /* Make counter grid more compact */
+  .counter-grid, 
+  .area-tags {
+    grid-template-columns: repeat(3, 1fr); /* Three columns on mobile */
+    gap: 0.3rem; /* Smaller gap */
+  }
+  
+  .counter-item, 
+  .area-tag {
+    min-height: 2.5rem; /* Shorter height */
+    padding: 0.25rem; /* Less padding */
+  }
+  
+  /* Enhance column visibility for mobile */
+  .calendar-table .sequence-col,
+  .calendar-table .sequence-cell,
+  .calendar-table .extras-col,
+  .calendar-table .extras-cell,
+  .calendar-table .featured-extras-col,
+  .calendar-table .featured-extras-cell,
+  .calendar-table .second-unit-col,
+  .calendar-table .second-unit-cell {
+    display: none; /* Hide less critical columns */
+  }
+  
+  /* Create condensed columns for critical data */
+  .calendar-table .main-unit-col { width: 100px; }
+  .calendar-table .location-col { width: 80px; }
+  .calendar-table .departments-col { width: 80px; }
+  .calendar-table .notes-col { width: 80px; }
+  
+  /* Adjust cell content for smaller spaces */
+  .location-name {
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+  }
+  
+  .location-area {
+    font-size: 0.65rem;
+  }
+  
+  /* Department tags adjustments */
+  .department-tag {
+    padding: 0.05rem 0.15rem;
+    font-size: 0.6rem;
+  }
+  
+  /* Add horizontal scroll indicator */
+  .calendar-table-wrapper {
+    position: relative;
+    max-height: 75vh; /* Smaller height on mobile */
+  }
+  
+  .calendar-table-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 15px;
+    height: 40px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.2));
+    border-radius: 0 4px 4px 0;
+    pointer-events: none;
+    display: none; /* Hidden by default, shown if scrollable */
+  }
+  
+  .calendar-table-wrapper.scrollable::after {
+    display: block;
+  }
+}
+
+/* Extreme narrow screens (phones in portrait) */
+@media (max-width: 480px) {
+  /* Further column reduction */
+  .calendar-table .departments-col,
+  .calendar-table .departments-cell {
+    display: none; /* Hide departments column on very small screens */
+  }
+  
+  .calendar-table-wrapper {
+    max-height: 70vh; /* Still tall but slightly smaller for very small screens */
+  }
+  
+  /* Stack project metadata for very small screens */
+  .project-meta {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+  .meta-group {
+    flex-basis: 100%;
+  }
+  
+  /* Make project header more compact */
+  .project-info-header {
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  /* Smaller counter grid */
+  .counter-grid, 
+  .area-tags {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on very small screens */
+  }
+  
+  /* Smaller row height */
+  .calendar-row {
+    min-height: 2.5rem;
+  }
+}
+
+/* Add JS detection for scrollable content */
+/* This requires a small JavaScript addition to detect if the table is scrollable horizontally */
+
+/* Add this to your static/css/calendar.css file */
+
+/* Mobile zoom controls */
+.calendar-mobile-controls {
+  display: none; /* Hidden by default - visible only on mobile */
+  margin-bottom: 0.8rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zoom-button {
+  background-color: var(--primary-light);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.zoom-button:hover {
+  background-color: var(--accent-color);
+}
+
+.zoom-level {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  min-width: 3rem;
+  text-align: center;
+}
+
+.scroll-hint {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.scroll-hint .arrow {
+  display: inline-block;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+}
+
+/* Show controls only on mobile */
+@media (max-width: 768px) {
+  .calendar-mobile-controls {
+    display: flex;
+  }
+}
+
+/* For extremely small screens */
+@media (max-width: 480px) {
+  .calendar-mobile-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Zoom levels for the table */
+.calendar-table-wrapper.zoom-75 .calendar-table {
+  font-size: 0.75em;
+  transform-origin: top left;
+}
+
+.calendar-table-wrapper.zoom-50 .calendar-table {
+  font-size: 0.5em;
+  transform-origin: top left;
+}
+
+.calendar-table-wrapper.fit-width .calendar-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.calendar-table-wrapper.fit-width .calendar-table th,
+.calendar-table-wrapper.fit-width .calendar-table td {
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

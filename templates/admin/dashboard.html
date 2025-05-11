@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Schedule, At a Glance!{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/admin/dashboard.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h2>Admin Dashboard</h2>
+    <div class="admin-actions">
+        <a href="/admin/project/new" class="button">Create New Project</a>
+    </div>
+</div>
+
+<!-- Admin Navigation Tabs -->
+<div class="admin-tabs">
+    {# Points to the 'admin_dashboard' function in the 'admin' blueprint #}
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="active">Projects</a>
+    {# Points to the 'admin_locations' function in the 'admin' blueprint #}
+    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
+    {# Points to the 'admin_departments' function in the 'admin' blueprint #}
+    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
+    {# Points to the 'admin_dates' function in the 'admin' blueprint (without project_id for the main link) #}
+    <a href="{{ url_for('admin.admin_dates') }}">Special Dates</a>
+</div>
+
+<div class="project-list admin-projects">
+    <h3>Manage Projects</h3>
+    {% if projects %}
+        <div class="project-grid">
+            {% for project in projects %}
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <h4>{{ project.title or 'Untitled Project' }}</h4>
+                        <span class="version-tag">{{ project.version or 'v1.0' }}</span>
+                    </div>
+                    <div class="project-card-body">
+                        <p><strong>Director:</strong> {{ project.director or 'N/A' }}</p>
+                        <p><strong>First AD:</strong> {{ project.firstAD or 'N/A' }}</p>
+                        {% if project.shootStartDate %}
+                        <p><strong>Shoot Start:</strong> {{ project.shootStartDate }}</p>
+                        {% endif %}
+                        <p class="updated-at">Last updated: {{ project.updated.split('T')[0] if project.updated else 'N/A' }}</p>
+                    </div>
+                    <div class="project-card-footer">
+                        <div class="button-group">
+                            {# Points to 'admin_project' function, passing the specific project.id #}
+                            <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="button small">Edit Details</a>
+                            {# Points to 'admin_calendar' function, passing the specific project.id #}
+                            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button small">Edit Calendar</a>
+                            {# Points to the 'viewer' function in the 'main' blueprint, passing project.id #}
+                            <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="button small secondary">View</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No projects available yet.</p>
+            <p>Use the "Create New Project" button to get started.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set up delete project buttons
+        document.querySelectorAll('.delete-project').forEach(button => {
+            button.addEventListener('click', function() {
+                const projectId = this.getAttribute('data-id');
+                const projectTitle = this.getAttribute('data-title') || 'this project';
+                
+                if (confirm(`WARNING: Are you sure you want to delete "${projectTitle}"? This action cannot be undone.`)) {
+                    // Show loading state
+                    this.textContent = 'Deleting...';
+                    this.disabled = true;
+                    
+                    // Call delete API
+                    fetch(`/api/projects/${projectId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to delete project');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Remove the project card from the UI
+                        const projectCard = this.closest('.project-card');
+                        if (projectCard) {
+                            projectCard.remove();
+                        }
+                        
+                        // Refresh if all projects are deleted
+                        const remainingProjects = document.querySelectorAll('.project-card');
+                        if (remainingProjects.length === 0) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error.message);
+                        this.textContent = 'Delete';
+                        this.disabled = false;
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

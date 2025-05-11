@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}Special Dates Management - Schedule, At a Glance!{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/dates.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h2>Special Dates Management</h2>
+    <div class="admin-actions">
+        {% if project_id %}
+            {# Points to 'admin_calendar' function in 'admin' blueprint, passing project_id #}
+            <a href="{{ url_for('admin.admin_calendar', project_id=project_id) }}" class="button secondary">Back to Calendar</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Admin Navigation Tabs -->
+<div class="admin-tabs">
+    {# Points to 'admin_dashboard' function in 'admin' blueprint #}
+    <a href="{{ url_for('admin.admin_dashboard') }}">Projects</a>
+    {# Points to 'admin_locations' function in 'admin' blueprint #}
+    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
+    {# Points to 'admin_departments' function in 'admin' blueprint #}
+    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
+    {# Points to 'admin_dates' function in 'admin' blueprint (without project_id for the main tab link) #}
+    <a href="{{ url_for('admin.admin_dates') }}" class="active">Special Dates</a>
+</div>
+
+<div class="content-container">
+    <div class="project-selector form-group">
+        <p>Manage Special dates as per your current project requirements.</p>
+        <label for="project-select">Select Project</label>
+        <select id="project-select" name="project">
+            <option value="">-- Select Project --</option>
+            {% for project in projects %}
+            <option value="{{ project.id }}" {% if project_id == project.id %}selected{% endif %}>{{ project.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    {% if project_id %}
+    <div class="dates-container">
+        <div>
+            <!-- Working Weekends Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Working Weekends</h3>
+                </div>
+                <div class="section-content">
+                    <p>Select weekend dates (Saturday/Sunday) that will count as shooting days.</p>
+                    
+                    <button id="add-weekend-btn" class="button">Add Working Weekend</button>
+                    
+                    <div class="date-list" id="weekend-list">
+                        <!-- Weekend dates will be added here dynamically -->
+                    </div>
+                    
+                    <div id="no-weekends" class="empty-state">
+                        <p>No working weekends have been scheduled.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bank Holidays Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Bank Holidays</h3>
+                </div>
+                <div class="section-content">
+                    <p>Add bank holidays and specify whether they will be working days.</p>
+                    
+                    <button id="add-holiday-btn" class="button">Add Bank Holiday</button>
+                    
+                    <div class="date-list" id="holiday-list">
+                        <!-- Bank holiday dates will be added here dynamically -->
+                    </div>
+                    
+                    <div id="no-holidays" class="empty-state">
+                        <p>No bank holidays have been added.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <!-- Hiatus Periods Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Hiatus Periods</h3>
+                </div>
+                <div class="section-content">
+                    <p>Define hiatus periods when production will be paused. Calendar days will be skipped during these periods.</p>
+                    
+                    <button id="add-hiatus-btn" class="button">Add Hiatus Period</button>
+                    
+                    <div class="date-list" id="hiatus-list">
+                        <!-- Hiatus periods will be added here dynamically -->
+                    </div>
+                    
+                    <div id="no-hiatus" class="empty-state">
+                        <p>No hiatus periods have been scheduled.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Special Dates Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Other Special Dates</h3>
+                </div>
+                <div class="section-content">
+                    <p>Add travel days, production meetings, or other non-shooting days that should be highlighted.</p>
+                    
+                    <button id="add-special-btn" class="button">Add Special Date</button>
+                    
+                    <div class="date-list" id="special-list">
+                        <!-- Special dates will be added here dynamically -->
+                    </div>
+                    
+                    <div id="no-special" class="empty-state">
+                        <p>No special dates have been added.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="action-row">
+        <button id="regenerate-calendar-btn" class="button">Regenerate Calendar</button>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Please select a project to manage special dates.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Working Weekend Modal -->
+<div id="weekend-modal" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h3 id="weekend-modal-title">Add Working Weekend</h3>
+          <button class="close-button" data-close-modal="weekend-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <form id="weekend-form">
+              <input type="hidden" id="weekend-id" name="id" value="">
+              
+              <div class="form-group">
+                  <label for="weekend-date">Weekend Date (Sat/Sun)</label>
+                  <input type="date" id="weekend-date" name="date" required>
+                  <div class="field-hint">Must be a Saturday or Sunday</div>
+              </div>
+              
+              <div class="form-group">
+                  <label for="weekend-description">Description (Optional)</label>
+                  <textarea id="weekend-description" name="description" rows="2"></textarea>
+              </div>
+              
+              <div class="form-check">
+                  <input type="checkbox" id="weekend-is-shoot-day" name="isShootDay" checked>
+                  <label for="weekend-is-shoot-day">Count as shoot day</label>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button class="button secondary" data-close-modal="weekend-modal">Cancel</button>
+          <button class="button" id="save-weekend-btn">Save Weekend</button>
+      </div>
+  </div>
+</div>
+
+<!-- Bank Holiday Modal -->
+<div id="holiday-modal" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h3 id="holiday-modal-title">Add Bank Holiday</h3>
+          <button class="close-button" data-close-modal="holiday-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <form id="holiday-form">
+              <input type="hidden" id="holiday-id" name="id" value="">
+              
+              <div class="form-group">
+                  <label for="holiday-date">Holiday Date</label>
+                  <input type="date" id="holiday-date" name="date" required>
+              </div>
+              
+              <div class="form-group">
+                  <label for="holiday-name">Holiday Name</label>
+                  <input type="text" id="holiday-name" name="name" required>
+              </div>
+              
+              <div class="form-check">
+                  <input type="checkbox" id="holiday-is-working" name="isWorking">
+                  <label for="holiday-is-working">Working day (production is active)</label>
+              </div>
+              
+              <div class="form-check">
+                  <input type="checkbox" id="holiday-is-shoot-day" name="isShootDay">
+                  <label for="holiday-is-shoot-day">Count as shoot day</label>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button class="button secondary" data-close-modal="holiday-modal">Cancel</button>
+          <button class="button" id="save-holiday-btn">Save Holiday</button>
+      </div>
+  </div>
+</div>
+
+<!-- Hiatus Period Modal -->
+<div id="hiatus-modal" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h3 id="hiatus-modal-title">Add Hiatus Period</h3>
+          <button class="close-button" data-close-modal="hiatus-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <form id="hiatus-form">
+              <input type="hidden" id="hiatus-id" name="id" value="">
+              
+              <div class="form-group">
+                  <label for="hiatus-name">Hiatus Name</label>
+                  <input type="text" id="hiatus-name" name="name" required placeholder="e.g., Christmas Break">
+              </div>
+              
+              <div class="form-group">
+                  <label for="hiatus-start-date">Start Date</label>
+                  <input type="date" id="hiatus-start-date" name="startDate" required>
+              </div>
+              
+              <div class="form-group">
+                  <label for="hiatus-end-date">End Date</label>
+                  <input type="date" id="hiatus-end-date" name="endDate" required>
+              </div>
+              
+              <div class="form-group">
+                  <label for="hiatus-description">Description (Optional)</label>
+                  <textarea id="hiatus-description" name="description" rows="2"></textarea>
+              </div>
+              
+              <div class="form-check">
+                  <input type="checkbox" id="hiatus-is-visible" name="isVisible" checked>
+                  <label for="hiatus-is-visible">Visible on calendar</label>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button class="button secondary" data-close-modal="hiatus-modal">Cancel</button>
+          <button class="button" id="save-hiatus-btn">Save Hiatus</button>
+      </div>
+  </div>
+</div>
+
+<!-- Special Date Modal -->
+<div id="special-modal" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h3 id="special-modal-title">Add Special Date</h3>
+          <button class="close-button" data-close-modal="special-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <form id="special-form">
+              <input type="hidden" id="special-id" name="id" value="">
+              
+              <div class="form-group">
+                  <label for="special-date">Date</label>
+                  <input type="date" id="special-date" name="date" required>
+              </div>
+              
+              <div class="form-group">
+                  <label for="special-name">Name</label>
+                  <input type="text" id="special-name" name="name" required placeholder="e.g., Travel to London">
+              </div>
+              
+              <div class="form-group">
+                  <label for="special-type">Type</label>
+                  <select id="special-type" name="type">
+                      <option value="travel">Travel Day</option>
+                      <option value="meeting">Production Meeting</option>
+                      <option value="rehearsal">Rehearsal</option>
+                      <option value="other">Other</option>
+                  </select>
+              </div>
+              
+              <div class="form-group">
+                  <label for="special-description">Description (Optional)</label>
+                  <textarea id="special-description" name="description" rows="2"></textarea>
+              </div>
+              
+              <div class="form-check">
+                  <input type="checkbox" id="special-is-working" name="isWorking" checked>
+                  <label for="special-is-working">Count as working day</label>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button class="button secondary" data-close-modal="special-modal">Cancel</button>
+          <button class="button" id="save-special-btn">Save Special Date</button>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/special-dates.js"></script>
+{% endblock %}

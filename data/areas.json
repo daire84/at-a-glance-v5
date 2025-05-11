@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Dublin North",
+    "color": "#a1cdfc",
+    "id": "north"
+  },
+  {
+    "name": "Dublin South",
+    "color": "#e3b0b0",
+    "id": "south"
+  },
+  {
+    "name": "Wicklow",
+    "color": "#ffcb3d",
+    "id": "wicklow"
+  },
+  {
+    "name": "Ardmore Studios",
+    "color": "#bb98fb",
+    "id": "ardmore"
+  },
+  {
+    "id": "ashford",
+    "name": "Ashford Studios",
+    "color": "#ffd8e6"
+  },
+  {
+    "name": "Spain",
+    "color": "#c660e2",
+    "id": "4459abff-cd87-4fdc-a238-1ff355b2e970"
+  }
+]
