@@ -14,28 +14,33 @@ class VersionManager {
     /**
      * Initialize the version manager
      */
-    async initialize() {
+    async initialize(projectData = null) {
         try {
-            // Check if project is versioned
-            const project = await this.getProject();
+            // Use provided project data or fetch from API
+            const project = projectData ? projectData : await this.getProject();
             this.isVersioned = project.isVersioned || false;
-
+    
             if (!this.isVersioned) {
-                console.log('Project is not versioned yet');
-                return;
+                console.log('Project is not versioned yet - but will show UI anyway');
             }
-
-            // Create the version UI container
+    
+            // Create the version UI container regardless of versioned status
             this.createVersionUI();
-
-            // Load versions
-            await this.loadVersions();
-
-            // Check for workspace changes
-            this.checkWorkspaceStatus();
-
+    
+            // Only load versions if project is versioned
+            if (this.isVersioned) {
+                // Load versions
+                await this.loadVersions();
+    
+                // Check for workspace changes
+                this.checkWorkspaceStatus();
+            }
+    
         } catch (error) {
             console.error('Error initializing version manager:', error);
+            // Still create the UI even on error
+            this.isVersioned = false;
+            this.createVersionUI();
         }
     }
 
@@ -68,11 +73,11 @@ class VersionManager {
                     <div class="version-manager-header">
                         <h3>Version Management</h3>
                         <div class="version-actions">
-                            <button id="create-version-btn" class="button small">Save as Version</button>
-                            <button id="migrate-project-btn" class="button small secondary">Enable Versioning</button>
+                            <button id="create-version-btn" class="button small ${!this.isVersioned ? 'hidden' : ''}">Save as Version</button>
+                            <button id="migrate-project-btn" class="button small secondary ${this.isVersioned ? 'hidden' : ''}">Enable Versioning</button>
                         </div>
                     </div>
-                    <div id="workspace-indicator" class="workspace-indicator hidden">
+                    <div id="workspace-indicator" class="workspace-indicator ${!this.isVersioned ? 'hidden' : ''}">
                         <span class="draft-badge">Draft</span>
                         <span class="draft-message">Working in draft mode - changes not yet versioned</span>
                     </div>
@@ -85,6 +90,25 @@ class VersionManager {
                 calendarContainer.insertBefore(versionSection, calendarContainer.firstChild);
                 this.container = versionSection;
             }
+        } else {
+            // Update existing container
+            this.container.className = 'version-manager-section';
+            this.container.innerHTML = `
+                <div class="version-manager-header">
+                    <h3>Version Management</h3>
+                    <div class="version-actions">
+                        <button id="create-version-btn" class="button small ${!this.isVersioned ? 'hidden' : ''}">Save as Version</button>
+                        <button id="migrate-project-btn" class="button small secondary ${this.isVersioned ? 'hidden' : ''}">Enable Versioning</button>
+                    </div>
+                </div>
+                <div id="workspace-indicator" class="workspace-indicator ${!this.isVersioned ? 'hidden' : ''}">
+                    <span class="draft-badge">Draft</span>
+                    <span class="draft-message">Working in draft mode - changes not yet versioned</span>
+                </div>
+                <div id="version-list" class="version-list">
+                    <div class="loading">Loading versions...</div>
+                </div>
+            `;
         }
 
         // Add event listeners
@@ -463,7 +487,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (projectIdElement && isAdminCalendar) {
         const projectId = projectIdElement.value;
-        versionManager = new VersionManager(projectId);
-        versionManager.initialize();
+        // Don't initialize here - let calendar.html do it with project data
+        // versionManager = new VersionManager(projectId);
+        // versionManager.initialize();
     }
 });

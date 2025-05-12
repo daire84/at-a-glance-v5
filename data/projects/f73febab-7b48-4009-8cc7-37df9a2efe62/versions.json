@@ -1,11 +1,11 @@
 {
   "versions": [
     {
-      "id": "71c0c2f4-cb4c-4e1f-8f50-23910a6acbbb",
+      "id": "f2fa17a9-8afc-4ec5-a280-295c5bec3c94",
       "versionNumber": "1.0",
       "notes": "Initial version (migrated from v4)",
-      "createdAt": "2025-05-11T23:07:33.418565Z",
-      "publishedAt": "2025-05-11T23:07:33.418578Z",
+      "createdAt": "2025-05-12T23:18:34.052674Z",
+      "publishedAt": "2025-05-12T23:18:34.052735Z",
       "isPublished": true,
       "isLatestPublished": true,
       "calendarData": {
@@ -8222,5 +8222,5 @@
       }
     }
   ],
-  "latestPublishedId": "71c0c2f4-cb4c-4e1f-8f50-23910a6acbbb"
+  "latestPublishedId": "f2fa17a9-8afc-4ec5-a280-295c5bec3c94"
 }
