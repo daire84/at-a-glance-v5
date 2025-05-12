@@ -236,7 +236,7 @@ class VersionManager {
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>Create New Version</h3>
-                    <button class="close-button" onclick="this.closest('.modal').remove()">&times;</button>
+                    <button class="close-button">&times;</button>
                 </div>
                 <div class="modal-body">
                     <form id="create-version-form">
@@ -252,13 +252,22 @@ class VersionManager {
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="button secondary" onclick="this.closest('.modal').remove()">Cancel</button>
-                    <button class="button" onclick="versionManager.createVersion()">Create Version</button>
+                    <button class="button secondary cancel-btn">Cancel</button>
+                    <button class="button create-version-btn">Create Version</button>
                 </div>
             </div>
         `;
 
         document.body.appendChild(modal);
+
+        // Add event listeners after the modal is added to the DOM
+        const closeButton = modal.querySelector('.close-button');
+        const cancelButton = modal.querySelector('.cancel-btn');
+        const createButton = modal.querySelector('.create-version-btn');
+
+        closeButton.addEventListener('click', () => modal.remove());
+        cancelButton.addEventListener('click', () => modal.remove());
+        createButton.addEventListener('click', () => this.createVersion());
     }
 
     /**
@@ -306,6 +315,11 @@ class VersionManager {
         const versionNumber = document.getElementById('version-number').value;
         const notes = document.getElementById('version-notes').value;
 
+        if (!versionNumber) {
+            this.showError('Version number is required');
+            return;
+        }
+
         try {
             const response = await fetch(`/api/projects/${this.projectId}/versions`, {
                 method: 'POST',
@@ -324,7 +338,10 @@ class VersionManager {
             }
 
             // Close modal
-            document.querySelector('.modal').remove();
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                modal.remove();
+            }
 
             // Reload versions
             await this.loadVersions();

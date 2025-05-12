@@ -1,6 +1,6 @@
 {
-  "baseVersionId": "f2fa17a9-8afc-4ec5-a280-295c5bec3c94",
-  "lastModified": "2025-05-12T23:20:04.429495Z",
+  "baseVersionId": "40416082-179a-4534-8c97-9790bcf1625b",
+  "lastModified": "2025-05-12T23:32:49.565495Z",
   "calendarData": {
     "projectId": "f73febab-7b48-4009-8cc7-37df9a2efe62",
     "days": [
@@ -2437,14 +2437,21 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 16,
-        "mainUnit": "",
-        "extras": 0,
-        "featuredExtras": 0,
-        "location": "",
-        "locationArea": "",
-        "sequence": "",
-        "departments": [],
-        "notes": ""
+        "mainUnit": "TESTING",
+        "extras": 32,
+        "featuredExtras": 1,
+        "location": "Ana's House",
+        "locationArea": "Spain",
+        "sequence": "TESTING",
+        "departments": [
+          "ANI",
+          "ST",
+          "STN"
+        ],
+        "notes": "",
+        "secondUnit": "TEST",
+        "secondUnitLocation": "Dublin City",
+        "locationAreaId": "4459abff-cd87-4fdc-a238-1ff355b2e970"
       },
       {
         "date": "2025-04-15",
@@ -2485,20 +2492,14 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 18,
-        "mainUnit": "HOUSE",
-        "extras": 21,
+        "mainUnit": "",
+        "extras": 0,
         "featuredExtras": 0,
-        "location": "D Stage",
-        "locationArea": "Ardmore Studios",
-        "sequence": "HOUSE",
-        "departments": [
-          "CST",
-          "PR"
-        ],
-        "notes": "",
-        "secondUnit": "TOWN",
-        "secondUnitLocation": "Manchester",
-        "locationAreaId": "ardmore"
+        "location": "",
+        "locationArea": "",
+        "sequence": "",
+        "departments": [],
+        "notes": ""
       },
       {
         "date": "2025-04-17",
@@ -2515,14 +2516,20 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 19,
-        "mainUnit": "",
-        "extras": 0,
-        "featuredExtras": 0,
-        "location": "",
-        "locationArea": "",
-        "sequence": "",
-        "departments": [],
-        "notes": ""
+        "mainUnit": "HOUSE",
+        "extras": 22,
+        "featuredExtras": 12,
+        "location": "Fosters Place",
+        "locationArea": "Dublin South",
+        "sequence": "House fight",
+        "departments": [
+          "LL",
+          "INT"
+        ],
+        "notes": "HOUSE FIGHT",
+        "secondUnit": "",
+        "secondUnitLocation": "",
+        "locationAreaId": "south"
       },
       {
         "date": "2025-04-18",
@@ -2707,20 +2714,14 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 24,
-        "mainUnit": "RATHMINES",
-        "extras": 3,
-        "featuredExtras": 1,
-        "location": "B Stage",
-        "locationArea": "Ardmore Studios",
-        "sequence": "Three men",
-        "departments": [
-          "VEH",
-          "STN"
-        ],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "ardmore"
+        "mainUnit": "",
+        "extras": 0,
+        "featuredExtras": 0,
+        "location": "",
+        "locationArea": "",
+        "sequence": "",
+        "departments": [],
+        "notes": ""
       },
       {
         "date": "2025-04-26",
@@ -3763,7 +3764,7 @@
         "locationArea": null,
         "sequence": "",
         "departments": [],
-        "notes": "WORKING WEEKEND: Working due to Art College avail",
+        "notes": "",
         "secondUnit": "",
         "secondUnitLocation": "",
         "locationAreaId": null
@@ -3989,16 +3990,16 @@
       "sfx": 4,
       "stn": 5,
       "crane": 0,
-      "stead": 1,
-      "pros": 2,
-      "ll": 0,
+      "stead": 2,
+      "pros": 1,
+      "ll": 1,
       "vfx": 3,
-      "ani": 0,
+      "ani": 1,
       "uw": 0,
-      "d5d255c0-b909-452e-9d7e-5681db738e58": 2,
+      "d5d255c0-b909-452e-9d7e-5681db738e58": 3,
       "11c71102-9c7e-4514-a7d4-b4e40b9c174d": 4,
-      "b2a632d2-844d-41e7-bdcf-1fc5c1602006": 4,
-      "257de5dc-f04a-4285-8d6e-3ca68c9c3b97": 1,
+      "b2a632d2-844d-41e7-bdcf-1fc5c1602006": 3,
+      "257de5dc-f04a-4285-8d6e-3ca68c9c3b97": 0,
       "main": 60,
       "secondUnit": 3,
       "sixthDay": 2,
@@ -4038,20 +4039,20 @@
     ],
     "lastUpdated": "2025-05-11T22:43:28.937927Z",
     "locationCounts": {
-      "D Stage": 5,
+      "D Stage": 4,
       "Dublin City Hall": 1,
       "Trinity College": 1,
       "Glenmaroon": 1,
       "Phoenix Park": 1,
       "St Pats": 1,
-      "Ana's House": 1,
-      "B Stage": 1
+      "Ana's House": 2,
+      "Fosters Place": 1
     },
     "areaCounts": {
-      "ardmore": 6,
-      "south": 1,
+      "ardmore": 4,
+      "south": 2,
       "north": 2,
-      "4459abff-cd87-4fdc-a238-1ff355b2e970": 1
+      "4459abff-cd87-4fdc-a238-1ff355b2e970": 2
     },
     "areaColorMap": {
       "north": "#a1cdfc",
