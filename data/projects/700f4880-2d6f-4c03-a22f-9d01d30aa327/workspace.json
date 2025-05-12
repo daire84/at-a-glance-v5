@@ -1,8 +1,8 @@
 {
-  "baseVersionId": "71c0c2f4-cb4c-4e1f-8f50-23910a6acbbb",
-  "lastModified": "2025-05-11T23:26:36.279395Z",
+  "baseVersionId": "fb39033d-1e75-49d1-8461-23993eca9f3c",
+  "lastModified": "2025-05-11T23:07:33.458963Z",
   "calendarData": {
-    "projectId": "f73febab-7b48-4009-8cc7-37df9a2efe62",
+    "projectId": "700f4880-2d6f-4c03-a22f-9d01d30aa327",
     "days": [
       {
         "date": "2025-01-06",
@@ -1867,20 +1867,16 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 1,
-        "mainUnit": "CANNON HOUSE - KITCHEN",
+        "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
         "location": "",
-        "locationArea": "Ardmore Studios",
-        "sequence": "Dinner time",
+        "locationArea": "",
+        "sequence": "",
         "departments": [
-          "FOD",
-          "VFX",
-          "SFX",
-          "INT",
-          "PR"
+          "ANI"
         ],
-        "notes": "THIS IS A NOTE",
+        "notes": "",
         "secondUnit": "",
         "secondUnitLocation": ""
       },
@@ -1902,18 +1898,15 @@
         "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "C Stage",
-        "locationArea": "Ardmore Studios",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
         "departments": [
-          "FDS",
-          "CST",
-          "INT"
+          "CST"
         ],
         "notes": "",
         "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "ardmore"
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-03-26",
@@ -1930,21 +1923,18 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 3,
-        "mainUnit": "MY GAFF\r\nMORE TEXT\r\nSET MOVE\r\nEVEN MORE TEXT",
-        "extras": 22,
-        "featuredExtras": 3,
-        "location": "D Stage",
-        "locationArea": "Ardmore Studios",
-        "sequence": "Testicles",
+        "mainUnit": "",
+        "extras": 0,
+        "featuredExtras": 0,
+        "location": "",
+        "locationArea": "",
+        "sequence": "",
         "departments": [
-          "FDS",
-          "STN",
-          "CST"
+          "CR"
         ],
-        "notes": "How is your day?",
-        "secondUnit": "INFORMATION",
-        "secondUnitLocation": "Winter Wonderland",
-        "locationAreaId": "ardmore"
+        "notes": "",
+        "secondUnit": "",
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-03-27",
@@ -1961,21 +1951,18 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 4,
-        "mainUnit": "CANNON HOUSE - BEDROOM",
-        "extras": 20,
-        "featuredExtras": 1,
-        "location": "D Stage",
-        "locationArea": "Ardmore Studios",
-        "sequence": "Mum V Kids",
+        "mainUnit": "",
+        "extras": 0,
+        "featuredExtras": 0,
+        "location": "",
+        "locationArea": "",
+        "sequence": "",
         "departments": [
-          "STN",
-          "VFX",
-          "SFX"
+          "FDS"
         ],
-        "notes": "THIS IS A NOTE",
+        "notes": "",
         "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "ardmore"
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-03-28",
@@ -1992,22 +1979,18 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 5,
-        "mainUnit": "CAIRO POLICE STATION - OFFICE",
-        "extras": 35,
-        "featuredExtras": 2,
-        "location": "D Stage",
-        "locationArea": "Ardmore Studios",
-        "sequence": "Meet Zaki",
+        "mainUnit": "",
+        "extras": 0,
+        "featuredExtras": 0,
+        "location": "",
+        "locationArea": "",
+        "sequence": "",
         "departments": [
-          "SFX",
-          "STN",
-          "ST",
-          "FDS"
+          "INT"
         ],
-        "notes": "This isnt real",
+        "notes": "",
         "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "ardmore"
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-03-29",
@@ -2075,11 +2058,11 @@
         "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "Dublin City Hall",
-        "locationArea": "Dublin South",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
         "departments": [
-          "WNK"
+          "LL"
         ],
         "notes": "",
         "secondUnit": "",
@@ -2103,14 +2086,15 @@
         "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "Trinity College",
-        "locationArea": "Dublin South",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
-        "departments": [],
+        "departments": [
+          "PR"
+        ],
         "notes": "",
         "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "south"
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-04-02",
@@ -2131,10 +2115,10 @@
         "extras": 0,
         "featuredExtras": 0,
         "location": "",
-        "locationArea": "Dublin South",
+        "locationArea": "",
         "sequence": "",
         "departments": [
-          "VFX"
+          "SFX"
         ],
         "notes": "",
         "secondUnit": "",
@@ -2158,14 +2142,15 @@
         "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "Glenmaroon",
-        "locationArea": "Dublin North",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
-        "departments": [],
+        "departments": [
+          "ST"
+        ],
         "notes": "",
         "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "north"
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-04-04",
@@ -2185,11 +2170,11 @@
         "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "Phoenix Park",
-        "locationArea": "Dublin North",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
         "departments": [
-          "CST"
+          "STN"
         ],
         "notes": "",
         "secondUnit": "",
@@ -2258,17 +2243,18 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 11,
-        "mainUnit": "JEFF",
+        "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "St Pats",
-        "locationArea": "Dublin North",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
-        "departments": [],
+        "departments": [
+          "UW"
+        ],
         "notes": "",
-        "secondUnit": "Shooting next to us",
-        "secondUnitLocation": "Mexico",
-        "locationAreaId": "north"
+        "secondUnit": "",
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-04-08",
@@ -2285,21 +2271,18 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 12,
-        "mainUnit": "NEW MEXICO HOUSE",
+        "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "Ana's House",
-        "locationArea": "Spain",
-        "sequence": "The House",
+        "location": "",
+        "locationArea": "",
+        "sequence": "",
         "departments": [
-          "FDS",
-          "WNK",
-          "SFX"
+          "VFX"
         ],
-        "notes": "Yes sir ",
+        "notes": "",
         "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "4459abff-cd87-4fdc-a238-1ff355b2e970"
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-04-09",
@@ -2322,8 +2305,12 @@
         "location": "",
         "locationArea": "",
         "sequence": "",
-        "departments": [],
-        "notes": ""
+        "departments": [
+          "STN"
+        ],
+        "notes": "",
+        "secondUnit": "",
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-04-10",
@@ -2346,8 +2333,12 @@
         "location": "",
         "locationArea": "",
         "sequence": "",
-        "departments": [],
-        "notes": ""
+        "departments": [
+          "VEH"
+        ],
+        "notes": "",
+        "secondUnit": "",
+        "secondUnitLocation": ""
       },
       {
         "date": "2025-04-11",
@@ -2364,20 +2355,14 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 15,
-        "mainUnit": "SPAIN",
+        "mainUnit": "",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "Ana's House",
-        "locationArea": "Spain",
+        "location": "",
+        "locationArea": "",
         "sequence": "",
-        "departments": [
-          "LL",
-          "PR"
-        ],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": "4459abff-cd87-4fdc-a238-1ff355b2e970"
+        "departments": [],
+        "notes": ""
       },
       {
         "date": "2025-04-12",
@@ -2617,7 +2602,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "BANK HOLIDAY: Easter Bank Holiday"
+        "notes": "BANK HOLIDAY: Easter"
       },
       {
         "date": "2025-04-22",
@@ -2953,7 +2938,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "BANK HOLIDAY: Working May Bank Holiday"
+        "notes": "BANK HOLIDAY: May Holiday"
       },
       {
         "date": "2025-05-06",
@@ -3241,9 +3226,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": ""
+        "notes": ""
       },
       {
         "date": "2025-05-18",
@@ -3408,13 +3391,10 @@
         "extras": 0,
         "featuredExtras": 0,
         "location": "",
-        "locationArea": null,
+        "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": null
+        "notes": ""
       },
       {
         "date": "2025-05-25",
@@ -3507,13 +3487,10 @@
         "extras": 0,
         "featuredExtras": 0,
         "location": "",
-        "locationArea": null,
+        "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": null
+        "notes": ""
       },
       {
         "date": "2025-05-29",
@@ -3534,13 +3511,10 @@
         "extras": 0,
         "featuredExtras": 0,
         "location": "",
-        "locationArea": null,
+        "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": null
+        "notes": ""
       },
       {
         "date": "2025-05-30",
@@ -3564,7 +3538,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "HIATUS: Spain Prep Period"
+        "notes": "HIATUS: Spin Travel/Prep"
       },
       {
         "date": "2025-05-31",
@@ -3588,7 +3562,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "HIATUS: Spain Prep Period"
+        "notes": "HIATUS: Spin Travel/Prep"
       },
       {
         "date": "2025-06-01",
@@ -3612,7 +3586,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "HIATUS: Spain Prep Period"
+        "notes": "HIATUS: Spin Travel/Prep"
       },
       {
         "date": "2025-06-02",
@@ -3636,7 +3610,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "HIATUS: Spain Prep Period"
+        "notes": "HIATUS: Spin Travel/Prep"
       },
       {
         "date": "2025-06-03",
@@ -3753,13 +3727,10 @@
         "extras": 0,
         "featuredExtras": 0,
         "location": "",
-        "locationArea": null,
+        "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "",
-        "secondUnit": "",
-        "secondUnitLocation": "",
-        "locationAreaId": null
+        "notes": "WORKING WEEKEND"
       },
       {
         "date": "2025-06-08",
@@ -3783,7 +3754,7 @@
         "locationArea": "",
         "sequence": "",
         "departments": [],
-        "notes": "WORKING WEEKEND: Working due to Art College avail"
+        "notes": ""
       },
       {
         "date": "2025-06-09",
@@ -3979,33 +3950,33 @@
       }
     ],
     "departmentCounts": {
-      "sfx": 4,
-      "stn": 3,
-      "crane": 0,
+      "sfx": 1,
+      "stn": 2,
+      "crane": 1,
       "stead": 1,
-      "pros": 2,
+      "pros": 1,
       "ll": 1,
-      "vfx": 3,
-      "ani": 0,
-      "uw": 0,
-      "d5d255c0-b909-452e-9d7e-5681db738e58": 2,
-      "11c71102-9c7e-4514-a7d4-b4e40b9c174d": 4,
-      "b2a632d2-844d-41e7-bdcf-1fc5c1602006": 3,
-      "257de5dc-f04a-4285-8d6e-3ca68c9c3b97": 0,
+      "vfx": 1,
+      "ani": 1,
+      "uw": 1,
+      "d5d255c0-b909-452e-9d7e-5681db738e58": 1,
+      "11c71102-9c7e-4514-a7d4-b4e40b9c174d": 1,
+      "b2a632d2-844d-41e7-bdcf-1fc5c1602006": 1,
+      "257de5dc-f04a-4285-8d6e-3ca68c9c3b97": 1,
       "main": 60,
-      "secondUnit": 2,
+      "secondUnit": 0,
       "sixthDay": 2,
       "splitDay": 0
     },
     "locationAreas": [
       {
         "name": "Dublin North",
-        "color": "#a1cdfc",
+        "color": "#74b5fb",
         "id": "north"
       },
       {
         "name": "Dublin South",
-        "color": "#e3b0b0",
+        "color": "#d18989",
         "id": "south"
       },
       {
@@ -4015,7 +3986,7 @@
       },
       {
         "name": "Ardmore Studios",
-        "color": "#bb98fb",
+        "color": "#9a4bfb",
         "id": "ardmore"
       },
       {
@@ -4025,41 +3996,13 @@
       },
       {
         "name": "Spain",
-        "color": "#c660e2",
+        "color": "#e486fe",
         "id": "4459abff-cd87-4fdc-a238-1ff355b2e970"
       }
     ],
-    "lastUpdated": "2025-05-11T23:19:56.084360Z",
-    "locationCounts": {
-      "C Stage": 1,
-      "D Stage": 3,
-      "Dublin City Hall": 1,
-      "Trinity College": 1,
-      "Glenmaroon": 1,
-      "Phoenix Park": 1,
-      "St Pats": 1,
-      "Ana's House": 2
-    },
-    "areaCounts": {
-      "ardmore": 4,
-      "south": 1,
-      "north": 2,
-      "4459abff-cd87-4fdc-a238-1ff355b2e970": 2
-    },
-    "areaColorMap": {
-      "north": "#a1cdfc",
-      "Dublin North": "#a1cdfc",
-      "south": "#e3b0b0",
-      "Dublin South": "#e3b0b0",
-      "wicklow": "#ffcb3d",
-      "Wicklow": "#ffcb3d",
-      "ardmore": "#bb98fb",
-      "Ardmore Studios": "#bb98fb",
-      "ashford": "#ffd8e6",
-      "Ashford Studios": "#ffd8e6",
-      "4459abff-cd87-4fdc-a238-1ff355b2e970": "#c660e2",
-      "Spain": "#c660e2"
-    },
+    "lastUpdated": "2025-05-04T19:45:21.822038Z",
+    "locationCounts": {},
+    "areaCounts": {},
     "departments": [
       {
         "id": "sfx",
@@ -4152,7 +4095,21 @@
         "color": "#4ae35c",
         "id": "257de5dc-f04a-4285-8d6e-3ca68c9c3b97"
       }
-    ]
+    ],
+    "areaColorMap": {
+      "north": "#a1cdfc",
+      "Dublin North": "#a1cdfc",
+      "south": "#e3b0b0",
+      "Dublin South": "#e3b0b0",
+      "wicklow": "#ffcb3d",
+      "Wicklow": "#ffcb3d",
+      "ardmore": "#9cf7dc",
+      "Ardmore Studios": "#9cf7dc",
+      "ashford": "#ffd8e6",
+      "Ashford Studios": "#ffd8e6",
+      "4459abff-cd87-4fdc-a238-1ff355b2e970": "#eca8ff",
+      "Spain": "#eca8ff"
+    }
   },
-  "isDraft": true
+  "isDraft": false
 }

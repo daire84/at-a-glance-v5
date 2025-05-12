@@ -141,6 +141,26 @@
 <script src="/static/js/calendar.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Debug: Check if version manager is initializing
+        const projectIdElement = document.getElementById('project-id');
+        const versionManagerDiv = document.getElementById('version-manager');
+        
+        console.log('Calendar page loaded');
+        console.log('Project ID element:', projectIdElement);
+        console.log('Version manager div:', versionManagerDiv);
+        
+        if (projectIdElement) {
+            console.log('Project ID:', projectIdElement.value);
+            console.log('Project isVersioned:', '{{ project.isVersioned }}');
+        }
+        
+        // Check if versionManager is initialized
+        if (typeof versionManager !== 'undefined') {
+            console.log('Version manager initialized:', versionManager);
+        } else {
+            console.log('Version manager NOT initialized - this is the issue!');
+        }
+        
         // Add click handler for regenerate calendar button
         const regenerateBtn = document.getElementById("regenerate-calendar");
         if (regenerateBtn) {

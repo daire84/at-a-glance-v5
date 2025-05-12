@@ -6,7 +6,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash 
 
 from utils.decorators import admin_required # Absolute import
 # --- Corrected helpers import ---
-from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, logger, recalculate_shoot_days
+from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, logger, recalculate_shoot_days, save_project_workspace, get_project_workspace
+
 from utils.helpers import update_day_from_form # Absolute import
 # --- Corrected calendar_generator import ---
 from utils.calendar_generator import calculate_department_counts, calculate_location_counts # Absolute import
@@ -135,7 +136,7 @@ def admin_calendar(project_id):
 def admin_day(project_id, date):
     """Day editor"""
     # Import helper function locally or ensure it's imported from app/utils
-    from utils.helpers import update_day_from_form
+    from utils.helpers import update_day_from_form, save_project_workspace, get_project_workspace
     # Import update_calendar_with_location_areas if needed
     from utils.calendar_generator import update_calendar_with_location_areas
 
@@ -215,15 +216,26 @@ def admin_day(project_id, date):
                     # Recalculate all shoot day numbers
                     calendar_data['days'] = recalculate_shoot_days(calendar_data['days'])
 
-            # Save the entire updated calendar
-            # Consider making save_project_calendar more granular later if performance is an issue
-            save_project_calendar(project_id, calendar_data)
-
-            # Recalculate and save counts after saving day changes
+            # Recalculate counts before saving
             calendar_data = calculate_department_counts(calendar_data)
             calendar_data = calculate_location_counts(calendar_data)
-            # update_calendar_with_location_areas might be implicitly covered by calc_loc_counts now
-            save_project_calendar(project_id, calendar_data) # Save again with updated counts/areas
+
+            # Save the calendar - now checking if project is versioned
+            if project.get('isVersioned'):
+                # For versioned projects, save to workspace
+                workspace = get_project_workspace(project_id)
+                if workspace:
+                    workspace['calendarData'] = calendar_data
+                    save_project_workspace(project_id, workspace)
+                    logger.info(f"Saved calendar to workspace for versioned project {project_id}")
+                else:
+                    # Fallback to regular save if workspace not found
+                    logger.warning(f"Workspace not found for versioned project {project_id}, using regular save")
+                    save_project_calendar(project_id, calendar_data)
+            else:
+                # For non-versioned projects, use regular save
+                save_project_calendar(project_id, calendar_data)
+                logger.info(f"Saved calendar for non-versioned project {project_id}")
 
             flash('Day updated successfully', 'success')
             return redirect(url_for('admin.admin_calendar', project_id=project_id))
@@ -236,7 +248,6 @@ def admin_day(project_id, date):
     # GET request or POST error
     # Renders 'admin/day.html'
     return render_template('day.html', project=project, day=day)
-
 
 @admin_bp.route('/locations')
 @admin_required

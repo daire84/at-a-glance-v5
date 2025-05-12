@@ -17,5 +17,7 @@
   "wrapDate": "2025-06-16",
   "notes": "",
   "created": "2025-05-04T18:58:39.580329Z",
-  "updated": "2025-05-04T20:52:43.687722Z"
+  "updated": "2025-05-04T20:52:43.687722Z",
+  "isVersioned": true,
+  "currentWorkspaceVersion": "fb39033d-1e75-49d1-8461-23993eca9f3c"
 }
