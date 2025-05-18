@@ -343,24 +343,24 @@ body.light-theme .calendar-table td {
   background-color: color-mix(in srgb, var(--row-area-color) 25%, var(--background-color));
 }
 
-/* Update your existing row background color definitions */
+/* Updated row background color definitions for dark mode */
 .calendar-row.weekend {
-  background-color: var(--weekend-color, color-mix(in srgb, #3c3c3c 75%, var(--row-area-color, var(--background-alt))));
+  background-color: var(--weekend-color, color-mix(in srgb, #747476 75%, var(--row-area-color, var(--background-alt))));
 }
 .calendar-row.prep {
-  background-color: var(--prep-color, color-mix(in srgb, #2e3e2e 75%, var(--row-area-color, var(--background-alt))));
+  background-color: var(--prep-color, color-mix(in srgb, #344a39 75%, var(--row-area-color, var(--background-alt))));
 }
 .calendar-row.shoot {
-  background-color: var(--shoot-color, color-mix(in srgb, #2e3e4e 75%, var(--row-area-color, var(--background-alt))));
+  background-color: var(--shoot-color, color-mix(in srgb, #2d4561 75%, var(--row-area-color, var(--background-alt))));
 }
 .calendar-row.hiatus {
-  background-color: var(--hiatus-color, color-mix(in srgb, #4e2e2e 75%, var(--row-area-color, var(--background-alt))));
+  background-color: var(--hiatus-color, color-mix(in srgb, #5a3a3a 75%, var(--row-area-color, var(--background-alt))));
 }
 .calendar-row.holiday {
-  background-color: var(--holiday-color, color-mix(in srgb, #4e3e2e 75%, var(--row-area-color, var(--background-alt))));
+  background-color: var(--holiday-color, color-mix(in srgb, #5a4a2f 75%, var(--row-area-color, var(--background-alt))));
 }
 .calendar-row.working-weekend {
-  background-color: var(--working-weekend-color, color-mix(in srgb, #2e4e2e 75%, var(--row-area-color, var(--background-alt))));
+  background-color: var(--working-weekend-color, color-mix(in srgb, #355a35 75%, var(--row-area-color, var(--background-alt))));
 }
 
 .calendar-row.working-weekend .date-cell::after {

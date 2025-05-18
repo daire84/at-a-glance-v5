@@ -1,6 +1,6 @@
 {
-  "baseVersionId": "40416082-179a-4534-8c97-9790bcf1625b",
-  "lastModified": "2025-05-12T23:32:49.565495Z",
+  "baseVersionId": "6a3f4578-603b-40e0-8032-24d84cc7ce9c",
+  "lastModified": "2025-05-12T23:51:47.276643Z",
   "calendarData": {
     "projectId": "f73febab-7b48-4009-8cc7-37df9a2efe62",
     "days": [
@@ -2666,14 +2666,21 @@
         "isWorkingWeekend": false,
         "dayType": "shoot",
         "shootDay": 22,
-        "mainUnit": "",
+        "mainUnit": "PLANE CRASH",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "",
-        "locationArea": "",
+        "location": "Powerscourt",
+        "locationArea": "Wicklow",
         "sequence": "",
-        "departments": [],
-        "notes": ""
+        "departments": [
+          "STN",
+          "SFX",
+          "CR"
+        ],
+        "notes": "",
+        "secondUnit": "",
+        "secondUnitLocation": "",
+        "locationAreaId": "wicklow"
       },
       {
         "date": "2025-04-24",
@@ -3987,9 +3994,9 @@
       }
     ],
     "departmentCounts": {
-      "sfx": 4,
-      "stn": 5,
-      "crane": 0,
+      "sfx": 5,
+      "stn": 6,
+      "crane": 1,
       "stead": 2,
       "pros": 1,
       "ll": 1,
@@ -4046,13 +4053,15 @@
       "Phoenix Park": 1,
       "St Pats": 1,
       "Ana's House": 2,
-      "Fosters Place": 1
+      "Fosters Place": 1,
+      "Powerscourt": 1
     },
     "areaCounts": {
       "ardmore": 4,
       "south": 2,
       "north": 2,
-      "4459abff-cd87-4fdc-a238-1ff355b2e970": 2
+      "4459abff-cd87-4fdc-a238-1ff355b2e970": 2,
+      "wicklow": 1
     },
     "areaColorMap": {
       "north": "#a1cdfc",

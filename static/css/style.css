@@ -1,42 +1,3 @@
-/**
- * =============================================================================
- * Global Stylesheet (style.css)
- * =============================================================================
- *
- * Purpose: Defines the core look and feel, layout, variables, resets,
- * and global utility classes for the entire application.
- * Includes base styles for typography, headers, footers, buttons,
- * project cards, flash messages, etc.
- *
- * Organization:
- * - CSS Variables (:root)
- * - CSS Resets
- * - Base Body & Container Styles
- * - Main Header & Navigation Styles
- * - Main Content Area Styles
- * - Admin Header & Tabs Styles
- * - Project List & Card Styles (Global Base)
- * - Button Styles (Global Base)
- * - Print Button Specifics
- * - Mobile Menu Toggle (Placeholder/Hide)
- * - Empty State Styles
- * - Flash Message Styles (Global)
- * - Hero Section Styles
- * - Footer Styles
- * - Responsive Styles (@media)
- * - Print Styles (@media print)
- * - Navigation Styles (Moved from base.html)
- *
- * Key Techniques Used:
- * - CSS Variables for theming.
- * - Basic CSS Reset.
- * - Flexbox for layout (header, nav, actions).
- * - Grid for project card layout.
- * - `rem` and `px` units.
- * - Transitions for hover effects.
- * - Media Queries for responsiveness and print.
- */
-
 /* Theme CSS Variables - Replace your current :root variables in static/css/style.css */
 
 :root {
@@ -52,8 +13,8 @@
   
   /* Text colors */
   --text-color: #e0e2e7;           /* Light gray text */
-  --text-light: #a0a4ad;           /* Medium-light gray for secondary text */
-  --text-dark: #323233;            /* Dark text for special cases */
+  --text-light: #d7d9dd;           /* Medium-light gray for secondary text */
+  --text-dark: #1c1c20;            /* Dark text for special cases */
   
   /* Background colors */
   --background-color: #1e1e20;     /* Dark background */
@@ -69,6 +30,14 @@
   --success-color: #7eb58d;        /* Muted green */
   --error-color: #d64c4c;          /* Muted red */
   --warning-color: #e6a954;        /* Muted orange */
+
+  /* Calendar row colors - Dark Theme (THESE WILL NOW BE EFFECTIVE) */
+  --weekend-color: #7f7f83;        /* Slate blue-gray for weekends */
+  --prep-color: #477551;           /* Forest green for prep days */
+  --shoot-color: #2d4561;          /* Navy blue for shoot days */
+  --hiatus-color: #5a3a3a;         /* Burgundy for hiatus periods */
+  --holiday-color: #5a4a2f;        /* Amber/golden for holidays */
+  --working-weekend-color: #355a35; /* Emerald green for working weekends */
 }
 
 /* Light Theme Variables */
@@ -99,7 +68,16 @@ body.light-theme {
   --success-color: #4caf50;        /* Green */
   --error-color: #f44336;          /* Red */
   --warning-color: #ff9800;        /* Orange */
+
+  /* Calendar row colors - Light Theme (Still managed by JS or can be moved here too if preferred) */
+  --weekend-color: #e8e8f0;        /* Light blue-gray for weekends */
+  --prep-color: #e0f0e0;           /* Light green for prep days */
+  --shoot-color: #e0e8f0;          /* Light blue for shoot days */
+  --hiatus-color: #f0e0e0;         /* Light red for hiatus */
+  --holiday-color: #f0e8d0;        /* Light amber for holidays */
+  --working-weekend-color: #d8f0d8; /* Light green for working weekends */
 }
+
 /* === CSS RESET === */
 /* Basic reset to remove default browser styling inconsistencies */
 *, *::before, *::after {

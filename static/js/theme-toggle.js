@@ -37,59 +37,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Apply the specified theme to the document
+ * Apply the specified theme to the document by toggling a class on the body.
+ * CSS will handle the application of variables based on this class.
  * @param {string} theme - 'light' or 'dark'
  */
 function applyTheme(theme) {
     if (theme === 'light') {
         document.body.classList.add('light-theme');
-        
-        // Set light theme specific CSS variables
-        document.documentElement.style.setProperty('--page-title-color', '#333333');
-        document.documentElement.style.setProperty('--text-color', '#333333');
-        document.documentElement.style.setProperty('--text-light', '#555555');
-        
-        // Calendar row colors for light theme
-        document.documentElement.style.setProperty('--weekend-color', 'color-mix(in srgb, #f0f0f0 75%, var(--row-area-color, transparent))');
-        document.documentElement.style.setProperty('--prep-color', 'color-mix(in srgb, #e0ffe0 75%, var(--row-area-color, transparent))');
-        document.documentElement.style.setProperty('--shoot-color', 'color-mix(in srgb, #e0f0ff 75%, var(--row-area-color, transparent))');
-        document.documentElement.style.setProperty('--hiatus-color', 'color-mix(in srgb, #ffe0e0 75%, var(--row-area-color, transparent))');
-        document.documentElement.style.setProperty('--holiday-color', 'color-mix(in srgb, #fff0e0 75%, var(--row-area-color, transparent))');
-        document.documentElement.style.setProperty('--working-weekend-color', 'color-mix(in srgb, #e0f0e0 75%, var(--row-area-color, transparent))');
-        
-        // Table header colors
-        document.documentElement.style.setProperty('--table-header-bg', '#546e7a');
-        document.documentElement.style.setProperty('--table-header-color', 'white');
-        
-        // Script info section
-        document.documentElement.style.setProperty('--script-info-bg', '#f8f9fa');
-        document.documentElement.style.setProperty('--script-info-border', '#dee2e6');
-    } else {
+        // All document.documentElement.style.setProperty(...) lines removed for light theme
+    } else { // Dark Theme
         document.body.classList.remove('light-theme');
-        
-        // Reset to dark theme CSS variables
-        document.documentElement.style.setProperty('--page-title-color', 'white');
-        document.documentElement.style.setProperty('--text-color', '#e0e2e7');
-        document.documentElement.style.setProperty('--text-light', '#a0a4ad');
-        
-        // Calendar row colors for dark theme
-        document.documentElement.style.setProperty('--weekend-color', 'color-mix(in srgb, #3c3c3c 75%, var(--row-area-color, var(--background-alt)))');
-        document.documentElement.style.setProperty('--prep-color', 'color-mix(in srgb, #2e3e2e 75%, var(--row-area-color, var(--background-alt)))');
-        document.documentElement.style.setProperty('--shoot-color', 'color-mix(in srgb, #2e3e4e 75%, var(--row-area-color, var(--background-alt)))');
-        document.documentElement.style.setProperty('--hiatus-color', 'color-mix(in srgb, #4e2e2e 75%, var(--row-area-color, var(--background-alt)))');
-        document.documentElement.style.setProperty('--holiday-color', 'color-mix(in srgb, #4e3e2e 75%, var(--row-area-color, var(--background-alt)))');
-        document.documentElement.style.setProperty('--working-weekend-color', 'color-mix(in srgb, #2e4e2e 75%, var(--row-area-color, var(--background-alt)))');
-        
-        // Table header colors
-        document.documentElement.style.setProperty('--table-header-bg', 'var(--primary-color)');
-        document.documentElement.style.setProperty('--table-header-color', 'white');
-        
-        // Script info section
-        document.documentElement.style.setProperty('--script-info-bg', 'var(--background-alt)');
-        document.documentElement.style.setProperty('--script-info-border', 'var(--border-color)');
+        // All document.documentElement.style.setProperty(...) lines removed for dark theme
+        // Also, the explicit .removeProperty() calls from the previous step are no longer needed
+        // as we are not setting them in JS for light mode anymore either.
     }
     
     // Re-apply location area colors after theme change
+    // This might still be needed if locationAreaColors are dynamically generated
+    // and rely on CSS variables that might change with the theme class.
+    // If applyLocationAreaColors directly sets styles or depends on
+    // JS-calculated values based on theme, it should remain.
+    // If it purely relies on CSS variables now defined in style.css,
+    // this explicit call might become less critical, but often harmless.
     setTimeout(function() {
         if (typeof window.applyLocationAreaColors === 'function') {
             const areas = window.getLocationAreas ? window.getLocationAreas() : {};
@@ -110,7 +79,7 @@ function updateToggleUI(theme) {
     if (!themeToggle) return;
     
     const themeIcon = themeToggle.querySelector('.theme-icon');
-    const themeText = themeToggle.querySelector('.theme-text');
+    const themeText = themeToggle.querySelector('.theme-text'); // Assuming you might have text
     
     if (theme === 'light') {
         // Update to show dark mode option
