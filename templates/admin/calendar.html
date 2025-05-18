@@ -151,21 +151,40 @@
         
         if (projectIdElement) {
             console.log('Project ID:', projectIdElement.value);
-            console.log('Project isVersioned:', {{ project.isVersioned|tojson }});
-            console.log('Project full data:', {{ project|tojson }});
+            console.log('Project isVersioned:', {{ project.isVersioned|default(false)|tojson }});
+            // Safely log project data
+            try {
+                console.log('Project full data:', {{ project|tojson }});
+            } catch (e) {
+                console.error('Error logging project data:', e);
+            }
         }
         
         // Initialize version manager once with project data
         if (typeof VersionManager !== 'undefined' && projectIdElement) {
-            const projectData = {{ project|tojson }};
-            
-            // Create and initialize version manager
-            window.versionManager = new VersionManager(projectIdElement.value);
-            
-            // Initialize with project data to avoid API call
-            window.versionManager.initialize(projectData);
-            
-            console.log('Version manager initialized:', window.versionManager);
+            try {
+                const projectData = {{ project|tojson }};
+                
+                // Add isVersioned property if missing
+                if (typeof projectData.isVersioned === 'undefined') {
+                    projectData.isVersioned = false;
+                }
+                
+                // Create and initialize version manager
+                window.versionManager = new VersionManager(projectIdElement.value);
+                
+                // Initialize with project data to avoid API call
+                window.versionManager.initialize(projectData);
+                
+                console.log('Version manager initialized:', window.versionManager);
+            } catch (e) {
+                console.error('Error initializing version manager:', e);
+                // Provide basic UI even if version manager fails
+                const versionManager = document.getElementById('version-manager');
+                if (versionManager) {
+                    versionManager.innerHTML = '<div class="error-message">Error initializing version manager</div>';
+                }
+            }
         } else {
             console.error('VersionManager class not found or project ID missing!');
         }

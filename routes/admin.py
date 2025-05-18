@@ -84,52 +84,81 @@ def admin_project(project_id):
 @admin_required # Apply decorator
 def admin_calendar(project_id):
     """Calendar editor"""
-    project = get_project(project_id)
-    if not project:
-        flash('Project not found', 'error')
+    try:
+        project = get_project(project_id)
+        if not project:
+            flash('Project not found', 'error')
+            return redirect(url_for('admin.admin_dashboard'))
+
+        # Ensure project has isVersioned property
+        if 'isVersioned' not in project:
+            project['isVersioned'] = False
+            
+            # Also save this change back to the file
+            try:
+                save_project(project)
+                logger.info(f"Added missing isVersioned property to project {project_id}")
+            except Exception as e:
+                logger.error(f"Failed to save updated project with isVersioned: {str(e)}")
+
+        calendar_data = get_project_calendar(project_id)
+
+        # --- Load supporting data ---
+        departments = []
+        departments_file = os.path.join(DATA_DIR, 'departments.json')
+        if os.path.exists(departments_file):
+            try:
+                with open(departments_file, 'r') as f:
+                    departments = json.load(f)
+            except Exception as e:
+                logger.error(f"Error loading departments: {str(e)}")
+                departments = []  # Ensure departments is always a list
+
+        locations = []
+        locations_file = os.path.join(DATA_DIR, 'locations.json')
+        if os.path.exists(locations_file):
+            try:
+                with open(locations_file, 'r') as f:
+                    locations = json.load(f)
+            except Exception as e:
+                logger.error(f"Error loading locations: {str(e)}")
+                locations = []  # Ensure locations is always a list
+
+        areas = []
+        areas_file = os.path.join(DATA_DIR, 'areas.json')
+        if os.path.exists(areas_file):
+            try:
+                with open(areas_file, 'r') as f:
+                    areas = json.load(f)
+            except Exception as e:
+                logger.error(f"Error loading areas in admin_calendar route: {str(e)}")
+                areas = []  # Ensure areas is always a list
+        # --- End Load supporting data ---
+
+        # Ensure calendar_data is properly structured
+        if not isinstance(calendar_data, dict):
+            calendar_data = {"days": []}
+        if "days" not in calendar_data:
+            calendar_data["days"] = []
+
+        # Ensure the latest supporting data is available in the calendar_data object
+        calendar_data['departments'] = departments
+        calendar_data['locationAreas'] = areas # Add/overwrite with the fresh list
+
+        # Calculate counts safely
+        try:
+            calendar_data = calculate_department_counts(calendar_data)
+            calendar_data = calculate_location_counts(calendar_data)
+        except Exception as e:
+            logger.error(f"Error calculating counts: {str(e)}")
+
+        # Renders 'admin/calendar.html' - Corrected template path!
+        return render_template('admin/calendar.html', project=project, calendar=calendar_data, locations=locations)
+    
+    except Exception as e:
+        logger.error(f"Error in admin_calendar for project {project_id}: {str(e)}")
+        flash(f'Error loading calendar: {str(e)}', 'error')
         return redirect(url_for('admin.admin_dashboard'))
-
-    calendar_data = get_project_calendar(project_id)
-
-    # --- Load supporting data ---
-    departments = []
-    departments_file = os.path.join(DATA_DIR, 'departments.json')
-    if os.path.exists(departments_file):
-        try:
-            with open(departments_file, 'r') as f:
-                departments = json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading departments: {str(e)}")
-
-    locations = []
-    locations_file = os.path.join(DATA_DIR, 'locations.json')
-    if os.path.exists(locations_file):
-        try:
-            with open(locations_file, 'r') as f:
-                locations = json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading locations: {str(e)}")
-
-    areas = []
-    areas_file = os.path.join(DATA_DIR, 'areas.json')
-    if os.path.exists(areas_file):
-        try:
-            with open(areas_file, 'r') as f:
-                areas = json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading areas in admin_calendar route: {str(e)}")
-    # --- End Load supporting data ---
-
-    # Ensure the latest supporting data is available in the calendar_data object
-    calendar_data['departments'] = departments
-    calendar_data['locationAreas'] = areas # Add/overwrite with the fresh list
-
-    # Calculate counts
-    calendar_data = calculate_department_counts(calendar_data)
-    calendar_data = calculate_location_counts(calendar_data)
-
-    # Renders 'admin/calendar.html'
-    return render_template('calendar.html', project=project, calendar=calendar_data, locations=locations)
 
 @admin_bp.route('/day/<project_id>/<date>', methods=['GET', 'POST'])
 @admin_required

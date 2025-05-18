@@ -18,24 +18,39 @@ class VersionManager {
         try {
             // Use provided project data or fetch from API
             const project = projectData ? projectData : await this.getProject();
-            this.isVersioned = project.isVersioned || false;
-    
+            
+            // Defensive checking for project and isVersioned property
+            if (!project) {
+                console.warn("Project data is empty or invalid");
+                this.isVersioned = false;
+            } else {
+                // More explicit check that handles undefined properly
+                this.isVersioned = project.isVersioned === true;
+                console.log('Project data received:', project);
+                console.log('isVersioned value:', this.isVersioned);
+            }
+        
             if (!this.isVersioned) {
                 console.log('Project is not versioned yet - but will show UI anyway');
             }
-    
+        
             // Create the version UI container regardless of versioned status
             this.createVersionUI();
-    
+        
             // Only load versions if project is versioned
             if (this.isVersioned) {
-                // Load versions
-                await this.loadVersions();
-    
-                // Check for workspace changes
-                this.checkWorkspaceStatus();
+                try {
+                    // Load versions
+                    await this.loadVersions();
+            
+                    // Check for workspace changes
+                    this.checkWorkspaceStatus();
+                } catch (versionError) {
+                    console.error('Error loading versions:', versionError);
+                    // Continue showing UI even if loading versions fails
+                }
             }
-    
+        
         } catch (error) {
             console.error('Error initializing version manager:', error);
             // Still create the UI even on error

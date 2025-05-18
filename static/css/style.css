@@ -382,12 +382,14 @@ body.light-theme .admin-tabs a {
 }
 
 /* Footer section of the project card */
+/* Modified rule */
 .project-card-footer {
-  padding: 0.8rem;  /* Reduced padding */
-  border-top: 1px solid var(--border-color); /* Separator line */
-  display: flex; /* Arrange items horizontally */
-  justify-content: flex-end; /* Align items (buttons) to the right */
-  margin-top: auto; /* Push footer to bottom if body content is short */
+  padding: 0.8rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end; /* Keeps buttons to the right */
+  align-items: center; /* Vertically aligns the buttons to their center */
+  margin-top: auto;
 }
 
 /* Container for groups of buttons */

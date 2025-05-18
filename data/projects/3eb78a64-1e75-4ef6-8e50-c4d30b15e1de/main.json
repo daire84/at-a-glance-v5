@@ -1,7 +1,7 @@
 {
-  "id": "700f4880-2d6f-4c03-a22f-9d01d30aa327",
-  "title": "Lee Cronin's - The Mummy",
-  "version": "V14",
+  "id": "3eb78a64-1e75-4ef6-8e50-c4d30b15e1de",
+  "title": "Lee Cronin's 'The Mummy'",
+  "version": "v14",
   "director": "Lee Cronin",
   "producer": "John Keville",
   "lineProducer": "Niamh Gale",
@@ -10,14 +10,13 @@
   "secondAD": "Nicola Long",
   "scriptTitle": "Shooting Script",
   "scriptEpisode": "",
-  "scriptDated": "2025-05-01",
-  "scriptColor": "Buff",
+  "scriptDated": "2025-05-19",
+  "scriptColor": "2nd Pink",
   "prepStartDate": "2025-01-06",
   "shootStartDate": "2025-03-24",
   "wrapDate": "2025-06-16",
   "notes": "",
-  "created": "2025-05-04T18:58:39.580329Z",
-  "updated": "2025-05-04T20:52:43.687722Z",
-  "isVersioned": true,
-  "currentWorkspaceVersion": "fb39033d-1e75-49d1-8461-23993eca9f3c"
+  "isVersioned": false,
+  "created": "2025-05-18T21:53:49.413582Z",
+  "updated": "2025-05-18T21:53:49.413582Z"
 }
