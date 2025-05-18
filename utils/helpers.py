@@ -72,17 +72,10 @@ def save_project(project):
             project_id = str(uuid.uuid4())
             project['id'] = project_id
 
-        # Ensure isVersioned property exists
-        if 'isVersioned' not in project:
-            project['isVersioned'] = False
-            logger.info(f"Added missing isVersioned property to project {project_id}")
+        # Always set isVersioned to true for all projects
+        project['isVersioned'] = True
 
-        # Basic validation/sanitization (expand as needed)
-        project_id = str(project_id).strip() # Ensure it's a string and remove whitespace
-        if not project_id or '/' in project_id or '\\' in project_id or '.' in project_id:
-             logger.error(f"Invalid project ID generated or provided: {project_id}")
-             raise ValueError("Invalid project ID")
-
+        # Rest of the function remains the same...
         project_dir = os.path.join(PROJECTS_DIR, project_id)
         os.makedirs(project_dir, exist_ok=True)
 

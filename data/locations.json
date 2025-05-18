@@ -1,31 +1,31 @@
 [
   {
-    "name": "A Stage",
+    "name": "A Stage Ardmore",
     "areaId": "ardmore",
     "address": "Studio Complex, Sound Stage A",
     "notes": "",
     "id": "studio-a"
   },
   {
-    "name": "B Stage",
-    "areaId": "ardmore",
+    "name": "B Stage Ardmore",
+    "areaId": "034142b7-5b63-4fc3-9406-fc04dc2f6efd",
     "address": "Studio Complex, Sound Stage B",
     "notes": "",
     "id": "studio-b"
   },
   {
-    "name": "C Stage",
-    "areaId": "ardmore",
+    "name": "C Stage Ardmore",
+    "areaId": "d228a557-0301-45fe-89ba-bc0cd781d404",
     "address": "Ardmore Studios, Bray",
     "notes": "Large sound stage",
     "id": "ardmore-a"
   },
   {
-    "id": "ardmore-d",
-    "name": "D Stage",
-    "areaId": "ardmore",
+    "name": "D Stage Ardmore",
+    "areaId": "aa1f6728-63e5-445c-b4f7-59a3111c4042",
     "address": "Ardmore Studios, Bray",
-    "notes": "Medium sound stage"
+    "notes": "Medium sound stage",
+    "id": "ardmore-d"
   },
   {
     "name": "St Pats",

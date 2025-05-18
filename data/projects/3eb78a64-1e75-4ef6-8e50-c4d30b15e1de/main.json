@@ -16,7 +16,8 @@
   "shootStartDate": "2025-03-24",
   "wrapDate": "2025-06-16",
   "notes": "",
-  "isVersioned": false,
+  "isVersioned": true,
   "created": "2025-05-18T21:53:49.413582Z",
-  "updated": "2025-05-18T21:53:49.413582Z"
+  "updated": "2025-05-18T21:53:49.413582Z",
+  "currentWorkspaceVersion": "8f928202-a10a-4282-9ff5-df03ad6a7ba1"
 }
