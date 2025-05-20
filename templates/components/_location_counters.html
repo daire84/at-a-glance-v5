@@ -1,3 +1,6 @@
+<!-- In templates/components/_location_counters.html -->
+<!-- Update the counter-item divs to include data attributes: -->
+
 <div class="location-counters">
     <h4 class="counter-title">Location Counts</h4>
     <div class="counter-grid">
@@ -21,7 +24,11 @@
                         {% endfor %}
                     {% endif %}
 
-                    <div class="counter-item" style="background-color: {{ area_color }};">
+                    <!-- ADD data-location attribute here: -->
+                    <div class="counter-item" 
+                         style="background-color: {{ area_color }};" 
+                         data-location="{{ location }}"
+                         data-area-color="{{ area_color }}">
                         <div class="counter-label">{{ location }}</div>
                         <div class="counter-value">{{ count }}</div>
                     </div>

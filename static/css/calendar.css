@@ -85,8 +85,8 @@
 }
 
 .meta-label {
-  font-size: 0.75rem;
-  color: var(--text-light);
+  font-size: 0.8rem;
+  color: var(--accent-dark);
   margin-bottom: 0.15rem;
 }
 
@@ -644,6 +644,400 @@ textarea#mainUnit:focus {
   gap: 0.5rem; /* Add gap between filter buttons */
 }
 
+/* Replace the viewer header CSS with this more specific version */
+
+/* Unified Viewer Header Layout - ONLY affects viewer pages */
+.admin-header.viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  min-height: 60px;
+}
+
+.viewer-header .header-spacer {
+  flex: 1;
+}
+
+.viewer-header .header-center {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.viewer-header .admin-actions {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Slightly smaller Go to Today button for viewer */
+.viewer-header #go-to-today-btn.enhanced-today-btn {
+  padding: 12px 20px;
+  font-size: 1em;
+  min-width: 140px;
+}
+
+/* Mobile responsiveness - ONLY for viewer header */
+@media (max-width: 768px) {
+  .admin-header.viewer-header {
+      flex-direction: column;
+      gap: 15px;
+      text-align: center;
+  }
+  
+  .viewer-header .header-spacer {
+      display: none;
+  }
+  
+  .viewer-header .header-center {
+      order: -1;
+  }
+  
+  .viewer-header .admin-actions {
+      justify-content: center;
+      flex-wrap: wrap;
+  }
+  
+  .viewer-header #go-to-today-btn.enhanced-today-btn {
+      padding: 10px 16px;
+      font-size: 0.9em;
+      min-width: 120px;
+  }
+}
+
+/* Add this mobile CSS to your calendar.css file */
+
+/* Mobile fixes for admin calendar buttons */
+@media (max-width: 768px) {
+    
+  /* Admin calendar actions - stack vertically on mobile */
+  .admin-calendar .calendar-actions {
+      flex-direction: column;
+      gap: 15px;
+      text-align: center;
+      align-items: center;
+  }
+  
+  /* Make Go to Today button smaller on mobile for admin */
+  .admin-calendar #go-to-today-btn.enhanced-today-btn {
+      padding: 10px 16px;
+      font-size: 0.9em;
+      min-width: 120px;
+      max-width: 200px; /* Prevent it from getting too wide */
+  }
+  
+  /* Ensure action buttons container doesn't get squashed */
+  .admin-calendar .action-buttons {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+  }
+  
+  /* Make regenerate button appropriately sized for mobile */
+  .admin-calendar #regenerate-calendar {
+      padding: 10px 16px;
+      font-size: 0.9em;
+      white-space: nowrap; /* Prevent text wrapping */
+  }
+  
+  /* Stack the entire shoot days section vertically */
+  .admin-calendar .calendar-actions h3 {
+      margin-bottom: 10px;
+      width: 100%;
+  }
+}
+
+/* Extra small mobile screens */
+@media (max-width: 480px) {
+  
+  /* Even smaller buttons for very small screens */
+  .admin-calendar #go-to-today-btn.enhanced-today-btn {
+      padding: 8px 12px;
+      font-size: 0.85em;
+      min-width: 100px;
+  }
+  
+  .admin-calendar #go-to-today-btn .today-btn-content i {
+      font-size: 1.1em; /* Slightly smaller icon */
+  }
+  
+  .admin-calendar #go-to-today-btn .today-btn-main {
+      font-size: 0.9em;
+  }
+  
+  .admin-calendar #go-to-today-btn .today-btn-sub {
+      font-size: 0.7em;
+  }
+  
+  .admin-calendar #regenerate-calendar {
+      padding: 8px 12px;
+      font-size: 0.85em;
+  }
+}
+
+/* Keep admin calendar header layout unchanged */
+.admin-calendar .admin-header {
+  /* This preserves the original admin calendar header styling */
+  display: block; /* Override any flex settings for admin calendar */
+}
+
+.admin-calendar .calendar-actions {
+  /* Ensure admin calendar actions layout stays the same */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.admin-calendar .action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Add these styles to static/css/calendar.css */
+
+/* Go to Today button highlight effect */
+.today-highlight {
+  animation: pulse-highlight 2s ease-in-out;
+  border: 2px solid #007bff !important;
+}
+
+@keyframes pulse-highlight {
+  0% { 
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); 
+  }
+  70% { 
+      box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); 
+  }
+  100% { 
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); 
+  }
+}
+
+/* Clickable filter styling */
+.clickable-filter {
+  transition: all 0.2s ease;
+}
+
+.clickable-filter:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.filter-active {
+  background-color: #007bff !important;
+  color: white !important;
+  font-weight: bold;
+  border: 2px solid #0056b3 !important;
+}
+
+/* Location filter indicator */
+.location-filter-indicator {
+  margin-bottom: 15px;
+  border-left: 4px solid #007bff;
+}
+
+/* Hide rows filtered by location */
+.calendar-row.location-filtered-hidden {
+  display: none !important;
+}
+
+/* Ensure visibility transitions are smooth */
+.calendar-row {
+  transition: opacity 0.3s ease;
+}
+
+/* Enhanced Go to Today button styling */
+.calendar-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.calendar-actions h3 {
+  margin: 0;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Viewer header layout */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.viewer-today-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Enhanced Today Button */
+#go-to-today-btn.enhanced-today-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 25px;
+  font-weight: 600;
+  font-size: 1.1em;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 160px;
+}
+
+#go-to-today-btn.enhanced-today-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+  background: linear-gradient(135deg, #0056b3, #004085);
+}
+
+#go-to-today-btn.enhanced-today-btn:active {
+  transform: translateY(0);
+}
+
+.today-btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.today-btn-content i {
+  font-size: 1.3em;
+  margin-bottom: 2px;
+}
+
+.today-btn-main {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.today-btn-sub {
+  font-size: 0.8em;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+#go-to-today-btn.not-in-schedule {
+  background: linear-gradient(135deg, #6c757d, #495057);
+}
+
+#go-to-today-btn.not-found {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+/* Theme-Aware Location Filter Section Styling - Matches your style.css variables */
+
+.location-filter-section {
+  margin: 25px 0 15px 0;
+  padding: 15px;
+  background-color: var(--background-alt);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.location-filter-title {
+  color: var(--text-color);
+  margin: 0 0 10px 0;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.location-filter-help {
+  margin-bottom: 10px;
+}
+
+/* Theme-Aware Filter Help Text */
+.filter-help-text {
+  background-color: var(--background-alt);
+  border-left: 4px solid var(--accent-color);
+  border: 1px solid var(--border-color);
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin: 8px 0;
+  transition: background-color 0.3s ease;
+  /* Use semi-transparent overlay for better theme integration */
+  position: relative;
+}
+
+.filter-help-text small {
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 0.9em;
+  position: relative;
+  z-index: 2;
+}
+
+/* Theme-Aware Location Filter Indicator */
+.location-filter-indicator {
+  margin: 15px 0 20px 0;
+  border-left: 4px solid var(--accent-color);
+  background-color: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px 15px;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.location-filter-indicator span {
+  color: var(--text-color);
+}
+
+.location-filter-indicator button {
+  background-color: var(--accent-color);
+  color: white;
+  border: 1px solid var(--accent-color);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  transition: all 0.3s ease;
+}
+
+.location-filter-indicator button:hover {
+  background-color: var(--accent-dark);
+  border-color: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+/* Improved spacing between sections */
+.location-areas {
+  margin-top: 10px;
+}
+
+/* Enhanced contrast for better readability */
+:root .location-filter-section {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .location-filter-section {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 /* ============================================= */
 /* === PRINT STYLES ============================ */
 /* ============================================= */
@@ -1095,14 +1489,48 @@ textarea#mainUnit:focus {
     font-size: 0.7rem; /* Smaller font size */
   }
   
-  /* Adjust project info header for mobile */
-  .project-meta {
-    gap: 0.3rem; /* Tighter spacing */
+    
+    /* Project metadata sections - make them responsive grids */
+    .project-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Two equal columns */
+      gap: 15px 20px; /* Vertical gap 15px, horizontal gap 20px */
+      margin: 15px 0;
   }
   
+  /* Individual meta items - ensure they stack nicely */
   .meta-group {
-    min-width: 0; /* Allow groups to be smaller */
-    flex-basis: calc(50% - 0.15rem); /* Two columns layout */
+      display: flex;
+      flex-direction: column;
+      text-align: center; /* Keep text left-aligned within each cell */
+  }
+  
+  .meta-label {
+      font-size: 0.85em;
+      margin-bottom: 4px;
+      color: var(--accent-dark);
+  }
+  
+  .meta-value {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: var(--text-color);
+  }
+  
+  /* Project header adjustments for mobile */
+  .project-header-top {
+      text-align: center;
+      margin-bottom: 20px;
+  }
+  
+  .project-title {
+      font-size: 1.3em;
+      margin-bottom: 8px;
+  }
+  
+  .version-badge {
+      font-size: 0.8em;
+      margin-top: 5px;
   }
   
   /* Make counter grid more compact */

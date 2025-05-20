@@ -46,12 +46,22 @@
 
     <div class="calendar-actions">
         <h3>Shoot Days</h3>
+        <!-- Enhanced Go to Today Button (centered) -->
+        <button class="button enhanced-today-btn" id="go-to-today-btn">
+            <div class="today-btn-content">
+                <i class="fas fa-calendar-day"></i>
+                <span class="today-btn-main">Go to Today</span>
+                <span class="today-btn-sub">Loading...</span>
+            </div>
+        </button>
         <div class="action-buttons">
             <button class="button" id="regenerate-calendar">Regenerate Calendar</button>
         </div>
     </div>
 
     {% include 'components/_department_counters.html' %}
+
+    {% include 'components/_location_filter_section.html' %}
 
     {% include 'components/_location_areas.html' %}
 

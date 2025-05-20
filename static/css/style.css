@@ -268,7 +268,7 @@ h3 {
 /* Header specific to admin sections */
 /* Admin header and tabs styling fixes */
 .admin-header h2 {
-  color: var(--page-title-color);
+  color: var(--title-text-color);
   font-size: 1.4rem;
   margin-bottom: 1.2rem;
 }

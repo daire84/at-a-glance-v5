@@ -52,7 +52,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
+
+<!-- Replace both sections in templates/viewer.html with this single unified header: -->
+
+<div class="admin-header viewer-header">
+    <!-- Left side spacer -->
+    <div class="header-spacer"></div>
+    
+    <!-- Center: Go to Today Button -->
+    <div class="header-center">
+        <button id="go-to-today-btn" class="button enhanced-today-btn">
+            <div class="today-btn-content">
+                <i class="fas fa-calendar-day"></i>
+                <span class="today-btn-main">Go to Today</span>
+                <span class="today-btn-sub">Loading...</span>
+            </div>
+        </button>
+    </div>
+    
+    <!-- Right side: Action buttons -->
     <div class="admin-actions">
         <button onclick="window.print();" class="print-button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -101,6 +119,7 @@
         {% include 'components/_project_header.html' %}
         {% include 'components/_filter_panel.html' %}
         {% include 'components/_department_counters.html' %}
+        {% include 'components/_location_filter_section.html' %}
         {% include 'components/_location_areas.html' %}
         {% include 'components/_location_counters.html' %}
         {% include 'components/_calendar_mobile_controls.html' %}

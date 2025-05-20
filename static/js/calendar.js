@@ -108,6 +108,339 @@ function enhanceLocationCounters() {
     });
 }
 
+/**
+ * Enhanced Go to Today functionality - scrolls calendar to today's date and shows current shoot day
+ */
+function goToToday() {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    
+    // Find the day element for today - try different possible selectors
+    let todayElement = document.querySelector(`[data-date="${todayString}"]`);
+    
+    // If not found, try looking in calendar rows
+    if (!todayElement) {
+        todayElement = document.querySelector(`.calendar-row[data-date="${todayString}"]`);
+    }
+    
+    if (todayElement) {
+        // Smooth scroll to today's date
+        todayElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+        
+        // Optional: Add a temporary highlight effect
+        todayElement.classList.add('today-highlight');
+        setTimeout(() => {
+            todayElement.classList.remove('today-highlight');
+        }, 2000);
+        
+        // Get shoot day info
+        const shootDayCell = todayElement.querySelector('.day-cell');
+        const shootDay = shootDayCell ? shootDayCell.textContent.trim() : '';
+        
+        console.log(`Scrolled to today's date: ${todayString}${shootDay ? ` (Shoot Day ${shootDay})` : ''}`);
+    } else {
+        // If today's date isn't in the current calendar view
+        console.log(`Today's date (${todayString}) not found in calendar`);
+        
+        // Show a more helpful message
+        const button = document.getElementById('go-to-today-btn');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-exclamation-circle"></i> Not in Schedule';
+        button.classList.add('not-found');
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('not-found');
+        }, 3000);
+    }
+}
+
+/**
+ * Update the Go to Today button with current information
+ */
+function updateGoToTodayButton() {
+    const button = document.getElementById('go-to-today-btn');
+    if (!button) return;
+    
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    
+    // Find today's row
+    const todayRow = document.querySelector(`.calendar-row[data-date="${todayString}"]`);
+    
+    if (todayRow) {
+        const shootDayCell = todayRow.querySelector('.day-cell');
+        const shootDay = shootDayCell ? shootDayCell.textContent.trim() : '';
+        
+        if (shootDay) {
+            button.innerHTML = `
+                <div class="today-btn-content">
+                    <i class="fas fa-calendar-day"></i>
+                    <span class="today-btn-main">Go to Today</span>
+                    <span class="today-btn-sub">Shoot Day ${shootDay}</span>
+                </div>
+            `;
+        } else {
+            // Check if it's a weekend, holiday, or other day type
+            const dayType = todayRow.classList.contains('weekend') ? 'Weekend' :
+                           todayRow.classList.contains('holiday') ? 'Holiday' :
+                           todayRow.classList.contains('hiatus') ? 'Hiatus' :
+                           todayRow.classList.contains('prep') ? 'Prep Day' : 'Non-Shoot';
+            
+            button.innerHTML = `
+                <div class="today-btn-content">
+                    <i class="fas fa-calendar-day"></i>
+                    <span class="today-btn-main">Go to Today</span>
+                    <span class="today-btn-sub">${dayType}</span>
+                </div>
+            `;
+        }
+        button.classList.add('enhanced-today-btn');
+    } else {
+        button.innerHTML = `
+            <div class="today-btn-content">
+                <i class="fas fa-calendar-day"></i>
+                <span class="today-btn-main">Go to Today</span>
+                <span class="today-btn-sub">Not in Schedule</span>
+            </div>
+        `;
+        button.classList.add('enhanced-today-btn', 'not-in-schedule');
+    }
+}
+
+/**
+ * Enhanced Location Filter System - locations and areas only
+ */
+class LocationFilter {
+    constructor() {
+        this.activeFilters = {
+            locations: new Set(),
+            areas: new Set()
+            // Removed departments
+        };
+        this.init();
+    }
+
+    init() {
+        this.setupLocationClickHandlers();
+        this.setupAreaClickHandlers();
+        this.setupClearFilters();
+        // Removed setupDepartmentClickHandlers
+    }
+
+    setupLocationClickHandlers() {
+        // Make location count boxes clickable
+        document.querySelectorAll('.location-counters .counter-item').forEach(counter => {
+            const label = counter.querySelector('.counter-label');
+            if (label) {
+                counter.style.cursor = 'pointer';
+                counter.title = 'Click to filter by this location';
+                counter.classList.add('clickable-filter');
+                
+                counter.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const locationName = label.textContent.trim();
+                    this.toggleLocationFilter(locationName, counter);
+                });
+            }
+        });
+    }
+
+    setupAreaClickHandlers() {
+        // Make area boxes clickable
+        document.querySelectorAll('.location-areas .area-tag').forEach(counter => {
+            counter.style.cursor = 'pointer';
+            counter.title = 'Click to filter by this area';
+            counter.classList.add('clickable-filter');
+            
+            counter.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Extract area name, excluding count if present
+                const nameElement = counter.cloneNode(true);
+                const countElement = nameElement.querySelector('.area-count');
+                if (countElement) {
+                    nameElement.removeChild(countElement);
+                }
+                const areaName = nameElement.textContent.trim();
+                this.toggleAreaFilter(areaName, counter);
+            });
+        });
+    }
+
+    toggleLocationFilter(locationName, element) {
+        if (this.activeFilters.locations.has(locationName)) {
+            this.activeFilters.locations.delete(locationName);
+            element.classList.remove('filter-active');
+        } else {
+            this.activeFilters.locations.add(locationName);
+            element.classList.add('filter-active');
+        }
+        this.applyFilters();
+    }
+
+    toggleAreaFilter(areaName, element) {
+        if (this.activeFilters.areas.has(areaName)) {
+            this.activeFilters.areas.delete(areaName);
+            element.classList.remove('filter-active');
+        } else {
+            this.activeFilters.areas.add(areaName);
+            element.classList.add('filter-active');
+        }
+        this.applyFilters();
+    }
+
+    applyFilters() {
+        const hasLocationFilters = this.activeFilters.locations.size > 0;
+        const hasAreaFilters = this.activeFilters.areas.size > 0;
+        
+        // If no filters active, show all
+        if (!hasLocationFilters && !hasAreaFilters) {
+            this.showAllDays();
+            return;
+        }
+
+        // Apply filters to calendar rows
+        document.querySelectorAll('.calendar-row').forEach(row => {
+            let showRow = false;
+
+            // Check location filters
+            if (hasLocationFilters) {
+                const locationCell = row.querySelector('.location-cell');
+                if (locationCell) {
+                    const locationText = locationCell.textContent.trim();
+                    showRow = Array.from(this.activeFilters.locations).some(loc => 
+                        locationText.includes(loc)
+                    );
+                }
+            }
+
+            // Check area filters
+            if (hasAreaFilters && !showRow) {
+                const areaAttribute = row.getAttribute('data-area');
+                if (areaAttribute) {
+                    showRow = this.activeFilters.areas.has(areaAttribute);
+                } else {
+                    // Fallback: check location text against areas
+                    const locationCell = row.querySelector('.location-cell');
+                    if (locationCell) {
+                        const locationText = locationCell.textContent.trim();
+                        showRow = Array.from(this.activeFilters.areas).some(area => 
+                            locationText.includes(area)
+                        );
+                    }
+                }
+            }
+
+            // Apply location filter styling
+            if (hasLocationFilters || hasAreaFilters) {
+                row.classList.toggle('location-filtered-hidden', !showRow);
+            } else {
+                row.classList.remove('location-filtered-hidden');
+            }
+        });
+
+        this.updateFilterIndicator();
+        this.updateFilterStats();
+    }
+
+    showAllDays() {
+        document.querySelectorAll('.calendar-row').forEach(row => {
+            row.classList.remove('location-filtered-hidden');
+        });
+        this.clearFilterIndicator();
+        this.updateFilterStats();
+    }
+
+    updateFilterIndicator() {
+        let filterText = 'Active Location Filters: ';
+        const filters = [];
+        
+        if (this.activeFilters.locations.size > 0) {
+            filters.push(`Locations: ${Array.from(this.activeFilters.locations).join(', ')}`);
+        }
+        
+        if (this.activeFilters.areas.size > 0) {
+            filters.push(`Areas: ${Array.from(this.activeFilters.areas).join(', ')}`);
+        }
+        
+        filterText += filters.join(' | ');
+        
+        this.showFilterIndicator(filterText);
+    }
+
+    showFilterIndicator(text) {
+        let indicator = document.getElementById('location-filter-indicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'location-filter-indicator';
+            indicator.className = 'alert alert-info location-filter-indicator';
+            indicator.style.margin = '15px 0 20px 0';
+            indicator.style.display = 'flex';
+            indicator.style.justifyContent = 'space-between';
+            indicator.style.alignItems = 'center';
+            
+            const textSpan = document.createElement('span');
+            textSpan.textContent = text;
+            
+            const clearBtn = document.createElement('button');
+            clearBtn.textContent = 'Clear Location Filters';
+            clearBtn.className = 'btn btn-sm btn-outline-primary';
+            clearBtn.onclick = () => this.clearAllFilters();
+            
+            indicator.appendChild(textSpan);
+            indicator.appendChild(clearBtn);
+            
+            // Find the location areas section to insert before it
+            const locationAreas = document.querySelector('.location-areas');
+            if (locationAreas) {
+                locationAreas.parentNode.insertBefore(indicator, locationAreas);
+            } else {
+                // Fallback to old position
+                const calendar = document.querySelector('.calendar-container') || document.querySelector('.calendar-table-wrapper');
+                if (calendar) {
+                    calendar.insertBefore(indicator, calendar.firstChild);
+                }
+            }
+        } else {
+            indicator.querySelector('span').textContent = text;
+        }
+    }
+
+    clearFilterIndicator() {
+        const indicator = document.getElementById('location-filter-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+
+    updateFilterStats() {
+        // Update existing filter stats to account for location filtering
+        updateFilterStats(); // Call the existing function
+    }
+
+    clearAllFilters() {
+        this.activeFilters.locations.clear();
+        this.activeFilters.areas.clear();
+        
+        document.querySelectorAll('.filter-active').forEach(el => {
+            el.classList.remove('filter-active');
+        });
+        
+        this.showAllDays();
+    }
+
+    setupClearFilters() {
+        // The clear button is now handled in the filter indicator
+        // No separate clear button needed
+    }
+}
+
+// Make LocationFilter available globally
+window.LocationFilter = LocationFilter;
+
 // =======================================
 // Feature Initialization Functions
 // =======================================
@@ -347,27 +680,22 @@ function applyAllFilters() {
 }
 
 /**
- * Updates the filter statistics display elements.
+ * Updates the filter statistics display elements - ENHANCED VERSION
  */
 function updateFilterStats() {
     const totalRows = document.querySelectorAll('.calendar-row').length;
-    // Count only rows that DON'T have the filtered-hidden class
-    const visibleRows = document.querySelectorAll('.calendar-row:not(.filtered-hidden)').length;
+    // Count rows that DON'T have either filtered-hidden OR location-filtered-hidden classes
+    const visibleRows = document.querySelectorAll('.calendar-row:not(.filtered-hidden):not(.location-filtered-hidden)').length;
     const totalShootDays = document.querySelectorAll('.calendar-row.shoot').length;
-    const visibleShootDays = document.querySelectorAll('.calendar-row.shoot:not(.filtered-hidden)').length;
-    // Add stats for second unit days if needed
-    // const totalSecondUnitDays = document.querySelectorAll('.calendar-row .second-unit-cell:not(:empty)').length; // Example criteria
-    // const visibleSecondUnitDays = document.querySelectorAll('.calendar-row:not(.filtered-hidden) .second-unit-cell:not(:empty)').length; // Example criteria
+    const visibleShootDays = document.querySelectorAll('.calendar-row.shoot:not(.filtered-hidden):not(.location-filtered-hidden)').length;
 
     const statsTotal = document.getElementById('filter-stats-total');
     const statsVisible = document.getElementById('filter-stats-visible');
     const statsShootDays = document.getElementById('filter-stats-shoot-days');
-    // const statsSecondUnit = document.getElementById('filter-stats-second-unit'); // Get the element
 
     if (statsTotal) statsTotal.textContent = totalRows;
     if (statsVisible) statsVisible.textContent = visibleRows;
     if (statsShootDays) statsShootDays.textContent = `${visibleShootDays} / ${totalShootDays}`;
-    // if (statsSecondUnit) statsSecondUnit.textContent = `${visibleSecondUnitDays} / ${totalSecondUnitDays}`; // Update the display
 }
 
 /**
@@ -656,6 +984,29 @@ document.addEventListener('DOMContentLoaded', function() {
         enhanceLocationCounters(); // Ensure contrast/colors for counters
     } catch (error) {
         console.error("Error during core visual setup:", error);
+    }
+
+    // --- NEW: Go to Today Button Setup ---
+    try {
+        const goToTodayBtn = document.getElementById('go-to-today-btn');
+        if (goToTodayBtn) {
+            goToTodayBtn.addEventListener('click', goToToday);
+            updateGoToTodayButton(); // Update button with current info
+            console.log("Go to Today button initialized");
+        }
+    } catch (error) {
+        console.error("Error setting up Go to Today button:", error);
+    }
+
+    // --- NEW: Location Filtering Setup ---
+    try {
+        // Initialize location filtering after a short delay to ensure all elements are rendered
+        setTimeout(() => {
+            window.locationFilter = new LocationFilter();
+            console.log("Location filtering initialized");
+        }, 100);
+    } catch (error) {
+        console.error("Error setting up location filtering:", error);
     }
 
     // --- 2. Filter Setup ---
