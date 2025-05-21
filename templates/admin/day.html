@@ -5,6 +5,7 @@
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/day-editor-enhanced.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -15,12 +16,44 @@
         {% else %}
             Edit Shoot Day {{ day.shootDay if day.shootDay }}
         {% endif %}
-         <span style="font-weight: normal; font-size: 0.9em;">({{ day.date }})</span> {# Added date to header #}
+         <span style="font-weight: normal; font-size: 0.9em;">({{ day.date }})</span>
     </h2>
     <div class="admin-actions">
-        {# Points to 'admin_calendar' function in 'admin' blueprint, passing project_id #}
+        <button id="exit-editor" class="button secondary">Exit Editor</button>
         <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button secondary">Back to Calendar</a>
     </div>
+</div>
+
+<!-- Day Navigation Bar -->
+<div class="day-navigation-bar">
+    <button id="prev-day" class="nav-button" title="Previous Shoot Day">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15,18 9,12 15,6"></polyline>
+        </svg>
+        Previous Day
+    </button>
+    
+    <div class="current-day-info">
+        <span class="day-indicator">{{ day.dayOfWeek }}, {{ day.date }}</span>
+        {% if day.shootDay %}
+            <span class="shoot-day-badge">Shoot Day {{ day.shootDay }}</span>
+        {% elif day.isPrep %}
+            <span class="prep-day-badge">Prep Day</span>
+        {% endif %}
+    </div>
+    
+    <button id="next-day" class="nav-button" title="Next Shoot Day">
+        Next Day
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+    </button>
+</div>
+
+<!-- Save Status Indicator -->
+<div id="save-status" class="save-status" style="display: none;">
+    <span class="status-icon">✓</span>
+    <span class="status-text">Changes saved</span>
 </div>
 
 <div class="form-container">
@@ -28,7 +61,7 @@
         <h3>{{ day.dayOfWeek }}, {{ day.date }}</h3>
     </div>
     
-    <form method="POST" class="day-form">
+    <form id="day-form" method="POST" class="day-form">
         <div class="form-section">
             <h3>Main Unit Details</h3>
             
@@ -43,7 +76,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="location">Location</label>
-                    <select id="location" name="location" class="location-select">
+                    <select id="location" name="location" class="location-select" data-current-location="{{ day.location or '' }}">
                         <option value="">-- Select Location --</option>
                         <!-- Options will be populated by JavaScript -->
                     </select>
@@ -130,14 +163,42 @@
             </div>
         </div>
         
-        <div class="form-actions">
-            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button secondary">Cancel</a>
-            <button type="submit" class="button">Save Changes</button>
+        <!-- Enhanced Form Actions -->
+        <div class="form-actions enhanced-actions">
+            <div class="action-group primary-actions">
+                <button type="button" id="save-stay" class="button">Save Changes</button>
+                <button type="button" id="save-exit" class="button secondary">Save & Exit</button>
+            </div>
+            
+            <div class="action-group navigation-actions">
+                <button type="button" id="prev-day-bottom" class="button nav-button-bottom">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                    Previous
+                </button>
+                <button type="button" id="next-day-bottom" class="button nav-button-bottom">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </button>
+            </div>
         </div>
     </form>
 </div>
+
+<!-- Hidden data for JavaScript -->
+<script id="project-data" type="application/json">
+{
+    "projectId": "{{ project.id }}",
+    "currentDate": "{{ day.date }}",
+    "calendarData": {{ calendar_data|tojson if calendar_data else '{}' }}
+}
+</script>
 {% endblock %}
 
 {% block scripts %}
 <script src="/static/js/day-editor.js"></script>
+<script src="/static/js/day-editor-enhanced.js"></script>
 {% endblock %}

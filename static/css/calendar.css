@@ -1156,6 +1156,36 @@ textarea#mainUnit:focus {
   border-radius: 2px;
 }
 
+/* Add this to your existing static/css/calendar.css file */
+
+/* === DAY HIGHLIGHTING FOR NAVIGATION === */
+.calendar-row.day-highlight {
+  animation: highlight-pulse 3s ease-in-out;
+  border: 2px solid var(--accent-color) !important;
+  box-shadow: 0 0 10px rgba(var(--accent-color-rgb, 41, 182, 246), 0.3);
+}
+
+@keyframes highlight-pulse {
+  0% { 
+      box-shadow: 0 0 5px rgba(var(--accent-color-rgb, 41, 182, 246), 0.5);
+      border-color: var(--accent-color);
+  }
+  50% { 
+      box-shadow: 0 0 20px rgba(var(--accent-color-rgb, 41, 182, 246), 0.8);
+      border-color: var(--accent-light);
+  }
+  100% { 
+      box-shadow: 0 0 5px rgba(var(--accent-color-rgb, 41, 182, 246), 0.3);
+      border-color: var(--accent-color);
+  }
+}
+
+/* Make calendar rows have position relative for better anchor scrolling */
+.calendar-row {
+  position: relative;
+  scroll-margin-top: 100px; /* Offset for sticky headers */
+}
+
 /* ============================================= */
 /* === PRINT STYLES ============================ */
 /* ============================================= */

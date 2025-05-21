@@ -17,15 +17,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDepartmentTags();
     
     // Function to fetch locations from API
+    // In your existing day-editor.js, find this function and modify it:
     function fetchLocations() {
         fetch('/api/locations')
             .then(response => response.json())
             .then(locations => {
                 populateLocationDropdown(locations);
                 
-                // If a location is already selected, update the area
-                if (locationSelect.value) {
-                    updateLocationArea(locationSelect.value);
+                // IMPORTANT: Get the value from the template and set it AFTER population
+                const templateLocation = locationSelect.getAttribute('data-current-location');
+                if (templateLocation) {
+                    locationSelect.value = templateLocation;
+                    updateLocationArea(templateLocation);
                 }
             })
             .catch(error => {

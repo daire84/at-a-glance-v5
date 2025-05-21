@@ -880,6 +880,68 @@ function applySearchFilter(query) {
     console.log(`Search complete: ${matchCount} matches found`);
 }
 
+/**
+ * Enhanced calendar navigation with anchor support
+ */
+function initializeCalendarAnchors() {
+    console.log("Initializing calendar anchors...");
+    
+    // Check if there's an anchor in the URL when the page loads
+    if (window.location.hash) {
+        const anchor = window.location.hash.substring(1); // Remove the #
+        
+        // Check if it's a day anchor (format: day-YYYY-MM-DD)
+        if (anchor.startsWith('day-')) {
+            const date = anchor.replace('day-', '');
+            scrollToDay(date);
+        }
+    }
+    
+    // Add anchor IDs to calendar rows for easy navigation
+    addAnchorIdsToCalendarRows();
+}
+
+/**
+ * Add anchor IDs to calendar rows
+ */
+function addAnchorIdsToCalendarRows() {
+    const calendarRows = document.querySelectorAll('.calendar-row[data-date]');
+    
+    calendarRows.forEach(row => {
+        const date = row.getAttribute('data-date');
+        if (date) {
+            row.id = `day-${date}`;
+        }
+    });
+}
+
+/**
+ * Scroll to a specific day in the calendar
+ */
+function scrollToDay(date) {
+    const targetRow = document.getElementById(`day-${date}`);
+    
+    if (targetRow) {
+        // Add a small delay to ensure the page has fully rendered
+        setTimeout(() => {
+            targetRow.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+            
+            // Add a temporary highlight effect
+            targetRow.classList.add('day-highlight');
+            setTimeout(() => {
+                targetRow.classList.remove('day-highlight');
+            }, 3000);
+            
+            console.log(`Scrolled to day: ${date}`);
+        }, 100);
+    } else {
+        console.warn(`Day not found: ${date}`);
+    }
+}
+
 // Add the initialization call to the DOMContentLoaded listener in calendar.js
 // This should be manually inserted as part of an update to the existing listener
 
@@ -1185,6 +1247,13 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
         console.error("Error during search filter setup:", error);
     }
-    
+
+        // Add this new call
+    try {
+        initializeCalendarAnchors();
+    } catch (error) {
+        console.error("Error initializing calendar anchors:", error);
+    }
+
     console.log("All initializers called.");
 });

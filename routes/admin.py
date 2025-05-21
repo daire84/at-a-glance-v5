@@ -160,13 +160,13 @@ def admin_calendar(project_id):
         flash(f'Error loading calendar: {str(e)}', 'error')
         return redirect(url_for('admin.admin_dashboard'))
 
+# Update to routes/admin.py - Replace the existing admin_day function
+
 @admin_bp.route('/day/<project_id>/<date>', methods=['GET', 'POST'])
 @admin_required
 def admin_day(project_id, date):
-    """Day editor"""
-    # Import helper function locally or ensure it's imported from app/utils
+    """Enhanced day editor with navigation"""
     from utils.helpers import update_day_from_form, save_project_workspace, get_project_workspace
-    # Import update_calendar_with_location_areas if needed
     from utils.calendar_generator import update_calendar_with_location_areas
 
     project = get_project(project_id)
@@ -187,6 +187,9 @@ def admin_day(project_id, date):
         try:
             form_data = request.form.to_dict()
 
+            # Check if this is an AJAX save request
+            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
             # --- Update locationArea based on selected location ---
             if 'location' in form_data and form_data['location']:
                 selected_location_name = form_data['location']
@@ -194,12 +197,14 @@ def admin_day(project_id, date):
                 locations_list = []
                 loc_file = os.path.join(DATA_DIR, 'locations.json')
                 if os.path.exists(loc_file):
-                    with open(loc_file, 'r') as f: locations_list = json.load(f)
+                    with open(loc_file, 'r') as f: 
+                        locations_list = json.load(f)
 
                 areas_list = []
                 area_file = os.path.join(DATA_DIR, 'areas.json')
                 if os.path.exists(area_file):
-                     with open(area_file, 'r') as f: areas_list = json.load(f)
+                     with open(area_file, 'r') as f: 
+                         areas_list = json.load(f)
 
                 area_id_found = None
                 for loc in locations_list:
@@ -215,23 +220,21 @@ def admin_day(project_id, date):
                             break
                     if area_name_found:
                          form_data['locationArea'] = area_name_found
-                         # Also store ID if needed later
                          form_data['locationAreaId'] = area_id_found
                     else:
-                         form_data['locationArea'] = None # Area name not found
+                         form_data['locationArea'] = None
                          form_data['locationAreaId'] = None
                 else:
-                     form_data['locationArea'] = None # Area ID not found
+                     form_data['locationArea'] = None
                      form_data['locationAreaId'] = None
             else:
-                # Clear area if location is cleared
                 form_data['locationArea'] = None
                 form_data['locationAreaId'] = None
             # --- End Update locationArea ---
 
             # Update the day object using the helper function
             calendar_data['days'][day_index] = update_day_from_form(day, form_data)
-            updated_day = calendar_data['days'][day_index] # Get reference to updated day
+            updated_day = calendar_data['days'][day_index]
 
             # Check if day type needs updating (e.g., Prep -> Shoot)
             if updated_day.get('isPrep', False) and not updated_day.get('isShootDay', False):
@@ -242,41 +245,63 @@ def admin_day(project_id, date):
                 if is_shoot_period and (updated_day.get('mainUnit') or updated_day.get('sequence')):
                     updated_day['isPrep'] = False
                     updated_day['isShootDay'] = True
-                    # Recalculate all shoot day numbers
                     calendar_data['days'] = recalculate_shoot_days(calendar_data['days'])
 
             # Recalculate counts before saving
             calendar_data = calculate_department_counts(calendar_data)
             calendar_data = calculate_location_counts(calendar_data)
 
-            # Save the calendar - now checking if project is versioned
+            # Save the calendar
             if project.get('isVersioned'):
-                # For versioned projects, save to workspace
                 workspace = get_project_workspace(project_id)
                 if workspace:
                     workspace['calendarData'] = calendar_data
                     save_project_workspace(project_id, workspace)
                     logger.info(f"Saved calendar to workspace for versioned project {project_id}")
                 else:
-                    # Fallback to regular save if workspace not found
                     logger.warning(f"Workspace not found for versioned project {project_id}, using regular save")
                     save_project_calendar(project_id, calendar_data)
             else:
-                # For non-versioned projects, use regular save
                 save_project_calendar(project_id, calendar_data)
                 logger.info(f"Saved calendar for non-versioned project {project_id}")
 
-            flash('Day updated successfully', 'success')
-            return redirect(url_for('admin.admin_calendar', project_id=project_id))
+            # For AJAX requests, return JSON response
+            if is_ajax:
+                return jsonify({
+                    'success': True,
+                    'message': 'Day updated successfully',
+                    'day': updated_day
+                })
+            else:
+                # For regular form submissions, check if it's save & exit
+                if 'save_exit' in request.form:
+                    flash('Day updated successfully', 'success')
+                    # Redirect back to calendar with anchor
+                    return redirect(url_for('admin.admin_calendar', project_id=project_id) + f'#day-{date}')
+                else:
+                    # Stay on the same page for "save & stay"
+                    flash('Day updated successfully', 'success')
+                    return redirect(url_for('admin.admin_day', project_id=project_id, date=date))
 
         except Exception as e:
             logger.error(f"Error updating day {date} for project {project_id}: {str(e)}")
-            flash(f'Error updating day: {str(e)}', 'error')
-            # Fall through to render form again
+            
+            # For AJAX requests, return error JSON
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({
+                    'success': False,
+                    'message': f'Error updating day: {str(e)}'
+                }), 500
+            else:
+                flash(f'Error updating day: {str(e)}', 'error')
+                # Fall through to render form again
 
-    # GET request or POST error
-    # Renders 'admin/day.html'
-    return render_template('day.html', project=project, day=day)
+    # GET request or POST error - render the enhanced day editor
+    # Pass calendar data for navigation
+    return render_template('admin/day.html', 
+                         project=project, 
+                         day=day,
+                         calendar_data=calendar_data)
 
 @admin_bp.route('/locations')
 @admin_required

@@ -1,6 +1,6 @@
 {
   "baseVersionId": "f24c7bc4-f367-488b-bbb3-8fd696dc50f2",
-  "lastModified": "2025-05-21T05:46:44.878806Z",
+  "lastModified": "2025-05-21T23:39:59.715764Z",
   "calendarData": {
     "projectId": "3eb78a64-1e75-4ef6-8e50-c4d30b15e1de",
     "days": [
@@ -1970,7 +1970,7 @@
           "STN",
           "PR"
         ],
-        "notes": "",
+        "notes": "TEST",
         "secondUnit": "",
         "secondUnitLocation": "",
         "locationAreaId": "ardmore"
@@ -3543,7 +3543,7 @@
           "SFX",
           "STN"
         ],
-        "notes": "",
+        "notes": "Testing",
         "secondUnit": "",
         "secondUnitLocation": "",
         "locationAreaId": "aa1f6728-63e5-445c-b4f7-59a3111c4042"
@@ -3684,8 +3684,8 @@
         "mainUnit": "EPILOGUE KITCHEN\r\nEPILOGUE BASEMENT",
         "extras": 0,
         "featuredExtras": 0,
-        "location": "A Stage Ardmore",
-        "locationArea": "A Stage",
+        "location": "D Stage Ardmore",
+        "locationArea": "D Stage",
         "sequence": "Epilogue",
         "departments": [
           "PR"
@@ -3693,7 +3693,7 @@
         "notes": "",
         "secondUnit": "",
         "secondUnitLocation": "",
-        "locationAreaId": "ardmore"
+        "locationAreaId": "aa1f6728-63e5-445c-b4f7-59a3111c4042"
       },
       {
         "date": "2025-05-27",
@@ -4328,8 +4328,8 @@
     ],
     "lastUpdated": "2025-05-18T23:39:48.846290Z",
     "locationCounts": {
-      "D Stage Ardmore": 29,
-      "A Stage Ardmore": 13,
+      "D Stage Ardmore": 30,
+      "A Stage Ardmore": 12,
       "Glenmaroon": 3,
       "Powerscourt": 1,
       "Fosters Place": 2,
@@ -4338,8 +4338,8 @@
       "Ana's House": 11
     },
     "areaCounts": {
-      "aa1f6728-63e5-445c-b4f7-59a3111c4042": 29,
-      "ardmore": 13,
+      "aa1f6728-63e5-445c-b4f7-59a3111c4042": 30,
+      "ardmore": 12,
       "north": 4,
       "wicklow": 1,
       "south": 3,
