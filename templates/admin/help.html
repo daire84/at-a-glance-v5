@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}Help - Film Production Scheduler{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h2>Help & Documentation</h2>
+    <div class="admin-actions">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- Admin Navigation Tabs -->
+<div class="admin-tabs">
+    <a href="{{ url_for('admin.admin_dashboard') }}">Projects</a>
+    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
+    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
+    <a href="{{ url_for('admin.admin_dates') }}">Special Dates</a>
+    <a href="{{ url_for('admin.admin_help') }}" class="active">Help</a>
+</div>
+
+<div class="help-container">
+    <!-- Table of Contents Sidebar -->
+    <div class="help-sidebar">
+        <div class="toc-container">
+            <h3>Contents</h3>
+            <ul class="toc-list">
+                <li><a href="#introduction" class="toc-link">Introduction</a></li>
+                <li><a href="#getting-started" class="toc-link">Getting Started</a></li>
+                <li>
+                    <a href="#main-features" class="toc-link">Main Features</a>
+                    <ul>
+                        <li><a href="#calendar-management" class="toc-link">Calendar Management</a></li>
+                        <li><a href="#locations" class="toc-link">Locations & Areas</a></li>
+                        <li><a href="#departments" class="toc-link">Departments</a></li>
+                        <li><a href="#special-dates" class="toc-link">Special Dates</a></li>
+                        <li><a href="#versioning" class="toc-link">Versioning System</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#day-to-day" class="toc-link">Day-to-Day Usage</a>
+                    <ul>
+                        <li><a href="#filtering" class="toc-link">Filtering & Searching</a></li>
+                        <li><a href="#editing-days" class="toc-link">Editing Days</a></li>
+                        <li><a href="#drag-drop" class="toc-link">Drag & Drop</a></li>
+                    </ul>
+                </li>
+                <li><a href="#printing" class="toc-link">Printing & Sharing</a></li>
+                <li><a href="#faq" class="toc-link">FAQ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="help-content">
+        <!-- Introduction Section -->
+        <section id="introduction" class="help-section">
+            <h2>Introduction to "At a Glance" Film Production Scheduler</h2>
+            <div class="section-content">
+                <p>Welcome to the "At a Glance" Film Production Scheduler - your comprehensive tool for managing production calendars for film and television projects.</p>
+                
+                <p>This application was designed specifically for film production teams to easily visualize, plan, and update shooting schedules. The interface prioritizes clarity and efficiency, allowing production teams to:</p>
+                
+                <ul>
+                    <li>Create and manage detailed production calendars</li>
+                    <li>Track locations, departments, and resources</li>
+                    <li>Easily update schedules with drag-and-drop functionality</li>
+                    <li>Handle special production dates like holidays and hiatus periods</li>
+                    <li>Generate versions to track schedule changes over time</li>
+                    <li>Share calendars with team members via print-friendly views</li>
+                </ul>
+                
+                <div class="help-image-container">
+                    <img src="{{ url_for('static', filename='images/help/app_overview.jpg') }}" alt="Application Overview" class="help-image">
+                    <p class="image-caption">Main calendar view showing a production schedule at a glance!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section id="getting-started" class="help-section">
+            <h2>Getting Started</h2>
+            <div class="section-content">
+                <h3>Creating Your First Project</h3>
+                <p>To get started with the Film Production Scheduler:</p>
+                
+                <ol>
+                    <li>
+                        <strong>Access the Admin Dashboard</strong> - Log in with admin credentials to access the main dashboard.
+                    </li>
+                    <li>
+                        <strong>Create a New Project</strong> - Click the "Create New Project" button on the dashboard.
+                    </li>
+                    <li>
+                        <strong>Enter Project Details</strong> - Fill in basic information like project title, director, producer, etc.
+                    </li>
+                    <li>
+                        <strong>Set Key Dates</strong> - Define your prep start date, shoot start date, and estimated wrap date.
+                    </li>
+                    <li>
+                        <strong>Save & Generate Calendar</strong> - Save your project to automatically generate a calendar based on your dates.
+                    </li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>Tip: Production Dates</h4>
+                    <p>The system will automatically calculate shoot days starting from your Shoot Start Date. Weekends and holidays are marked accordingly but can be adjusted as needed.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Features Section -->
+        <section id="main-features" class="help-section">
+            <h2>Main Features</h2>
+            
+            <div id="calendar-management" class="subsection">
+                <h3>Calendar Management</h3>
+                <p>The heart of the application is the calendar view where you can see and manage the entire production schedule.</p>
+                
+                <h4>Calendar Components:</h4>
+                <ul>
+                    <li><strong>Project Header</strong> - Displays project metadata</li>
+                    <li><strong>Day Rows</strong> - Each row represents a calendar day</li>
+                    <li><strong>Department Counters</strong> - Shows how many days each department is scheduled</li>
+                    <li><strong>Location Areas</strong> - Visual representation of shooting locations</li>
+                    <li><strong>Filter Panel</strong> - Tools to customize the calendar view</li>
+                </ul>
+                
+                <div class="help-image-container">
+                    <img src="{{ url_for('static', filename='images/help/calendar_anatomy.jpg') }}" alt="Calendar Components" class="help-image">
+                    <p class="image-caption">Anatomy of the calendar view</p>
+                </div>
+            </div>
+            
+            <div id="locations" class="subsection">
+                <h3>Locations & Areas</h3>
+                <p>Manage the filming locations and group them into geographic areas for better organization.</p>
+                
+                <h4>Location Features:</h4>
+                <ul>
+                    <li>Create and edit location entries</li>
+                    <li>Group locations into color-coded areas</li>
+                    <li>View location usage statistics</li>
+                    <li>Filter calendar by location or area</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <h4>Pro Tip: Color Coding</h4>
+                    <p>Location areas are color-coded in the calendar, making it easy to visually track shooting locations at a glance.</p>
+                </div>
+            </div>
+            
+            <div id="departments" class="subsection">
+                <h3>Departments</h3>
+                <p>Track which departments are needed on which days with the department tag system.</p>
+                
+                <h4>Department Features:</h4>
+                <ul>
+                    <li>Create department tags with custom colors</li>
+                    <li>Assign departments to specific days</li>
+                    <li>View department usage statistics</li>
+                    <li>Track specialized equipment needs</li>
+                </ul>
+            </div>
+            
+            <div id="special-dates" class="subsection">
+                <h3>Special Dates</h3>
+                <p>Handle non-standard production days such as holidays, hiatus periods, and working weekends.</p>
+                
+                <h4>Special Dates Features:</h4>
+                <ul>
+                    <li>Mark bank holidays with options for working/non-working</li>
+                    <li>Define hiatus periods when production pauses</li>
+                    <li>Schedule working weekends when shooting continues through weekends</li>
+                    <li>Add custom special dates like travel days or production meetings</li>
+                </ul>
+            </div>
+            
+            <div id="versioning" class="subsection">
+                <h3>Versioning System</h3>
+                <p>Track changes to your schedule over time with the versioning system.</p>
+                
+                <h4>Versioning Features:</h4>
+                <ul>
+                    <li>Create named versions of your schedule</li>
+                    <li>Add version notes to track what changed</li>
+                    <li>Publish versions for wider team viewing</li>
+                    <li>Switch between versions to compare changes</li>
+                </ul>
+                
+                <div class="help-image-container">
+                    <img src="{{ url_for('static', filename='images/help/versioning.jpg') }}" alt="Versioning System" class="help-image">
+                    <p class="image-caption">Working with schedule versions</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Day-to-Day Usage Section -->
+        <section id="day-to-day" class="help-section">
+            <h2>Day-to-Day Usage</h2>
+            
+            <div id="filtering" class="subsection">
+                <h3>Filtering & Searching</h3>
+                <p>Customize your view of the calendar with powerful filtering tools.</p>
+                
+                <h4>Filter Options:</h4>
+                <ul>
+                    <li><strong>Day Types</strong> - Show/hide weekends, prep days, holidays, etc.</li>
+                    <li><strong>Column Visibility</strong> - Show/hide specific columns</li>
+                    <li><strong>Location Filtering</strong> - Filter by specific locations or areas</li>
+                    <li><strong>Search</strong> - Find keywords across notes, locations, and scenes</li>
+                </ul>
+                
+                <div class="help-image-container">
+                    <img src="{{ url_for('static', filename='images/help/filtering.jpg') }}" alt="Filtering Options" class="help-image">
+                    <p class="image-caption">Using filters and search to customize the view</p>
+                </div>
+            </div>
+            
+            <div id="editing-days" class="subsection">
+                <h3>Editing Days</h3>
+                <p>Update information for individual production days.</p>
+                
+                <h4>Day Editing Features:</h4>
+                <ul>
+                    <li>Edit main unit descriptions</li>
+                    <li>Assign locations to days</li>
+                    <li>Track extras counts</li>
+                    <li>Add sequence/scene numbers</li>
+                    <li>Tag departments needed for the day</li>
+                    <li>Add production notes</li>
+                    <li>Track second unit activities</li>
+                </ul>
+            </div>
+            
+            <div id="drag-drop" class="subsection">
+                <h3>Drag & Drop Functionality</h3>
+                <p>Quickly reschedule shoot days using the drag and drop feature.</p>
+                
+                <h4>How to Use Drag & Drop:</h4>
+                <ol>
+                    <li>Click and hold on a shoot day row</li>
+                    <li>Drag to the desired new date</li>
+                    <li>Release to move the day</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>Note:</h4>
+                    <p>Drag and drop is only available for shoot days and not for prep days, holidays, or hiatus periods.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Printing & Sharing Section -->
+        <section id="printing" class="help-section">
+            <h2>Printing & Sharing</h2>
+            <div class="section-content">
+                <p>Share your production schedule with team members through printing or PDF generation.</p>
+                
+                <h4>Printing Tips:</h4>
+                <ul>
+                    <li><strong>Use Landscape Orientation</strong> - The calendar is optimized for landscape printing</li>
+                    <li><strong>Filter Before Printing</strong> - Use filters to show only the relevant information</li>
+                    <li><strong>Check Print Preview</strong> - Ensure all content fits properly before printing</li>
+                    <li><strong>Save as PDF</strong> - Use your browser's "Print to PDF" option to create shareable PDFs</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <h4>Pro Tip: Color Printing</h4>
+                    <p>The calendar is designed to be readable in both color and black & white printing, but color printing preserves location area distinctions and department tag colors.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="help-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="section-content">
+                <div class="faq-item">
+                    <h4>How do I add a new location?</h4>
+                    <p>Go to the "Locations" tab in the admin section, click "Add Location", and fill in the location details. You can also assign it to an area for color-coding.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>What happens if I change the shoot start date?</h4>
+                    <p>If you change the shoot start date, you'll need to regenerate the calendar. This will update the shoot day numbering but preserve any day-specific information you've added.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>How do I mark a weekend as a working day?</h4>
+                    <p>Go to the "Special Dates" tab, select your project, click "Add Working Weekend", and select the weekend date you want to mark as a working day.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>Can I export the calendar to other formats?</h4>
+                    <p>Currently, the best way to export is using the print function to create a PDF. Direct exports to Excel or other formats are planned for future updates.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>How do I share the calendar with someone who doesn't have access to the system?</h4>
+                    <p>You can either print the calendar as a PDF and share the file, or set them up with a viewer account that has limited permissions.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Highlight active section based on scroll position
+    const sections = document.querySelectorAll('.help-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    
+    // Add smooth scrolling to anchor links
+    document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to target
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Update URL without full page reload
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+    
+    // Track scroll position and update active TOC link
+    function updateActiveTocLink() {
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if (window.scrollY >= sectionTop - 100 && 
+                window.scrollY < sectionTop + sectionHeight - 100) {
+                currentSection = '#' + section.getAttribute('id');
+            }
+        });
+        
+        tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === currentSection) {
+                link.classList.add('active');
+                
+                // Expand parent list if this is a nested item
+                const parentLi = link.closest('li').parentElement;
+                if (parentLi && parentLi.tagName === 'UL') {
+                    const parentLink = parentLi.previousElementSibling;
+                    if (parentLink && parentLink.classList.contains('toc-link')) {
+                        parentLink.classList.add('active');
+                    }
+                }
+            }
+        });
+    }
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', updateActiveTocLink);
+    
+    // Initial call to highlight correct section
+    updateActiveTocLink();
+});
+</script>
+{% endblock %}

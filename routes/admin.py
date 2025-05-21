@@ -302,3 +302,10 @@ def admin_dates(project_id=None):
     projects = get_projects()
      # Renders 'admin/dates.html'
     return render_template('dates.html', projects=projects, project_id=project_id)
+
+@admin_bp.route('/help')
+@admin_required
+def admin_help():
+    """Help and documentation page"""
+    # Renders 'admin/help.html'
+    return render_template('admin/help.html')

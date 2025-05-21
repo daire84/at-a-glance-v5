@@ -1038,6 +1038,124 @@ textarea#mainUnit:focus {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* 
+ * Search Filter Styles
+ * To be added to static/css/calendar.css
+ */
+
+/* === SEARCH FILTER STYLES === */
+.search-filter-section {
+  margin: 15px 0;
+  padding: 15px;
+  background-color: var(--background-alt);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Search title and description styles */
+.search-title {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: var(--title-text-color);
+  font-weight: 500;
+}
+
+.search-description {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.search-input-container {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+#calendar-search {
+  flex: 1;
+  padding: 10px 40px 10px 15px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+#calendar-search:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb, 41, 182, 246), 0.2);
+}
+
+#clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: color 0.2s ease;
+}
+
+#clear-search:hover {
+  color: var(--accent-color);
+}
+
+.search-status {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  padding: 5px 10px;
+  background-color: rgba(var(--accent-color-rgb, 41, 182, 246), 0.1);
+  border-radius: 4px;
+  display: inline-block;
+}
+
+#search-term {
+  font-weight: 500;
+  color: var(--accent-color);
+}
+
+#search-results-count {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Hide rows that don't match search */
+.calendar-row.search-hidden {
+  display: none !important;
+}
+
+/* Make search box responsive */
+@media (max-width: 768px) {
+  .search-filter-section {
+      padding: 10px;
+  }
+  
+  #calendar-search {
+      padding: 8px 35px 8px 12px;
+      font-size: 0.9rem;
+  }
+}
+
+/* === CUSTOM SEARCH HIGHLIGHT === */
+/* Optional: Add this if you want to highlight matching text */
+.search-highlight {
+  background-color: rgba(var(--accent-color-rgb, 41, 182, 246), 0.2);
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
 /* ============================================= */
 /* === PRINT STYLES ============================ */
 /* ============================================= */

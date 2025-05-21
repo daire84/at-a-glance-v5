@@ -773,6 +773,117 @@ function initializeFilters() {
 }
 
 /**
+ * Search Filter Functionality for Calendar
+ * To be added to static/js/calendar.js
+ */
+
+/**
+ * Initialize the search filter
+ */
+function initializeSearchFilter() {
+    console.log("Initializing search filter...");
+    
+    const searchInput = document.getElementById('calendar-search');
+    const clearButton = document.getElementById('clear-search');
+    const searchStatus = document.getElementById('search-status');
+    const resultsCount = document.getElementById('search-results-count');
+    const searchTerm = document.getElementById('search-term');
+    
+    if (!searchInput || !clearButton) {
+        console.log("Search filter elements not found, skipping initialization.");
+        return;
+    }
+    
+    // Search debounce timer
+    let searchTimeout;
+    
+    // Add event listeners
+    searchInput.addEventListener('input', function(e) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const query = e.target.value.trim();
+            applySearchFilter(query);
+        }, 300); // Debounce search for 300ms
+    });
+    
+    clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        applySearchFilter('');
+        searchInput.focus();
+    });
+    
+    console.log("Search filter initialized");
+}
+
+/**
+ * Apply search filter to calendar rows
+ * @param {string} query - Search query
+ */
+function applySearchFilter(query) {
+    console.log(`Applying search filter: "${query}"`);
+    
+    const rows = document.querySelectorAll('.calendar-row');
+    const searchStatus = document.getElementById('search-status');
+    const resultsCount = document.getElementById('search-results-count');
+    const searchTerm = document.getElementById('search-term');
+    
+    if (!query) {
+        // Show all rows if query is empty
+        rows.forEach(row => {
+            row.classList.remove('search-hidden');
+        });
+        
+        if (searchStatus) {
+            searchStatus.style.display = 'none';
+        }
+        return;
+    }
+    
+    // Convert query to lowercase for case-insensitive search
+    const queryLower = query.toLowerCase();
+    let matchCount = 0;
+    
+    rows.forEach(row => {
+        // Search in multiple columns
+        const mainUnit = row.querySelector('.main-unit-cell')?.textContent || '';
+        const location = row.querySelector('.location-cell')?.textContent || '';
+        const notes = row.querySelector('.notes-cell')?.textContent || '';
+        const sequence = row.querySelector('.sequence-cell')?.textContent || '';
+        const secondUnit = row.querySelector('.second-unit-cell')?.textContent || '';
+        
+        // Combine all searchable text
+        const searchableText = `${mainUnit} ${location} ${notes} ${sequence} ${secondUnit}`.toLowerCase();
+        
+        // Check if any content matches the search query
+        const isMatch = searchableText.includes(queryLower);
+        
+        // Toggle visibility based on match
+        row.classList.toggle('search-hidden', !isMatch);
+        
+        if (isMatch) {
+            matchCount++;
+        }
+    });
+    
+    // Update search status
+    if (searchStatus && resultsCount && searchTerm) {
+        searchStatus.style.display = 'block';
+        resultsCount.textContent = matchCount;
+        searchTerm.textContent = query;
+    }
+    
+    // If using filter stats, update them
+    if (typeof updateFilterStats === 'function') {
+        updateFilterStats();
+    }
+    
+    console.log(`Search complete: ${matchCount} matches found`);
+}
+
+// Add the initialization call to the DOMContentLoaded listener in calendar.js
+// This should be manually inserted as part of an update to the existing listener
+
+/**
  * OLD CODE PLACEHELD FOR RELIC CALLS - Initializes the mobile menu toggle button functionality.
  */
 function setupMobileMenu() {
@@ -1065,6 +1176,14 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Sticky header enhancement added");
     } catch (error) {
         console.error("Error setting up sticky header:", error);
+    }
+    
+     // --- NEW: Search Filter Setup ---
+     try {
+        initializeSearchFilter();
+        console.log("Search filter initialization complete");
+    } catch (error) {
+        console.error("Error during search filter setup:", error);
     }
     
     console.log("All initializers called.");
