@@ -845,6 +845,7 @@ function applySearchFilter(query) {
     
     rows.forEach(row => {
         // Search in multiple columns
+        const dayNumber = row.querySelector('.day-cell')?.textContent || '';
         const mainUnit = row.querySelector('.main-unit-cell')?.textContent || '';
         const location = row.querySelector('.location-cell')?.textContent || '';
         const notes = row.querySelector('.notes-cell')?.textContent || '';
@@ -852,7 +853,7 @@ function applySearchFilter(query) {
         const secondUnit = row.querySelector('.second-unit-cell')?.textContent || '';
         
         // Combine all searchable text
-        const searchableText = `${mainUnit} ${location} ${notes} ${sequence} ${secondUnit}`.toLowerCase();
+        const searchableText = `${dayNumber} ${mainUnit} ${location} ${notes} ${sequence} ${secondUnit}`.toLowerCase();
         
         // Check if any content matches the search query
         const isMatch = searchableText.includes(queryLower);
