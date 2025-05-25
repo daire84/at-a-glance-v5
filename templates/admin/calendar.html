@@ -5,6 +5,7 @@
 {% block styles %}
 <link rel="stylesheet" href="/static/css/calendar.css">
 <link rel="stylesheet" href="/static/css/version-manager.css">
+<link rel="stylesheet" href="/static/css/calendar-view.css">
 {% endblock %}
 
 {% block content %}
@@ -150,6 +151,7 @@
 {% block scripts %}
 <script src="/static/js/version-manager.js"></script>
 <script src="/static/js/calendar-dragdrop.js"></script>
+<script src="/static/js/calendar-view.js"></script>
 <script src="/static/js/calendar.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -199,6 +201,36 @@
             }
         } else {
             console.error('VersionManager class not found or project ID missing!');
+        }
+        
+        // Initialize Calendar View - ADD THIS SECTION
+        if (typeof CalendarView !== 'undefined') {
+            try {
+                const calendarData = {{ calendar|tojson }};
+                const locations = {{ locations|tojson }};
+                const departments = calendarData.departments || [];
+                
+                // Create calendar view instance
+                window.calendarView = new CalendarView(calendarData, locations, departments);
+                console.log('Calendar view initialized successfully');
+                
+                // Integrate with existing location filter
+                if (window.locationFilter && window.locationFilter.applyFilters) {
+                    const originalApplyFilters = window.locationFilter.applyFilters.bind(window.locationFilter);
+                    window.locationFilter.applyFilters = function() {
+                        originalApplyFilters();
+                        // Also apply filters to calendar view
+                        if (window.calendarView && window.calendarView.getCurrentView() === 'calendar') {
+                            window.calendarView.applyFiltersToCalendarView();
+                        }
+                    };
+                }
+                
+            } catch (error) {
+                console.error('Error initializing calendar view:', error);
+            }
+        } else {
+            console.warn('CalendarView class not available');
         }
         
         // Add click handler for regenerate calendar button

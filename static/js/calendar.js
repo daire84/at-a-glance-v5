@@ -1143,6 +1143,96 @@ function setupZoomControls() {
      console.log("Zoom controls setup finished.");
 }
 
+// Helper function to extract calendar data from existing DOM
+// ADD THIS FUNCTION BEFORE YOUR DOMContentLoaded EVENT LISTENER
+function extractCalendarDataFromDOM() {
+    const days = [];
+    const rows = document.querySelectorAll('.calendar-row');
+    
+    rows.forEach(row => {
+        const date = row.getAttribute('data-date');
+        const area = row.getAttribute('data-area');
+        
+        if (date) {
+            const dayData = {
+                date: date,
+                locationArea: area,
+                locationAreaId: row.getAttribute('data-location-area-id'),
+                isWeekend: row.classList.contains('weekend'),
+                isHoliday: row.classList.contains('holiday'),
+                isHiatus: row.classList.contains('hiatus'),
+                isPrep: row.classList.contains('prep'),
+                isShootDay: row.classList.contains('shoot'),
+                isWorkingWeekend: row.classList.contains('working-weekend'),
+                dayOfWeek: new Date(date).toLocaleDateString('en-US', { weekday: 'long' }),
+                day: new Date(date).getDate(),
+                month: new Date(date).getMonth() + 1,
+                year: new Date(date).getFullYear()
+            };
+
+            // Extract shoot day number
+            const shootDayElement = row.querySelector('.day-cell');
+            if (shootDayElement && shootDayElement.textContent.trim()) {
+                const shootDayText = shootDayElement.textContent.trim();
+                if (shootDayText && !isNaN(shootDayText)) {
+                    dayData.shootDay = parseInt(shootDayText);
+                }
+            }
+
+            // Extract location
+            const locationElement = row.querySelector('.location-name');
+            if (locationElement) {
+                dayData.location = locationElement.textContent.trim();
+            }
+
+            // Extract main unit
+            const mainUnitElement = row.querySelector('.main-unit-cell');
+            if (mainUnitElement) {
+                dayData.mainUnit = mainUnitElement.textContent.trim();
+            }
+
+            // Extract departments
+            const deptElements = row.querySelectorAll('.department-tag');
+            dayData.departments = Array.from(deptElements).map(el => el.textContent.trim());
+
+            // Extract notes
+            const notesElement = row.querySelector('.notes-cell');
+            if (notesElement) {
+                dayData.notes = notesElement.textContent.trim();
+            }
+
+            days.push(dayData);
+        }
+    });
+
+    // Get location areas from existing function
+    const locationAreas = getLocationAreas ? getLocationAreas() : {};
+    
+    // Extract department data from existing tags
+    const departments = [];
+    document.querySelectorAll('.department-tag').forEach(tag => {
+        const code = tag.textContent.trim();
+        const color = tag.style.backgroundColor;
+        if (code && !departments.find(d => d.code === code)) {
+            departments.push({
+                code: code,
+                color: color || '#cccccc',
+                name: code
+            });
+        }
+    });
+
+    return {
+        days: days,
+        locationAreas: Object.keys(locationAreas).map(name => ({
+            name: name,
+            color: locationAreas[name]
+        })),
+        departments: departments,
+        areaColorMap: locationAreas
+    };
+}
+
 // =======================================
 // Main Initialization on DOMContentLoaded
 // =======================================
@@ -1158,6 +1248,52 @@ document.addEventListener('DOMContentLoaded', function() {
         enhanceLocationCounters(); // Ensure contrast/colors for counters
     } catch (error) {
         console.error("Error during core visual setup:", error);
+    }
+
+    // --- 2. Initialize Calendar View (NEW SECTION) ---
+    try {
+        if (typeof CalendarView !== 'undefined') {
+            // Get calendar data from the global scope or data attributes
+            let calendarData = null;
+            let locations = [];
+            let departments = [];
+
+            // Try to get data from global variables (set by templates)
+            if (typeof window.calendarData !== 'undefined') {
+                calendarData = window.calendarData;
+            }
+            if (typeof window.locationsData !== 'undefined') {
+                locations = window.locationsData;
+            }
+
+            // Fallback: try to extract from existing DOM elements
+            if (!calendarData) {
+                // Try to build calendar data from existing table rows
+                calendarData = extractCalendarDataFromDOM();
+            }
+
+            if (calendarData && calendarData.days && calendarData.days.length > 0) {
+                departments = calendarData.departments || [];
+                window.calendarView = new CalendarView(calendarData, locations, departments);
+                console.log('Calendar view initialized from calendar.js');
+                
+                // Integrate with location filter
+                if (window.locationFilter) {
+                    const originalApplyFilters = window.locationFilter.applyFilters.bind(window.locationFilter);
+                    window.locationFilter.applyFilters = function() {
+                        originalApplyFilters();
+                        // Also apply filters to calendar view
+                        if (window.calendarView && window.calendarView.getCurrentView() === 'calendar') {
+                            window.calendarView.applyFiltersToCalendarView();
+                        }
+                    };
+                }
+            } else {
+                console.log('No calendar data available for calendar view');
+            }
+        }
+    } catch (error) {
+        console.error("Error initializing calendar view:", error);
     }
 
     // --- NEW: Go to Today Button Setup ---

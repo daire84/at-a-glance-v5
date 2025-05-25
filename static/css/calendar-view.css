@@ -1,0 +1,997 @@
+/**
+ * =============================================================================
+ * Calendar View Stylesheet (calendar-view.css)
+ * =============================================================================
+ *
+ * Purpose: Provides traditional calendar grid layout as an alternative to 
+ * the table view. Shows days in a 7-day week format with compact information.
+ *
+ * Organization:
+ * - View Toggle Controls
+ * - Calendar Grid Layout
+ * - Calendar Day Cells
+ * - Department Tags in Calendar
+ * - Status Badges
+ * - Responsive Design
+ * - Print Styles
+ */
+
+/* === VIEW TOGGLE CONTROLS === */
+.view-toggle-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    background-color: var(--background-alt);
+    border-radius: 6px;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.view-toggle {
+    display: flex;
+    background-color: var(--background-color);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.view-toggle-btn {
+    background: none;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-toggle-btn:hover {
+    background-color: var(--primary-light);
+    color: white;
+}
+
+.view-toggle-btn.active {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.view-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* === CALENDAR GRID LAYOUT === */
+.calendar-view {
+    display: none; /* Hidden by default */
+    margin-top: 1rem;
+}
+
+.calendar-view.active {
+    display: block;
+}
+
+.calendar-month {
+    margin-bottom: 2rem;
+}
+
+.calendar-month-header {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    border-radius: 6px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.calendar-day-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* === CALENDAR DAY CELLS === */
+.calendar-day {
+    background-color: var(--background-alt);
+    min-height: 120px;
+    padding: 0.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-day:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-color: var(--accent-color);
+}
+
+/* Calendar day types with location area colors */
+.calendar-day.has-area-color {
+    background-color: color-mix(in srgb, var(--row-area-color) 25%, var(--background-alt));
+    border-left: 4px solid var(--row-area-color);
+}
+
+.calendar-day.weekend {
+    background-color: var(--weekend-color);
+}
+
+.calendar-day.prep {
+    background-color: var(--prep-color);
+}
+
+.calendar-day.shoot {
+    background-color: var(--shoot-color);
+}
+
+.calendar-day.holiday {
+    background-color: var(--holiday-color);
+}
+
+.calendar-day.hiatus {
+    background-color: var(--hiatus-color);
+}
+
+.calendar-day.working-weekend {
+    background-color: var(--working-weekend-color);
+}
+
+/* Override standard colors when area color is present */
+.calendar-day.has-area-color.weekend,
+.calendar-day.has-area-color.prep,
+.calendar-day.has-area-color.shoot,
+.calendar-day.has-area-color.hiatus,
+.calendar-day.has-area-color.holiday,
+.calendar-day.has-area-color.working-weekend {
+    background-color: color-mix(in srgb, var(--row-area-color) 40%, var(--background-alt));
+}
+
+/* Day number and shoot day */
+.calendar-day-number {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 0.25rem;
+}
+
+.calendar-shoot-day {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Main content area */
+.calendar-day-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.calendar-location {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.calendar-main-unit {
+    font-size: 0.7rem;
+    color: var(--text-color);
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+
+/* === DEPARTMENT TAGS IN CALENDAR === */
+.calendar-departments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    margin-top: auto;
+}
+
+.calendar-department-tag {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.25rem;
+    border-radius: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* === STATUS BADGES === */
+.calendar-status-badge {
+    position: absolute;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.calendar-status-badge.prep {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.calendar-status-badge.weekend {
+    background-color: #757575;
+    color: white;
+}
+
+.calendar-status-badge.holiday {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.calendar-status-badge.hiatus {
+    background-color: var(--error-color);
+    color: white;
+}
+
+/* Outside month styling */
+.calendar-day.outside-month {
+    background-color: var(--background-color);
+    opacity: 0.3;
+    cursor: default;
+}
+
+.calendar-day.outside-month:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* Filtering support */
+.calendar-day.location-filtered-hidden {
+    display: none !important;
+}
+
+/* Add this to your static/css/calendar-view.css file */
+
+/* === FILTER INFO COMPONENT === */
+.filter-info-container {
+    background-color: color-mix(in srgb, var(--accent-color) 15%, var(--background-alt));
+    border: 1px solid var(--accent-color);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin: 0.5rem 0 1rem 0;
+    transition: all 0.3s ease;
+}
+
+.filter-info-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.filter-info-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.filter-info-text {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.filter-info-text strong {
+    color: var(--text-color);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.filter-info-details {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+/* === FILTER DISABLED NOTICE === */
+.filter-disabled-notice {
+    background-color: color-mix(in srgb, var(--warning-color) 15%, var(--background-alt));
+    border: 1px solid var(--warning-color);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.filter-notice-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.filter-notice-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.filter-notice-text {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Hide/show based on current view */
+.calendar-view.active ~ .filter-panel .table-view-info,
+.calendar-view:not(.active) ~ .filter-panel .calendar-view-info {
+    display: none !important;
+}
+
+.calendar-view.active ~ .filter-panel .calendar-view-info,
+.calendar-view:not(.active) ~ .filter-panel .table-view-info {
+    display: inline !important;
+}
+
+/* Disable certain filter toggles in calendar view */
+.calendar-view.active ~ .filter-panel #filter-weekends,
+.calendar-view.active ~ .filter-panel #filter-shoot {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.calendar-view.active ~ .filter-panel label:has(#filter-weekends),
+.calendar-view.active ~ .filter-panel label:has(#filter-shoot) {
+    opacity: 0.5;
+}
+
+/* === MOBILE RESPONSIVE DESIGN FIXES === */
+/* Force calendar grid to stay within screen bounds */
+@media (max-width: 768px) {
+    .calendar-grid {
+        /* Force the grid to fit within viewport */
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+        /* Use fractional units that always add up to 100% */
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 1px; /* Minimal gap to save space */
+        overflow: hidden; /* Prevent any overflow */
+    }
+
+    .calendar-day {
+        /* Fixed dimensions that work within 1/7th of screen width */
+        min-width: 0; /* Allow shrinking below content size */
+        max-width: 100%; /* Don't exceed grid column */
+        min-height: 70px; /* Fixed height - adjust as needed */
+        max-height: 70px; /* Prevent expansion */
+        padding: 0.2rem;
+        overflow: hidden; /* Hide any content that doesn't fit */
+        box-sizing: border-box;
+        
+        /* Ensure content doesn't push boundaries */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .calendar-day-header {
+        padding: 0.4rem 0.1rem; /* Reduce horizontal padding */
+        font-size: 0.65rem; /* Smaller to fit better */
+        text-align: center;
+        white-space: nowrap; /* Prevent wrapping */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Ensure day content fits within fixed box */
+    .calendar-day-content {
+        flex: 1;
+        gap: 0.1rem;
+        overflow: hidden;
+        min-height: 0; /* Allow flex shrinking */
+    }
+
+    /* Very compact day numbers */
+    .calendar-day-number {
+        font-size: 0.6rem;
+        margin-bottom: 0.1rem;
+        line-height: 1;
+    }
+
+    /* Compact shoot day indicator */
+    .calendar-shoot-day {
+        width: 14px;
+        height: 14px;
+        font-size: 0.55rem;
+        top: 0.1rem;
+        right: 0.1rem;
+    }
+
+    /* Very compact location text - prioritize fitting over readability */
+    .calendar-location {
+        font-size: 0.55rem;
+        font-weight: 600;
+        line-height: 1.1;
+        margin-bottom: 0.1rem;
+        -webkit-line-clamp: 1; /* Only one line */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* Force single line */
+    }
+
+    /* Very compact main unit text */
+    .calendar-main-unit {
+        font-size: 0.5rem;
+        line-height: 1.1;
+        -webkit-line-clamp: 1; /* Only one line */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* Force single line */
+        margin-bottom: 0.1rem;
+    }
+
+    /* Hide department tags completely on mobile to save space */
+    .calendar-departments {
+        display: none !important;
+    }
+
+    /* Very compact status badges */
+    .calendar-status-badge {
+        font-size: 0.45rem;
+        padding: 0.05rem 0.1rem;
+        bottom: 0.1rem;
+        left: 0.1rem;
+        white-space: nowrap;
+    }
+
+    /* Ensure month container doesn't overflow */
+    .calendar-month {
+        margin-bottom: 1rem;
+        overflow: hidden; /* Prevent any child overflow */
+    }
+
+    /* More compact month headers */
+    .calendar-month-header {
+        font-size: 0.9rem;
+        padding: 0.4rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* === EXTRA SMALL MOBILE (PHONES IN PORTRAIT) === */
+@media (max-width: 480px) {
+    .calendar-day {
+        /* Even more fixed dimensions for very small screens */
+        min-height: 60px;
+        max-height: 60px;
+        padding: 0.15rem;
+    }
+
+    .calendar-day-header {
+        padding: 0.3rem 0.05rem;
+        font-size: 0.6rem;
+    }
+
+    /* Tiny day numbers */
+    .calendar-day-number {
+        font-size: 0.55rem;
+    }
+
+    /* Tiny shoot day indicator */
+    .calendar-shoot-day {
+        width: 12px;
+        height: 12px;
+        font-size: 0.5rem;
+        top: 0.05rem;
+        right: 0.05rem;
+    }
+
+    /* Extremely compact text */
+    .calendar-location {
+        font-size: 0.5rem;
+        line-height: 1;
+    }
+
+    .calendar-main-unit {
+        font-size: 0.45rem;
+        line-height: 1;
+    }
+
+    /* Tiny status badges */
+    .calendar-status-badge {
+        font-size: 0.4rem;
+        padding: 0.05rem 0.08rem;
+    }
+
+    /* Smaller month headers */
+    .calendar-month-header {
+        font-size: 0.8rem;
+        padding: 0.3rem;
+    }
+}
+
+/* === ULTRA COMPACT MODE FOR VERY SMALL SCREENS === */
+@media (max-width: 360px) {
+    .calendar-day {
+        /* Ultra-compact for small phones */
+        min-height: 50px;
+        max-height: 50px;
+        padding: 0.1rem;
+    }
+
+    .calendar-day-header {
+        padding: 0.2rem 0.05rem;
+        font-size: 0.55rem;
+    }
+
+    /* Hide shoot day indicator on ultra-small screens */
+    .calendar-shoot-day {
+        display: none;
+    }
+
+    /* Minimal text */
+    .calendar-location {
+        font-size: 0.45rem;
+    }
+
+    .calendar-main-unit {
+        font-size: 0.4rem;
+    }
+
+    /* Hide status badges on ultra-small screens */
+    .calendar-status-badge {
+        display: none;
+    }
+
+    /* Add shoot day number to day number if needed */
+    .calendar-day-number::after {
+        content: attr(data-shoot-day);
+        font-weight: 600;
+        color: var(--accent-color);
+        margin-left: 0.1rem;
+    }
+}
+
+/* === LANDSCAPE MOBILE OPTIMIZATION === */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Slightly more space in landscape */
+    .calendar-day {
+        min-height: 55px;
+        max-height: 55px;
+    }
+    
+    /* Can show slightly larger text in landscape */
+    .calendar-location {
+        font-size: 0.6rem;
+    }
+
+    .calendar-main-unit {
+        font-size: 0.55rem;
+    }
+}
+
+/* === DISABLE HOVER EFFECTS ON MOBILE === */
+@media (max-width: 768px) {
+    .calendar-day:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: transparent;
+    }
+}
+
+/* === ENHANCED PRINT STYLES FOR CALENDAR VIEW === */
+@media print {
+    /* Set up landscape page layout with optimal margins */
+    @page {
+        size: landscape;
+        margin: 0.5cm 0.8cm; /* Slightly wider margins for better spacing */
+    }
+
+    /* Hide all non-essential elements */
+    .view-toggle-container,
+    .filter-panel,
+    .search-filter-section,
+    .location-filter-section,
+    .calendar-actions,
+    .admin-header .admin-actions,
+    .print-button,
+    .flash-messages,
+    .mobile-menu-toggle,
+    .main-header,
+    footer,
+    
+    /* Search section - based on your templates */
+    .search-keywords,
+    #search-keywords,
+    .search-section,
+    .search-key-words,
+    .search-container,
+    .filter-search,
+    input[type="search"],
+    
+    /* Version selector - from viewer.html */
+    .version-selector,
+    .version-container,
+    .version-dropdown,
+    #version-select,
+    
+    /* Version manager - from your templates */
+    .version-manager,
+    .version-manager-section,
+    #version-manager,
+    
+    /* Interactive location filtering helper text */
+    .location-filter-help,
+    .filter-help-text,
+    .interactive-location-filtering,
+    
+    /* Admin navigation and controls */
+    .admin-tabs,
+    .admin-actions,
+    .theme-toggle-btn,
+    
+    /* Form controls that shouldn't print */
+    button:not(.print-safe),
+    select:not(.print-safe),
+    input[type="text"]:not(.print-safe),
+    input[type="search"],
+    
+    /* Navigation elements */
+    nav:not(.print-safe),
+    .nav-list,
+    .navigation,
+    
+    /* Additional UI elements */
+    .notification-container,
+    .loading-overlay,
+    .breadcrumbs {
+        display: none !important;
+    }
+
+    /* Ensure calendar view is visible */
+    .calendar-view {
+        display: block !important;
+    }
+
+    /* Hide table view completely */
+    .calendar-table-wrapper {
+        display: none !important;
+    }
+
+    /* === PAGE BREAK CONTROL === */
+    /* Ensure each month starts on a new page and stays together */
+    .calendar-month {
+        page-break-before: always; /* Start each month on new page */
+        page-break-inside: avoid;  /* Keep month together */
+        margin-bottom: 0;          /* Remove bottom margin */
+        height: 100vh;             /* Use full viewport height */
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Remove page break from first month */
+    .calendar-month:first-child {
+        page-break-before: auto;
+    }
+
+    /* Month header styling - keep with grid */
+    .calendar-month-header {
+        background-color: #333 !important;
+        color: white !important;
+        font-size: 14pt !important;
+        font-weight: 600 !important;
+        padding: 8pt !important;
+        margin-bottom: 4pt !important; /* Minimal gap to grid */
+        border-radius: 0 !important;   /* Remove border radius for print */
+        text-align: center !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        page-break-after: avoid !important; /* Never break after header */
+        flex-shrink: 0; /* Don't let header shrink */
+    }
+
+    /* === CALENDAR GRID SIZING === */
+    /* Make grid use remaining space and fill page height */
+    .calendar-grid {
+        width: 100% !important;
+        flex: 1; /* Take remaining space after header */
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        grid-template-rows: auto 1fr 1fr 1fr 1fr 1fr 1fr !important; /* Header + 6 rows */
+        gap: 1pt !important;
+        background-color: #ddd !important;
+        border: 1pt solid #333 !important;
+        page-break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Day headers - make more prominent */
+    .calendar-day-header {
+        background-color: #666 !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 10pt !important;
+        padding: 6pt !important;
+        text-align: center !important;
+        border: 0.5pt solid #333 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* === CALENDAR DAY CELLS === */
+    /* Make day cells fill available space */
+    .calendar-day {
+        border: 0.5pt solid #999 !important;
+        padding: 4pt !important;
+        background-color: white !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        overflow: hidden !important;
+        font-size: 8pt !important;
+        line-height: 1.2 !important;
+        color: #000 !important;
+        min-height: 0 !important; /* Allow flexible sizing */
+        page-break-inside: avoid !important;
+    }
+
+    /* Location area color backgrounds */
+    .calendar-day.has-area-color {
+        background-color: color-mix(in srgb, var(--row-area-color) 20%, white) !important;
+        border-left: 5pt solid var(--row-area-color) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Day types with subtle backgrounds */
+    .calendar-day.weekend {
+        background-color: #f5f5f5 !important;
+    }
+
+    .calendar-day.prep {
+        background-color: #f0f8f0 !important;
+    }
+
+    .calendar-day.shoot {
+        background-color: #f0f4f8 !important;
+    }
+
+    .calendar-day.holiday {
+        background-color: #fff8f0 !important;
+    }
+
+    .calendar-day.hiatus {
+        background-color: #f8f0f0 !important;
+    }
+
+    /* Outside month days */
+    .calendar-day.outside-month {
+        background-color: #f9f9f9 !important;
+        color: #999 !important;
+    }
+
+    /* === DAY CONTENT === */
+    /* Day numbers */
+    .calendar-day-number {
+        font-size: 7pt !important;
+        font-weight: 500 !important;
+        color: #666 !important;
+        margin-bottom: 2pt !important;
+        line-height: 1 !important;
+    }
+
+    /* Shoot day indicator */
+    .calendar-shoot-day {
+        position: absolute !important;
+        top: 2pt !important;
+        right: 2pt !important;
+        background-color: #333 !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 12pt !important;
+        height: 12pt !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 6pt !important;
+        font-weight: 600 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Location text */
+    .calendar-location {
+        font-weight: 600 !important;
+        font-size: 7pt !important;
+        color: #000 !important;
+        line-height: 1.1 !important;
+        margin-bottom: 1pt !important;
+        overflow: hidden !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    /* Main unit description */
+    .calendar-main-unit {
+        font-size: 6pt !important;
+        color: #333 !important;
+        line-height: 1.1 !important;
+        overflow: hidden !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        flex: 1 !important; /* Take remaining space */
+    }
+
+    /* Department tags */
+    .calendar-department-tag {
+        font-size: 5pt !important;
+        padding: 1pt 1pt !important;
+        border-radius: 1pt !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        margin: 0.pt 0.5pt 0 0 !important;
+        border: 0.5pt solid rgba(0,0,0,0.2) !important;
+        display: inline-block !important;
+        line-height: 1 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    .calendar-departments {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.5pt !important;
+        margin-top: auto !important; /* Push to bottom */
+    }
+
+    /* Status badges */
+    .calendar-status-badge {
+        position: absolute !important;
+        bottom: 1pt !important;
+        left: 1pt !important;
+        font-size: 5pt !important;
+        padding: 0.5pt 1pt !important;
+        border-radius: 2pt !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+        background-color: #666 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    .calendar-status-badge.prep {
+        background-color: #4CAF50 !important;
+    }
+
+    .calendar-status-badge.holiday {
+        background-color: #FF9800 !important;
+    }
+
+    .calendar-status-badge.hiatus {
+        background-color: #F44336 !important;
+    }
+
+    /* === BODY AND CONTAINER ADJUSTMENTS === */
+    body {
+        background-color: white !important;
+        color: black !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 8pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Container adjustments */
+    .container,
+    .calendar-container {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+    }
+
+    /* Project header - make more compact */
+    .project-info-header {
+        page-break-inside: avoid !important;
+        margin-bottom: 8pt !important;
+        padding: 6pt !important;
+        border: 1pt solid #ddd !important;
+        background-color: #f8f9fa !important;
+        border-radius: 0 !important;
+        font-size: 8pt !important;
+    }
+
+    .project-title {
+        font-size: 12pt !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+        margin-bottom: 4pt !important;
+        text-align: center !important;
+    }
+
+    .project-meta {
+        display: flex !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        gap: 8pt !important;
+        font-size: 7pt !important;
+    }
+
+    .meta-label {
+        font-weight: 500 !important;
+        color: #666 !important;
+        font-size: 6pt !important;
+    }
+
+    .meta-value {
+        color: #000 !important;
+        font-size: 7pt !important;
+    }
+
+    /* Script info */
+    .script-info {
+        background-color: #f0f0f0 !important;
+        padding: 4pt !important;
+        margin-top: 4pt !important;
+        font-size: 6pt !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        border: 0.5pt solid #ccc !important;
+    }
+}
