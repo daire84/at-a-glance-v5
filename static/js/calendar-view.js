@@ -1,6 +1,7 @@
 /**
  * Calendar View Module
  * Provides traditional calendar grid layout as an alternative to table view
+ * File: static/js/calendar-view.js - REPLACE ENTIRE FILE
  */
 
 class CalendarView {
@@ -10,6 +11,30 @@ class CalendarView {
         this.departments = departments || [];
         this.currentView = 'table';
         this.isInitialized = false;
+        
+        // Define which filters work in each view
+        this.filterCompatibility = {
+            table: {
+                // All filters work in table view
+                'filter-weekends': true,
+                'filter-prep': true,
+                'filter-holidays': true,
+                'filter-hiatus': true,
+                'filter-shoot': true,
+                'filter-col-sequence': true,
+                'filter-col-second-unit': true
+            },
+            calendar: {
+                // Only these filters work in calendar view
+                'filter-weekends': false,      // Weekends still show as calendar days
+                'filter-prep': true,           // Can hide prep days
+                'filter-holidays': true,       // Can hide holidays
+                'filter-hiatus': true,         // Can hide hiatus days
+                'filter-shoot': false,         // Shoot days still show as calendar days
+                'filter-col-sequence': false,  // No columns in calendar view
+                'filter-col-second-unit': false // No columns in calendar view
+            }
+        };
         
         // Wait for DOM to be ready before initializing  
         if (document.readyState === 'loading') {
@@ -124,38 +149,174 @@ class CalendarView {
                 calendarView.classList.add('active');
                 calendarView.style.display = 'block';
             }
-            
-            // Update filter info and disable irrelevant filters
-            this.updateFilterInfoForView('calendar');
-            this.toggleFilterAvailability('calendar');
-            
         } else {
             if (tableView) tableView.style.display = 'block';
             if (calendarView) {
                 calendarView.classList.remove('active');
                 calendarView.style.display = 'none';
             }
-            
-            // Update filter info and enable all filters
-            this.updateFilterInfoForView('table');
-            this.toggleFilterAvailability('table');
         }
+
+        // Update filter availability - THIS IS THE KEY ENHANCEMENT
+        this.updateFilterAvailability(view);
+        
+        // Update filter info text
+        this.updateFilterInfoForView(view);
 
         // Apply current filters to new view
         setTimeout(() => {
-            if (window.locationFilter) {
-                if (view === 'calendar') {
-                    this.applyFiltersToCalendarView();
-                } else {
-                    // Re-apply table filters
-                    if (typeof window.locationFilter.applyFilters === 'function') {
-                        window.locationFilter.applyFilters();
-                    }
+            if (view === 'calendar') {
+                this.applyFiltersToCalendarView();
+            } else {
+                // Re-apply table filters using the global filter system
+                if (typeof applyAllFilters === 'function') {
+                    applyAllFilters();
                 }
             }
         }, 100);
     }
 
+    /**
+     * Update filter availability based on current view
+     * @param {string} view - Current view ('table' or 'calendar')
+     */
+    updateFilterAvailability(view) {
+        const compatibility = this.filterCompatibility[view];
+        
+        Object.keys(compatibility).forEach(filterId => {
+            const filterElement = document.getElementById(filterId);
+            const isAvailable = compatibility[filterId];
+            
+            if (filterElement) {
+                // Update the checkbox state
+                filterElement.disabled = !isAvailable;
+                
+                // Update visual styling
+                const label = filterElement.closest('label') || filterElement.parentElement;
+                if (label) {
+                    if (isAvailable) {
+                        label.classList.remove('filter-disabled');
+                        label.style.opacity = '1';
+                        label.style.cursor = 'pointer';
+                    } else {
+                        label.classList.add('filter-disabled');
+                        label.style.opacity = '0.5';
+                        label.style.cursor = 'not-allowed';
+                    }
+                }
+                
+                // Update tooltip/title to explain why filter is disabled
+                if (!isAvailable) {
+                    filterElement.title = `This filter is not available in ${view} view`;
+                    if (label) {
+                        label.title = `This filter is not available in ${view} view`;
+                    }
+                } else {
+                    filterElement.title = '';
+                    if (label) {
+                        label.title = '';
+                    }
+                }
+            }
+        });
+        
+        // Update the reset filters button to only reset available filters
+        this.updateResetButtonBehavior(view);
+    }
+
+    /**
+     * Update reset button to only reset available filters
+     * @param {string} view - Current view
+     */
+    updateResetButtonBehavior(view) {
+        const resetButton = document.getElementById('reset-filters');
+        if (!resetButton) return;
+        
+        // Remove existing event listener by cloning the element
+        const newResetButton = resetButton.cloneNode(true);
+        resetButton.parentNode.replaceChild(newResetButton, resetButton);
+        
+        // Add new event listener that respects filter availability
+        newResetButton.addEventListener('click', () => {
+            const compatibility = this.filterCompatibility[view];
+            
+            Object.keys(compatibility).forEach(filterId => {
+                const filterElement = document.getElementById(filterId);
+                const isAvailable = compatibility[filterId];
+                
+                if (filterElement && isAvailable) {
+                    filterElement.checked = true; // Reset to default (visible)
+                }
+            });
+            
+            // Apply filters after reset
+            if (view === 'calendar') {
+                this.applyFiltersToCalendarView();
+            } else if (typeof applyAllFilters === 'function') {
+                applyAllFilters();
+            }
+            
+            // Save filter preferences
+            if (typeof saveFilterPreferences === 'function') {
+                saveFilterPreferences();
+            }
+        });
+    }
+
+    /**
+     * Apply filters specifically for calendar view
+     */
+    applyFiltersToCalendarView() {
+        if (this.currentView !== 'calendar') return;
+
+        // Get available filters for calendar view
+        const compatibility = this.filterCompatibility.calendar;
+        
+        // Apply location/area filters (if location filter system exists)
+        if (window.locationFilter && typeof window.locationFilter.applyToCalendarView === 'function') {
+            window.locationFilter.applyToCalendarView();
+        }
+
+        // Apply day type filters that are available in calendar view
+        document.querySelectorAll('.calendar-day:not(.outside-month)').forEach(dayEl => {
+            let showDay = true;
+            const date = dayEl.dataset.date;
+            const dayData = this.calendarData.days.find(d => d.date === date);
+
+            if (dayData) {
+                // Check each available filter
+                Object.keys(compatibility).forEach(filterId => {
+                    if (!compatibility[filterId]) return; // Skip unavailable filters
+                    
+                    const filterElement = document.getElementById(filterId);
+                    if (!filterElement || filterElement.checked) return; // Skip if checked (visible)
+                    
+                    // Apply the specific filter logic
+                    switch(filterId) {
+                        case 'filter-prep':
+                            if (dayData.isPrep) showDay = false;
+                            break;
+                        case 'filter-holidays':
+                            if (dayData.isHoliday) showDay = false;
+                            break;
+                        case 'filter-hiatus':
+                            if (dayData.isHiatus) showDay = false;
+                            break;
+                    }
+                });
+            }
+
+            // Apply visibility
+            dayEl.classList.toggle('calendar-filtered-hidden', !showDay);
+        });
+        
+        // Update filter statistics
+        this.updateCalendarFilterStats();
+    }
+
+    /**
+     * Update filter info text based on current view
+     */
     updateFilterInfoForView(view) {
         const tableInfo = document.querySelector('.table-view-info');
         const calendarInfo = document.querySelector('.calendar-view-info');
@@ -171,39 +332,25 @@ class CalendarView {
         }
     }
 
-    toggleFilterAvailability(view) {
-        // Disable weekend and shoot day filters in calendar view
-        const weekendFilter = document.getElementById('filter-weekends');
-        const shootFilter = document.getElementById('filter-shoot');
-        const weekendLabel = weekendFilter ? weekendFilter.closest('label') : null;
-        const shootLabel = shootFilter ? shootFilter.closest('label') : null;
+    /**
+     * Update filter statistics for calendar view
+     */
+    updateCalendarFilterStats() {
+        if (this.currentView !== 'calendar') return;
         
-        if (view === 'calendar') {
-            // Disable weekend and shoot filters
-            if (weekendFilter) {
-                weekendFilter.disabled = true;
-                weekendFilter.style.opacity = '0.5';
-            }
-            if (shootFilter) {
-                shootFilter.disabled = true;
-                shootFilter.style.opacity = '0.5';
-            }
-            if (weekendLabel) weekendLabel.style.opacity = '0.5';
-            if (shootLabel) shootLabel.style.opacity = '0.5';
-            
-        } else {
-            // Re-enable all filters
-            if (weekendFilter) {
-                weekendFilter.disabled = false;
-                weekendFilter.style.opacity = '1';
-            }
-            if (shootFilter) {
-                shootFilter.disabled = false;
-                shootFilter.style.opacity = '1';
-            }
-            if (weekendLabel) weekendLabel.style.opacity = '1';
-            if (shootLabel) shootLabel.style.opacity = '1';
-        }
+        const totalDays = document.querySelectorAll('.calendar-day:not(.outside-month)').length;
+        const visibleDays = document.querySelectorAll('.calendar-day:not(.outside-month):not(.calendar-filtered-hidden):not(.location-filtered-hidden)').length;
+        const totalShootDays = document.querySelectorAll('.calendar-day.shoot:not(.outside-month)').length;
+        const visibleShootDays = document.querySelectorAll('.calendar-day.shoot:not(.outside-month):not(.calendar-filtered-hidden):not(.location-filtered-hidden)').length;
+
+        // Update stats display
+        const statsTotal = document.getElementById('filter-stats-total');
+        const statsVisible = document.getElementById('filter-stats-visible');
+        const statsShootDays = document.getElementById('filter-stats-shoot-days');
+
+        if (statsTotal) statsTotal.textContent = totalDays;
+        if (statsVisible) statsVisible.textContent = visibleDays;
+        if (statsShootDays) statsShootDays.textContent = `${visibleShootDays} / ${totalShootDays}`;
     }
 
     generateCalendarView() {
@@ -410,7 +557,7 @@ class CalendarView {
             const content = document.createElement('div');
             content.className = 'calendar-day-content';
 
-            // Location
+            // Location (truncated)
             if (day.location) {
                 const location = document.createElement('div');
                 location.className = 'calendar-location';
@@ -528,84 +675,6 @@ class CalendarView {
         // Calculate brightness using YIQ formula
         const brightness = (r * 299 + g * 587 + b * 114) / 1000;
         return brightness > 128 ? '#000000' : '#ffffff';
-    }
-
-    // Apply current filters to calendar view
-    applyFiltersToCalendarView() {
-        if (!window.locationFilter) return;
-
-        const hasLocationFilters = window.locationFilter.activeFilters.locations.size > 0;
-        const hasAreaFilters = window.locationFilter.activeFilters.areas.size > 0;
-        
-        // Also check for row type filters that make sense in calendar view
-        const hidePrepDays = document.getElementById('filter-prep') && !document.getElementById('filter-prep').checked;
-        const hideHiatusDays = document.getElementById('filter-hiatus') && !document.getElementById('filter-hiatus').checked;
-        const hideHolidayDays = document.getElementById('filter-holidays') && !document.getElementById('filter-holidays').checked;
-
-        document.querySelectorAll('.calendar-day:not(.outside-month)').forEach(dayEl => {
-            let showDay = true;
-            const date = dayEl.dataset.date;
-            const dayData = this.calendarData.days.find(d => d.date === date);
-
-            if (dayData) {
-                // Apply location/area filters
-                if (hasLocationFilters || hasAreaFilters) {
-                    let locationMatch = false;
-                    
-                    // Check location filters
-                    if (hasLocationFilters && dayData.location) {
-                        locationMatch = Array.from(window.locationFilter.activeFilters.locations).some(loc => 
-                            dayData.location.includes(loc)
-                        );
-                    }
-
-                    // Check area filters
-                    if (hasAreaFilters && !locationMatch && dayData.locationArea) {
-                        locationMatch = window.locationFilter.activeFilters.areas.has(dayData.locationArea);
-                    }
-                    
-                    if (!locationMatch) {
-                        showDay = false;
-                    }
-                }
-                
-                // Apply day type filters that make sense in calendar view
-                if (showDay && hidePrepDays && dayData.isPrep) {
-                    showDay = false;
-                }
-                
-                if (showDay && hideHiatusDays && dayData.isHiatus) {
-                    showDay = false;
-                }
-                
-                if (showDay && hideHolidayDays && dayData.isHoliday) {
-                    showDay = false;
-                }
-            }
-
-            dayEl.classList.toggle('location-filtered-hidden', !showDay);
-        });
-        
-        // Update filter stats to account for calendar view
-        this.updateCalendarFilterStats();
-    }
-
-    // Add this new method to update filter statistics for calendar view
-    updateCalendarFilterStats() {
-        if (this.currentView !== 'calendar') return;
-        
-        const totalDays = document.querySelectorAll('.calendar-day:not(.outside-month)').length;
-        const visibleDays = document.querySelectorAll('.calendar-day:not(.outside-month):not(.location-filtered-hidden)').length;
-        const totalShootDays = document.querySelectorAll('.calendar-day.shoot:not(.outside-month)').length;
-        const visibleShootDays = document.querySelectorAll('.calendar-day.shoot:not(.outside-month):not(.location-filtered-hidden)').length;
-
-        const statsTotal = document.getElementById('filter-stats-total');
-        const statsVisible = document.getElementById('filter-stats-visible');
-        const statsShootDays = document.getElementById('filter-stats-shoot-days');
-
-        if (statsTotal) statsTotal.textContent = totalDays;
-        if (statsVisible) statsVisible.textContent = visibleDays;
-        if (statsShootDays) statsShootDays.textContent = `${visibleShootDays} / ${totalShootDays}`;
     }
 
     // Update calendar view with new data

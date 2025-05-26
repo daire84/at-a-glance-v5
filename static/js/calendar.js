@@ -211,15 +211,11 @@ function updateGoToTodayButton() {
     }
 }
 
-/**
- * Enhanced Location Filter System - locations and areas only
- */
 class LocationFilter {
     constructor() {
         this.activeFilters = {
             locations: new Set(),
             areas: new Set()
-            // Removed departments
         };
         this.init();
     }
@@ -228,11 +224,9 @@ class LocationFilter {
         this.setupLocationClickHandlers();
         this.setupAreaClickHandlers();
         this.setupClearFilters();
-        // Removed setupDepartmentClickHandlers
     }
 
     setupLocationClickHandlers() {
-        // Make location count boxes clickable
         document.querySelectorAll('.location-counters .counter-item').forEach(counter => {
             const label = counter.querySelector('.counter-label');
             if (label) {
@@ -250,7 +244,6 @@ class LocationFilter {
     }
 
     setupAreaClickHandlers() {
-        // Make area boxes clickable
         document.querySelectorAll('.location-areas .area-tag').forEach(counter => {
             counter.style.cursor = 'pointer';
             counter.title = 'Click to filter by this area';
@@ -258,7 +251,6 @@ class LocationFilter {
             
             counter.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Extract area name, excluding count if present
                 const nameElement = counter.cloneNode(true);
                 const countElement = nameElement.querySelector('.area-count');
                 if (countElement) {
@@ -296,17 +288,15 @@ class LocationFilter {
         const hasLocationFilters = this.activeFilters.locations.size > 0;
         const hasAreaFilters = this.activeFilters.areas.size > 0;
         
-        // If no filters active, show all
         if (!hasLocationFilters && !hasAreaFilters) {
             this.showAllDays();
             return;
         }
 
-        // Apply filters to calendar rows
+        // Apply filters to table view (calendar rows)
         document.querySelectorAll('.calendar-row').forEach(row => {
             let showRow = false;
 
-            // Check location filters
             if (hasLocationFilters) {
                 const locationCell = row.querySelector('.location-cell');
                 if (locationCell) {
@@ -317,13 +307,11 @@ class LocationFilter {
                 }
             }
 
-            // Check area filters
             if (hasAreaFilters && !showRow) {
                 const areaAttribute = row.getAttribute('data-area');
                 if (areaAttribute) {
                     showRow = this.activeFilters.areas.has(areaAttribute);
                 } else {
-                    // Fallback: check location text against areas
                     const locationCell = row.querySelector('.location-cell');
                     if (locationCell) {
                         const locationText = locationCell.textContent.trim();
@@ -334,22 +322,71 @@ class LocationFilter {
                 }
             }
 
-            // Apply location filter styling
-            if (hasLocationFilters || hasAreaFilters) {
-                row.classList.toggle('location-filtered-hidden', !showRow);
-            } else {
-                row.classList.remove('location-filtered-hidden');
-            }
+            row.classList.toggle('location-filtered-hidden', !showRow);
         });
+
+        // Apply to calendar view if it exists and is active
+        this.applyToCalendarView();
 
         this.updateFilterIndicator();
         this.updateFilterStats();
     }
 
+    applyToCalendarView() {
+        // Only apply if calendar view exists and is currently active
+        if (window.calendarView && window.calendarView.getCurrentView() === 'calendar') {
+            const hasLocationFilters = this.activeFilters.locations.size > 0;
+            const hasAreaFilters = this.activeFilters.areas.size > 0;
+            
+            if (!hasLocationFilters && !hasAreaFilters) {
+                // Show all calendar days
+                document.querySelectorAll('.calendar-day:not(.outside-month)').forEach(dayEl => {
+                    dayEl.classList.remove('location-filtered-hidden');
+                });
+                return;
+            }
+
+            // Apply location/area filters to calendar days
+            document.querySelectorAll('.calendar-day:not(.outside-month)').forEach(dayEl => {
+                let showDay = false;
+                const date = dayEl.dataset.date;
+                const dayData = window.calendarView.calendarData.days.find(d => d.date === date);
+
+                if (dayData) {
+                    // Check location filters
+                    if (hasLocationFilters && dayData.location) {
+                        showDay = Array.from(this.activeFilters.locations).some(loc => 
+                            dayData.location.includes(loc)
+                        );
+                    }
+
+                    // Check area filters
+                    if (hasAreaFilters && !showDay && dayData.locationArea) {
+                        showDay = this.activeFilters.areas.has(dayData.locationArea);
+                    }
+                }
+
+                dayEl.classList.toggle('location-filtered-hidden', !showDay);
+            });
+            
+            // Update calendar view statistics
+            if (typeof window.calendarView.updateCalendarFilterStats === 'function') {
+                window.calendarView.updateCalendarFilterStats();
+            }
+        }
+    }
+
     showAllDays() {
+        // Clear table view filters
         document.querySelectorAll('.calendar-row').forEach(row => {
             row.classList.remove('location-filtered-hidden');
         });
+        
+        // Clear calendar view filters
+        document.querySelectorAll('.calendar-day').forEach(dayEl => {
+            dayEl.classList.remove('location-filtered-hidden');
+        });
+        
         this.clearFilterIndicator();
         this.updateFilterStats();
     }
@@ -367,7 +404,6 @@ class LocationFilter {
         }
         
         filterText += filters.join(' | ');
-        
         this.showFilterIndicator(filterText);
     }
 
@@ -376,7 +412,7 @@ class LocationFilter {
         if (!indicator) {
             indicator = document.createElement('div');
             indicator.id = 'location-filter-indicator';
-            indicator.className = 'alert alert-info location-filter-indicator';
+            indicator.className = 'location-filter-indicator';
             indicator.style.margin = '15px 0 20px 0';
             indicator.style.display = 'flex';
             indicator.style.justifyContent = 'space-between';
@@ -387,22 +423,15 @@ class LocationFilter {
             
             const clearBtn = document.createElement('button');
             clearBtn.textContent = 'Clear Location Filters';
-            clearBtn.className = 'btn btn-sm btn-outline-primary';
+            clearBtn.className = 'button small secondary';
             clearBtn.onclick = () => this.clearAllFilters();
             
             indicator.appendChild(textSpan);
             indicator.appendChild(clearBtn);
             
-            // Find the location areas section to insert before it
             const locationAreas = document.querySelector('.location-areas');
             if (locationAreas) {
                 locationAreas.parentNode.insertBefore(indicator, locationAreas);
-            } else {
-                // Fallback to old position
-                const calendar = document.querySelector('.calendar-container') || document.querySelector('.calendar-table-wrapper');
-                if (calendar) {
-                    calendar.insertBefore(indicator, calendar.firstChild);
-                }
             }
         } else {
             indicator.querySelector('span').textContent = text;
@@ -418,7 +447,9 @@ class LocationFilter {
 
     updateFilterStats() {
         // Update existing filter stats to account for location filtering
-        updateFilterStats(); // Call the existing function
+        if (typeof updateFilterStats === 'function') {
+            updateFilterStats();
+        }
     }
 
     clearAllFilters() {
@@ -433,8 +464,7 @@ class LocationFilter {
     }
 
     setupClearFilters() {
-        // The clear button is now handled in the filter indicator
-        // No separate clear button needed
+        // The clear button is handled in the filter indicator
     }
 }
 
@@ -1275,19 +1305,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (calendarData && calendarData.days && calendarData.days.length > 0) {
                 departments = calendarData.departments || [];
                 window.calendarView = new CalendarView(calendarData, locations, departments);
-                console.log('Calendar view initialized from calendar.js');
-                
-                // Integrate with location filter
-                if (window.locationFilter) {
-                    const originalApplyFilters = window.locationFilter.applyFilters.bind(window.locationFilter);
-                    window.locationFilter.applyFilters = function() {
-                        originalApplyFilters();
-                        // Also apply filters to calendar view
-                        if (window.calendarView && window.calendarView.getCurrentView() === 'calendar') {
-                            window.calendarView.applyFiltersToCalendarView();
-                        }
-                    };
-                }
+                console.log('Calendar view initialized with enhanced filter management');                
             } else {
                 console.log('No calendar data available for calendar view');
             }

@@ -1,5 +1,25 @@
+<!-- 
+File: templates/components/_filter_panel.html
+REPLACE the existing filter panel with this enhanced version
+-->
+
 <div class="filter-panel">
     <h4>Calendar Filters</h4>
+    
+    <!-- Filter availability info -->
+    <div class="filter-info-container" id="filter-info">
+        <div class="filter-info-content">
+            <div class="filter-info-icon">ℹ️</div>
+            <div class="filter-info-text">
+                <strong>Filter Availability:</strong>
+                <span class="filter-info-details">
+                    <span class="table-view-info">All filters available in Table View</span>
+                    <span class="calendar-view-info" style="display: none;">Limited filters available in Calendar View - some filters are disabled</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    
     <div class="filter-section">
         <h5>Day Types</h5>
         <div class="filter-row">
@@ -42,29 +62,21 @@
         </div>
     </div>
 
-    <!-- In templates/components/_filter_panel.html -->
-    <!-- Add this new section after the existing "Filter Stats" section: -->
-    
-    <!-- ADD THIS SECTION -->
-    <div class="filter-info-container" id="filter-info">
-        <div class="filter-info-content">
-            <div class="filter-info-icon">ℹ️</div>
-            <div class="filter-info-text">
-                <strong>Filtering Options:</strong>
-                <span class="filter-info-details">
-                    <span class="table-view-info">All filters available in Table View</span>
-                    <span class="calendar-view-info" style="display: none;">Location, Area, Prep, Holiday & Hiatus filters work in Calendar View</span>
-                </span>
-            </div>
-        </div>
-    </div>
-
     <div class="filter-section">
         <h5>Filter Stats</h5>
         <div class="stats-row">
-            <div>Days: <span id="filter-stats-visible">--</span> / <span id="filter-stats-total">--</span></div>
-            <div>Shoot Days: <span id="filter-stats-shoot-days">--</span></div>
-            <div>Second Unit: <span id="filter-stats-second-unit">--</span></div>
+            <div>
+                <strong>Days:</strong><br>
+                <span id="filter-stats-visible">--</span> / <span id="filter-stats-total">--</span>
+            </div>
+            <div>
+                <strong>Shoot Days:</strong><br>
+                <span id="filter-stats-shoot-days">--</span>
+            </div>
+            <div>
+                <strong>Second Unit:</strong><br>
+                <span id="filter-stats-second-unit">--</span>
+            </div>
         </div>
     </div>
 
