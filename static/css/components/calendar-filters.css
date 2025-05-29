@@ -1,0 +1,377 @@
+/**
+ * =============================================================================
+ * Calendar Filters & Search System (calendar-filters.css)
+ * =============================================================================
+ *
+ * Purpose: Filter panel, search functionality, and interactive filtering
+ * Extracted from calendar.css lines ~650-950 (various sections)
+ *
+ * Features:
+ * - Filter panel with checkboxes
+ * - Search input and results
+ * - Location filtering interactions
+ * - Filter statistics and status
+ * - Active filter indicators
+ */
+
+/* === FILTER PANEL STYLES === */
+.filter-panel {
+    background-color: var(--background-alt);
+    border-color: var(--border-color);
+    border-radius: 6px;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .filter-panel h4 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    color: var(--title-text-color);
+  }
+  
+  .filter-section {
+    margin-bottom: 0.8rem;
+  }
+  
+  .filter-section h5 {
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+  }
+  
+  .filter-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .filter-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    min-width: 100px;
+  }
+  
+  .filter-toggle input[type="checkbox"] { /* Basic checkbox alignment */
+      margin-right: 0.4rem;
+  }
+  
+  .toggle-label {
+    /* margin-left: 0.4rem; *//* Removed as checkbox now has margin */
+    font-size: 0.85rem;
+    color: var(--text-color);
+  }
+  
+  .stats-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.8rem; /* Add spacing above stats */
+    padding-top: 0.8rem; /* Add padding above stats */
+    border-top: 1px solid var(--border-color); /* Separator */
+    border-top-color: var(--border-color);
+  }
+  
+  .filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.8rem;
+    gap: 0.5rem; /* Add gap between filter buttons */
+  }
+  
+  /* 
+   * Search Filter Styles
+   * To be added to static/css/calendar.css
+   */
+  
+  /* === SEARCH FILTER STYLES === */
+  .search-filter-section {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: var(--background-alt);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  /* Search title and description styles */
+  .search-title {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: var(--title-text-color);
+    font-weight: 500;
+  }
+  
+  .search-description {
+    margin: 0 0 12px 0;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.4;
+  }
+  
+  .search-input-container {
+    display: flex;
+    position: relative;
+    width: 100%;
+  }
+  
+  #calendar-search {
+    flex: 1;
+    padding: 10px 40px 10px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
+  
+  #calendar-search:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb, 41, 182, 246), 0.2);
+  }
+  
+  #clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    transition: color 0.2s ease;
+  }
+  
+  #clear-search:hover {
+    color: var(--accent-color);
+  }
+  
+  .search-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    padding: 5px 10px;
+    background-color: rgba(var(--accent-color-rgb, 41, 182, 246), 0.1);
+    border-radius: 4px;
+    display: inline-block;
+  }
+  
+  #search-term {
+    font-weight: 500;
+    color: var(--accent-color);
+  }
+  
+  #search-results-count {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  
+  /* Hide rows that don't match search */
+  .calendar-row.search-hidden {
+    display: none !important;
+  }
+  
+  /* Make search box responsive */
+  @media (max-width: 768px) {
+    .search-filter-section {
+        padding: 10px;
+    }
+    
+    #calendar-search {
+        padding: 8px 35px 8px 12px;
+        font-size: 0.9rem;
+    }
+  }
+  
+  /* === CUSTOM SEARCH HIGHLIGHT === */
+  /* Optional: Add this if you want to highlight matching text */
+  .search-highlight {
+    background-color: rgba(var(--accent-color-rgb, 41, 182, 246), 0.2);
+    padding: 1px 2px;
+    border-radius: 2px;
+  }
+  
+  /* Theme-Aware Location Filter Section Styling - Matches your style.css variables */
+  
+  .location-filter-section {
+    margin: 25px 0 15px 0;
+    padding: 15px;
+    background-color: var(--background-alt);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .location-filter-title {
+    color: var(--text-color);
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+  
+  .location-filter-help {
+    margin-bottom: 10px;
+  }
+  
+  /* Theme-Aware Filter Help Text */
+  .filter-help-text {
+    background-color: var(--background-alt);
+    border-left: 4px solid var(--accent-color);
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin: 8px 0;
+    transition: background-color 0.3s ease;
+    /* Use semi-transparent overlay for better theme integration */
+    position: relative;
+  }
+  
+  .filter-help-text small {
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.9em;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Theme-Aware Location Filter Indicator */
+  .location-filter-indicator {
+    margin: 15px 0 20px 0;
+    border-left: 4px solid var(--accent-color);
+    background-color: var(--background-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px 15px;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+  }
+  
+  .location-filter-indicator span {
+    color: var(--text-color);
+  }
+  
+  .location-filter-indicator button {
+    background-color: var(--accent-color);
+    color: white;
+    border: 1px solid var(--accent-color);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    transition: all 0.3s ease;
+  }
+  
+  .location-filter-indicator button:hover {
+    background-color: var(--accent-dark);
+    border-color: var(--accent-dark);
+    transform: translateY(-1px);
+  }
+  
+  /* Improved spacing between sections */
+  .location-areas {
+    margin-top: 10px;
+  }
+  
+  /* Enhanced contrast for better readability */
+  :root .location-filter-section {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .light-theme .location-filter-section {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Clickable filter styling */
+  .clickable-filter {
+    transition: all 0.2s ease;
+  }
+  
+  .clickable-filter:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .filter-active {
+    background-color: #007bff !important;
+    color: white !important;
+    font-weight: bold;
+    border: 2px solid #0056b3 !important;
+  }
+  
+  /* Location filter indicator */
+  .location-filter-indicator {
+    margin-bottom: 15px;
+    border-left: 4px solid #007bff;
+  }
+  
+  /* Hide rows filtered by location */
+  .calendar-row.location-filtered-hidden {
+    display: none !important;
+  }
+  
+  /* Ensure visibility transitions are smooth */
+  .calendar-row {
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Filter Information Component Styles */
+  .filter-info-container {
+    margin: 15px 0;
+    padding: 12px 15px;
+    background-color: var(--background-alt);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-color);
+  }
+  
+  .filter-info-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .filter-info-icon {
+    font-size: 1.2em;
+    flex-shrink: 0;
+  }
+  
+  .filter-info-text {
+    flex: 1;
+    font-size: 0.9em;
+    color: var(--text-color);
+  }
+  
+  .filter-info-details {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85em;
+    color: var(--text-light);
+  }
+  
+  .table-view-info,
+  .calendar-view-info {
+    display: inline;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .filter-info-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+    }
+    
+    .filter-info-icon {
+      align-self: center;
+    }
+  }

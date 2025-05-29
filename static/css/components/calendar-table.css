@@ -1,0 +1,315 @@
+/**
+ * =============================================================================
+ * Calendar Table Core Styles (calendar-table.css)
+ * =============================================================================
+ *
+ * Purpose: Main calendar table structure and styling
+ * Extracted from calendar.css lines ~351-650
+ *
+ * Features:
+ * - Responsive table wrapper with scrolling
+ * - Column definitions and widths
+ * - Row styling and color coding
+ * - Cell content formatting
+ * - Sticky headers
+ * - Department tags
+ */
+
+/* ============================================= */
+/* === CALENDAR TABLE - CORE STYLES ========== */
+/* ============================================= */
+.calendar-table-wrapper {
+    overflow-x: auto;  /* Keep existing horizontal scroll */
+    overflow-y: auto;  /* Add vertical scroll */
+    max-height: 70vh;  /* Set a maximum height (70% of viewport height) */
+    border: 1px solid var(--border-color);  /* Add border for visual clarity */
+    border-radius: 6px;  /* Match your design aesthetic */
+    position: relative;  /* Establish positioning context */
+  }
+  
+  .calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+    font-size: 0.85rem;
+    border-color: var(--border-color);
+  }
+  
+  /* Ensure the table header sticks properly */
+  .calendar-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* Shadow effect for scrolled header - will be toggled by JS */
+  .calendar-table thead.scrolled th {
+    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .calendar-table th,
+  .calendar-table td {
+    border: 1px solid #dee2e6;
+    border-color: var(--border-color);
+    color: var(--text-color);
+    padding: 0.3rem;
+    vertical-align: top;
+    text-align: left;
+    font-size: 0.75rem;
+  }
+  
+  /* Add this rule to increase border contrast in light mode */
+  body.light-theme .calendar-table th,
+  body.light-theme .calendar-table td {
+    border-color: #ccc; /* Darker border for light mode */
+  }
+  
+  /* Update table header styles to use variables */
+  .calendar-table th {
+    background-color: var(--table-header-bg, var(--primary-color));
+    color: var(--table-header-color, white);
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 0.4rem 0.5rem;
+    /* Add a subtle bottom border for better visual separation */
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  /* Ensure tbody takes up enough space to enable scrolling */
+  .calendar-table tbody {
+    min-height: 300px; /* Minimum height to enable scrolling */
+  }
+  
+  /* === COLUMN WIDTHS - REFINED === */
+  .date-col { width: 80px; }
+  .day-col { width: 30px; text-align: center; }
+  .main-unit-col { width: 170px; }
+  .extras-col, .featured-extras-col { width: 25px; text-align: center; }
+  .location-col { width: 110px; }
+  .sequence-col { width: 70px; }
+  .departments-col { width: 110px; }
+  .notes-col { width: 160px; }
+  .second-unit-col { width: 90px; }
+  
+  /* === SECOND UNIT COLUMN STYLES === */
+  .second-unit-cell {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+  
+  .second-unit-description {
+    font-weight: 500;
+  }
+  
+  .second-unit-location {
+    font-size: 0.7rem;
+    color: var(--text-dark);
+    font-style: italic;
+  }
+  
+  .hide-col-second-unit .second-unit-col,
+  .hide-col-second-unit .second-unit-cell {
+    display: none;
+  }
+  
+  /* === ROW STYLING - COLOR CODED === */
+  .calendar-row {
+    /* max-height: 3.5rem; */ /* Removing max-height allows content to define height */
+    min-height: 3.5rem; /* Set a minimum height instead */
+    transition: background-color 0.2s;
+    --row-area-color: transparent;
+  }
+  
+  .calendar-row.has-area-color {
+    background-color: color-mix(in srgb, var(--row-area-color) 15%, white);
+  }
+  
+  .calendar-row:hover {
+    background-color: color-mix(in srgb, var(--row-area-color) 25%, var(--background-color));
+  }
+  
+  /* Updated row background color definitions for dark mode */
+  .calendar-row.weekend {
+    background-color: var(--weekend-color, color-mix(in srgb, #747476 75%, var(--row-area-color, var(--background-alt))));
+  }
+  .calendar-row.prep {
+    background-color: var(--prep-color, color-mix(in srgb, #344a39 75%, var(--row-area-color, var(--background-alt))));
+  }
+  .calendar-row.shoot {
+    background-color: var(--shoot-color, color-mix(in srgb, #2d4561 75%, var(--row-area-color, var(--background-alt))));
+  }
+  .calendar-row.hiatus {
+    background-color: var(--hiatus-color, color-mix(in srgb, #5a3a3a 75%, var(--row-area-color, var(--background-alt))));
+  }
+  .calendar-row.holiday {
+    background-color: var(--holiday-color, color-mix(in srgb, #5a4a2f 75%, var(--row-area-color, var(--background-alt))));
+  }
+  .calendar-row.working-weekend {
+    background-color: var(--working-weekend-color, color-mix(in srgb, #355a35 75%, var(--row-area-color, var(--background-alt))));
+  }
+  
+  .calendar-row.working-weekend .date-cell::after {
+    content: "Working";
+    display: block;
+    font-size: 0.65rem;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 1px 3px;
+    border-radius: 2px;
+    margin-top: 2px;
+    text-align: center;
+    max-width: 50px;
+  }
+  
+  .week-number {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    background-color: rgba(var(--accent-color-rgb, 11, 95, 179), 0.15);
+    border-radius: 2px;
+    padding: 1px 3px;
+    display: inline-block;
+    margin-top: 3px;
+  }
+  
+  .calendar-row.filtered-hidden {
+    display: none;
+  }
+  
+  /* Make location area colors more specific */
+  .calendar-row.has-area-color.weekend,
+  .calendar-row.has-area-color.prep,
+  .calendar-row.has-area-color.shoot,
+  .calendar-row.has-area-color.hiatus,
+  .calendar-row.has-area-color.holiday,
+  .calendar-row.has-area-color.working-weekend {
+    background-color: color-mix(in srgb, var(--row-area-color) 30%, var(--background-alt));
+  }
+  
+  /* Override the standard row colors when an area is present */
+  body .calendar-row.has-area-color.weekend,
+  body .calendar-row.has-area-color.prep,
+  body .calendar-row.has-area-color.shoot,
+  body .calendar-row.has-area-color.hiatus,
+  body .calendar-row.has-area-color.holiday,
+  body .calendar-row.has-area-color.working-weekend {
+    background-color: color-mix(in srgb, var(--row-area-color) 40%, var(--weekend-color));
+  }
+  
+  /* === CELL CONTENT STYLING - COMPACT === */
+  .date-cell {
+    font-weight: 500;
+  }
+  
+  .date-display {
+    color: var(--text-color);
+    margin-bottom: 0.15rem;
+    font-size: 0.75rem;
+  }
+  
+  .date-day {
+    font-size: 0.7rem;
+    color: var(--text-light);
+  }
+  
+  .date-description {
+    color: var(--text-light);
+    font-size: 0.7rem;
+  }
+  
+  .day-cell {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+  
+  .main-unit-cell {
+    font-weight: 500;
+    font-size: 0.8rem; /* Slightly smaller for more content */
+    white-space: pre-line;
+    line-height: 1.3; /* Slightly increased line height */
+    color: var(--text-color);
+  }
+  
+  /* Main Unit Textarea Styling */
+  textarea#mainUnit {
+    font-family: inherit; /* Match your form font */
+    font-size: 0.95rem; /* Match your input text size */
+    line-height: 1.4; /* Better line spacing */
+    min-height: 2.5rem; /* Minimum height */
+    resize: vertical; /* Allow vertical resizing only */
+    padding: 0.75rem; /* Match your input padding */
+    width: 100%; /* Full width */
+    background-color: #f8f9fa; /* Match your input background */
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+  }
+  
+  /* Ensure consistent styling with your other inputs */
+  textarea#mainUnit:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.25);
+    outline: none;
+  }
+  
+  .extras-cell,
+  .featured-extras-cell {
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .location-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    vertical-align: middle; /* Keep middle alignment */
+  }
+  
+  .location-name {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text-color);
+  }
+  
+  .location-area {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    font-style: italic;
+    opacity: 0.9;
+  }
+  
+  .notes-cell {
+    font-size: 0.75rem;
+    line-height: 1.3; /* Slightly increased line height */
+    white-space: pre-line;
+  }
+  
+  /* === DEPARTMENT TAGS - COMPACT === */
+  .departments-cell {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    padding: 0.15rem;
+    align-items: flex-start;
+    /* max-height: 2.8rem; */ /* Remove max-height to allow wrapping */
+    /* overflow-y: auto; */ /* Remove scroll */
+  }
+  
+  .department-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    padding: 0.07rem 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 1;
+    /* Background/color set dynamically */
+  }

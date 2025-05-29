@@ -1,0 +1,167 @@
+/**
+ * =============================================================================
+ * Calendar Core Base Styles (calendar-core.css)
+ * =============================================================================
+ *
+ * Purpose: Essential calendar functionality and base classes
+ * Extracted from calendar.css lines ~1-50 and essential sections
+ *
+ * Features:
+ * - Global calendar container
+ * - Essential row and day type definitions
+ * - Basic calendar structure
+ * - Core calendar classes
+ */
+
+/* === GLOBAL CONTAINER STYLES === */
+.calendar-container {
+    background-color: var(--background-alt, white); /* Use alt background */
+    color: var(--text-color);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* === VIEWER MODE SPECIFICS === */
+  .viewer-mode .calendar-table th {
+    position: sticky; 
+    top: 0; 
+    z-index: 10;
+  }
+  
+  /* === ESSENTIAL ROW TYPE DEFINITIONS === */
+  /* Base calendar row styling - essential for all views */
+  .calendar-row {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  /* Essential day type classes - core functionality */
+  .calendar-row.weekend {
+    --row-type-color: #747476;
+  }
+  
+  .calendar-row.prep {
+    --row-type-color: #344a39;
+  }
+  
+  .calendar-row.shoot {
+    --row-type-color: #2d4561;
+  }
+  
+  .calendar-row.hiatus {
+    --row-type-color: #5a3a3a;
+  }
+  
+  .calendar-row.holiday {
+    --row-type-color: #5a4a2f;
+  }
+  
+  .calendar-row.working-weekend {
+    --row-type-color: #355a35;
+  }
+  
+  /* === CORE DEPARTMENT TAG STYLING === */
+  .department-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    padding: 0.07rem 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 1;
+    /* Background/color set dynamically via JavaScript */
+  }
+  
+  /* === BASIC ADMIN FUNCTIONALITY === */
+  .admin-calendar .calendar-row {
+    cursor: pointer;
+  }
+  
+  .admin-calendar .calendar-row:hover {
+    background-color: color-mix(in srgb, var(--row-area-color, transparent) 25%, var(--background-alt));
+  }
+  
+  /* === CORE CALENDAR STRUCTURE === */
+  .calendar-wrapper {
+    width: 100%;
+    position: relative;
+  }
+  
+  /* === ESSENTIAL UTILITY CLASSES === */
+  .calendar-row.filtered-hidden {
+    display: none;
+  }
+  
+  .calendar-row.search-hidden {
+    display: none !important;
+  }
+  
+  .calendar-row.location-filtered-hidden {
+    display: none !important;
+  }
+  
+  /* === COLOR SYSTEM FOUNDATION === */
+  :root {
+    /* Calendar-specific color variables */
+    --calendar-weekend-color: #747476;
+    --calendar-prep-color: #344a39;
+    --calendar-shoot-color: #2d4561;
+    --calendar-hiatus-color: #5a3a3a;
+    --calendar-holiday-color: #5a4a2f;
+    --calendar-working-weekend-color: #355a35;
+  }
+  
+  /* Light theme overrides for calendar colors */
+  .light-theme {
+    --calendar-weekend-color: #f0f0f0;
+    --calendar-prep-color: #e0ffe0;
+    --calendar-shoot-color: #e0f0ff;
+    --calendar-hiatus-color: #ffe0e0;
+    --calendar-holiday-color: #fff0e0;
+    --calendar-working-weekend-color: #e0f0e0;
+  }
+  
+  /* === AREA COLOR SYSTEM === */
+  .calendar-row.has-area-color {
+    --row-area-color: transparent; /* Will be set dynamically */
+  }
+  
+  .calendar-row.has-area-color {
+    background-color: color-mix(in srgb, var(--row-area-color) 15%, var(--background-alt));
+  }
+  
+  /* === ESSENTIAL RESPONSIVE BASE === */
+  @media (max-width: 768px) {
+    .calendar-container {
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  /* === CALENDAR ACCESSIBILITY === */
+  .calendar-row:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+  
+  /* Ensure keyboard navigation works */
+  .calendar-table:focus-within {
+    box-shadow: 0 0 0 2px var(--accent-color);
+  }
+  
+  /* === PRINT COMPATIBILITY === */
+  @media print {
+    .calendar-container {
+      box-shadow: none;
+      padding: 0.5cm;
+      background-color: white !important;
+      color: #323233 !important;
+    }
+  }

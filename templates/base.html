@@ -14,6 +14,9 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/modals.css') }}">
+    <!-- Add these to <head> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-core.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-layout.css') }}">
     {% block styles %}{% endblock %}
 </head>
 {# Add class for theme handling - Ensure theme-toggle.js sets this class #}

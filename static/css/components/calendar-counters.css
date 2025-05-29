@@ -1,0 +1,173 @@
+/**
+ * =============================================================================
+ * Calendar Counters & Statistics (calendar-counters.css)
+ * =============================================================================
+ *
+ * Purpose: Department counters, location counters, and area displays
+ * Extracted from calendar.css lines ~201-350
+ *
+ * Features:
+ * - Department usage counters
+ * - Location usage statistics
+ * - Color-coded area displays
+ * - Interactive counter elements
+ * - Grid-based responsive layouts
+ */
+
+/* ========================================================================== */
+/* === COUNTER/AREA "BOARDS" (Departments, Locations, Areas) - CONSOLIDATED === */
+/* ========================================================================== */
+.department-counters,
+.location-counters,
+.location-areas {
+  margin-bottom: 1.2rem;
+  background-color: var(--background-alt);
+  border-color: var(--border-color);
+  padding: 0.8rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color); /* Add subtle border */
+}
+
+.counter-title,
+.areas-title {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--title-text-color);
+}
+
+.counter-grid,
+.area-tags {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.7rem 0.5rem;
+  background-color: var(--background-alt);
+  color: var(--text-dark);
+}
+
+.counter-item,
+.area-tag {
+  border-radius: 3px;
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 3rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid rgba(0,0,0,0.05); /* Add subtle border */
+}
+
+.counter-item:hover,
+.area-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.counter-label {
+  font-size: 0.7rem;
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.counter-value,
+.area-count {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* === LOCATION COUNTERS SPECIFIC STYLES === */
+.location-counters h4 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--title-text-color);
+  font-weight: 500;
+}
+
+.location-counters .counter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+.location-counters .counter-item {
+  background-color: var(--location-counter-bg, var(--background-color));
+  border: 1px solid var(--border-color);
+  min-height: 2.8rem;
+}
+
+.location-counters .counter-label {
+  color: var(--text-dark);
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.location-counters .counter-value {
+  color: var(--text-dark);
+  font-size: 1.0rem;
+  font-weight: 700;
+}
+
+/* === AREA TAG SPECIFIC STYLES === */
+.area-tag {
+  /* Color will be set dynamically via inline styles */
+  color: #333 !important; /* Dark text for better contrast */
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+}
+
+.area-tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.area-tag .area-count {
+  position: relative;
+  z-index: 1;
+  color: inherit;
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+@media (max-width: 768px) {
+  .counter-grid,
+  .area-tags {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3rem;
+  }
+  
+  .counter-item,
+  .area-tag {
+    min-height: 2.5rem;
+    padding: 0.25rem;
+  }
+  
+  .counter-label {
+    font-size: 0.65rem;
+  }
+  
+  .counter-value,
+  .area-count {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .counter-grid,
+  .area-tags {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

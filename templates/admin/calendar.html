@@ -3,10 +3,14 @@
 {% block title %}Calendar Editor - Schedule, At a Glance!{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="/static/css/calendar.css">
-<link rel="stylesheet" href="/static/css/version-manager.css">
-<link rel="stylesheet" href="/static/css/calendar-view.css">
-{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-table.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-counters.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-filters.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-interactions.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/version-manager.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar-view.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-mobile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-print.css') }}">{% endblock %}
 
 {% block content %}
 <div class="admin-header">

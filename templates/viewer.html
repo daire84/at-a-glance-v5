@@ -3,8 +3,13 @@
 {% block title %}{{ project.title or 'Untitled Project' }} - Schedule, At a Glance!{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-table.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-counters.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-filters.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-interactions.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar-view.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-mobile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-print.css') }}">
 <style>
     .version-selector {
         margin-bottom: 1rem;
