@@ -110,6 +110,17 @@
       color: #333 !important;
     }
     
+    /* Make sure location sections have white background */
+    .location-counters .counter-grid,
+    .location-areas .area-tags {
+        background-color: transparent !important;
+    }
+
+        /* Make sure department counter section has white background */
+    .department-counters .counter-grid {
+        background-color: transparent !important;
+    }
+
     .script-item { 
       display: flex !important; 
       align-items: center !important; /* Ensure vertical alignment */
@@ -417,16 +428,59 @@
       line-height: 1.3 !important;
       color: #000 !important;
     }
-    
-    /* Hide various UI elements in print */
-    .calendar-actions, 
-    .filter-panel, 
-    .loading-overlay, 
+
+    /* Hide UI elements that shouldn't print */
+    .view-toggle-container,
+    .calendar-actions,
+    .filter-panel,
+    .loading-overlay,
     .admin-calendar .calendar-row,
+    .admin-actions,
+    .calendar-mobile-controls,
     .zoom-controls,
-    .scroll-hint,
-    .theme-toggle-btn {
-      display: none !important;
+    .theme-toggle-btn,
+    .scroll-hint {
+        display: none !important;
+    }
+    
+    /* When printing table view - hide calendar view */
+    body.print-table-view .calendar-view {
+        display: none !important;
+    }
+    
+    body.print-table-view .calendar-table-wrapper {
+        display: block !important;
+    }
+    
+    /* When printing calendar view - hide table view */
+    body.print-calendar-view .calendar-table-wrapper {
+        display: none !important;
+    }
+    
+    body.print-calendar-view .calendar-view {
+        display: block !important;
+    }
+    
+    /* ... your existing rules ... */
+    
+    /* Force page break before calendar table in table view */
+    body.print-table-view .calendar-table-wrapper {
+        page-break-before: always !important;
+        page-break-inside: auto !important;
+    }
+    
+    /* Ensure headers and counters stay together on first page */
+    body.print-table-view .project-info-header,
+    body.print-table-view .department-counters,
+    body.print-table-view .location-areas,
+    body.print-table-view .location-counters {
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+    
+    /* Force the last counter section to break to new page before table */
+    body.print-table-view .location-counters {
+        page-break-after: always !important;
     }
     
     /* Page layout settings */
@@ -447,5 +501,4 @@
     body.preparing-to-print .calendar-row.has-area-color {
       background-color: var(--row-area-color, transparent) !important;
     }
-  }
   /* End @media print */

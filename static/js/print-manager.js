@@ -85,6 +85,20 @@ class PrintManager {
         // Add body class to indicate current view for print CSS
         document.body.classList.add(`print-${currentView}-view`);
         
+        // For table view, add page break classes to keep first page clean
+        if (currentView === 'table') {
+            const tableWrapper = document.querySelector('.calendar-table-wrapper');
+            if (tableWrapper) {
+                tableWrapper.classList.add('print-page-break');
+            }
+            
+            // Add class to last info section to force page break
+            const locationCounters = document.querySelector('.location-counters');
+            if (locationCounters) {
+                locationCounters.classList.add('print-first-page-content');
+            }
+        }
+        
         // Hide the non-active view completely for printing
         if (currentView === 'calendar') {
             this.hideForPrint('.calendar-table-wrapper');
@@ -102,6 +116,7 @@ class PrintManager {
         this.hideForPrint('.calendar-mobile-controls');
         this.hideForPrint('.zoom-controls');
         this.hideForPrint('.scroll-hint');
+        this.hideForPrint('.version-selector');
         
         // Ensure counters and headers still print
         this.showForPrint('.department-counters');
@@ -109,12 +124,17 @@ class PrintManager {
         this.showForPrint('.location-areas');
         this.showForPrint('.project-info-header');
     }
-
+    
     afterPrint() {
         console.log('Cleaning up after print');
         
         // Remove print-specific body classes
         document.body.classList.remove('print-table-view', 'print-calendar-view');
+        
+        // Remove page break classes
+        document.querySelectorAll('.print-page-break, .print-first-page-content').forEach(el => {
+            el.classList.remove('print-page-break', 'print-first-page-content');
+        });
         
         // Restore original view visibility
         this.restoreViewVisibility();
@@ -132,7 +152,7 @@ class PrintManager {
             el.removeAttribute('data-original-display');
         });
     }
-
+    
     hideForPrint(selector) {
         const elements = document.querySelectorAll(selector);
         elements.forEach(el => {
