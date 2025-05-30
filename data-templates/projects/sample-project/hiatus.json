@@ -1,0 +1,10 @@
+[
+  {
+    "id": "hiatus-1-id",
+    "name": "Summer Break",
+    "startDate": "2024-07-01",
+    "endDate": "2024-07-07",
+    "description": "Scheduled production break",
+    "isVisible": true
+  }
+]

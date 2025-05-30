@@ -1,0 +1,16 @@
+[
+  {
+    "id": "sfx-dept-id",
+    "name": "Special Effects",
+    "code": "SFX",
+    "description": "Special effects department",
+    "color": "#ffd8e6"
+  },
+  {
+    "id": "stunts-dept-id", 
+    "name": "Stunts",
+    "code": "STN",
+    "description": "Stunt coordination",
+    "color": "#ffecd8"
+  }
+]

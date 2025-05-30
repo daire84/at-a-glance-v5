@@ -1,0 +1,12 @@
+[
+  {
+    "id": "area-1-id",
+    "name": "Studio",
+    "color": "#e8f5e9"
+  },
+  {
+    "id": "area-2-id",
+    "name": "Locations", 
+    "color": "#e3f2fd"
+  }
+]

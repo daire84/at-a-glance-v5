@@ -1,0 +1,14 @@
+[
+  {
+    "id": "location-1-id",
+    "name": "Studio A",
+    "areaId": "area-1-id",
+    "description": "Main studio space"
+  },
+  {
+    "id": "location-2-id", 
+    "name": "Location House",
+    "areaId": "area-2-id",
+    "description": "Residential location"
+  }
+]
