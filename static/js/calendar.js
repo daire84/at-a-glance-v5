@@ -710,15 +710,60 @@ function applyAllFilters() {
 }
 
 /**
+ * FIXED VERSION - Replace in static/js/calendar.js around line 650
  * Updates the filter statistics display elements - ENHANCED VERSION
  */
 function updateFilterStats() {
-    const totalRows = document.querySelectorAll('.calendar-row').length;
-    // Count rows that DON'T have either filtered-hidden OR location-filtered-hidden classes
-    const visibleRows = document.querySelectorAll('.calendar-row:not(.filtered-hidden):not(.location-filtered-hidden)').length;
-    const totalShootDays = document.querySelectorAll('.calendar-row.shoot').length;
-    const visibleShootDays = document.querySelectorAll('.calendar-row.shoot:not(.filtered-hidden):not(.location-filtered-hidden)').length;
+    // Check current view mode
+    const isCalendarView = window.calendarView && window.calendarView.getCurrentView() === 'calendar';
+    
+    if (isCalendarView) {
+        // Use calendar view elements
+        const totalDays = document.querySelectorAll('.calendar-day:not(.outside-month)').length;
+        const visibleDays = document.querySelectorAll('.calendar-day:not(.outside-month):not(.calendar-filtered-hidden):not(.location-filtered-hidden)').length;
+        const totalShootDays = document.querySelectorAll('.calendar-day.shoot:not(.outside-month)').length;
+        const visibleShootDays = document.querySelectorAll('.calendar-day.shoot:not(.outside-month):not(.calendar-filtered-hidden):not(.location-filtered-hidden)').length;
+        
+        updateStatsDisplay(totalDays, visibleDays, visibleShootDays, totalShootDays);
+    } else {
+        // Use table view elements with comprehensive hidden state checking
+        const allRows = document.querySelectorAll('.calendar-row');
+        const totalRows = allRows.length;
+        
+        // Count visible rows more accurately by checking all possible hidden states
+        let visibleRows = 0;
+        let visibleShootDays = 0;
+        let totalShootDays = 0;
+        
+        allRows.forEach(row => {
+            // Check if row is a shoot day
+            const isShootDay = row.classList.contains('shoot');
+            if (isShootDay) {
+                totalShootDays++;
+            }
+            
+            // Check ALL possible ways a row can be hidden
+            const isHidden = row.classList.contains('filtered-hidden') || 
+                           row.classList.contains('location-filtered-hidden') ||
+                           row.classList.contains('search-hidden') ||
+                           row.classList.contains('calendar-filtered-hidden') ||
+                           row.style.display === 'none' ||
+                           getComputedStyle(row).display === 'none';
+            
+            if (!isHidden) {
+                visibleRows++;
+                if (isShootDay) {
+                    visibleShootDays++;
+                }
+            }
+        });
+        
+        updateStatsDisplay(totalRows, visibleRows, visibleShootDays, totalShootDays);
+    }
+}
 
+// Helper function to update the display elements
+function updateStatsDisplay(totalRows, visibleRows, visibleShootDays, totalShootDays) {
     const statsTotal = document.getElementById('filter-stats-total');
     const statsVisible = document.getElementById('filter-stats-visible');
     const statsShootDays = document.getElementById('filter-stats-shoot-days');
@@ -726,6 +771,9 @@ function updateFilterStats() {
     if (statsTotal) statsTotal.textContent = totalRows;
     if (statsVisible) statsVisible.textContent = visibleRows;
     if (statsShootDays) statsShootDays.textContent = `${visibleShootDays} / ${totalShootDays}`;
+    
+    // Optional debug logging - remove in production
+    console.log(`Filter stats: ${visibleRows}/${totalRows} days visible, ${visibleShootDays}/${totalShootDays} shoot days`);
 }
 
 /**

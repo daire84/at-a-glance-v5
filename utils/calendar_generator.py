@@ -248,12 +248,12 @@ def get_day_type(is_prep, is_shoot_day, is_weekend, is_holiday, is_hiatus, is_wo
     """
     if is_hiatus:
         return "hiatus"
-    elif is_holiday:
+    elif is_shoot_day:        # <-- MOVED THIS UP - Check shoot day BEFORE holiday
+        return "shoot"
+    elif is_holiday:          # <-- Now this only catches non-working holidays
         return "holiday"
     elif is_prep:
         return "prep"
-    elif is_shoot_day:
-        return "shoot"
     elif is_weekend:
         if is_working_weekend:
             return "working-weekend"
