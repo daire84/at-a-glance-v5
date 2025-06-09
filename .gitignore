@@ -1,89 +1,33 @@
-# === PROJECT DATA - NEVER COMMIT ===
-# All project data should remain local/private
-data/
-*.json
-!requirements.txt
-!package.json
-!package-lock.json
-!data-templates/**/*.json
-*.db
-*.db-shm
-*.db-wal
-*.sqlite
-*.sqlite3
-
-# MongoDB specific files
-mongodb_data/
-*.wt
-WiredTiger*
-*.lock
-diagnostic.data/
-journal/
-
-# Backup files that might contain sensitive data
-backups/
-*.backup
-*.bak
-*.old
-
-# Environment files (contain passwords/secrets)
+# Environment and secrets
 .env
-.env.*
-!.env.example
-
-# Log files (might contain sensitive information)
-logs/
 *.log
-*.log.*
 
-# Cache and temp files
-**__pycache__**/
-.cache/
-.tmp/
-*.pyc
-*.pyo
-*.pyd
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 .Python
-
-# Virtual environments
 venv/
 env/
-ENV/
-.venv/
 
-# IDE and editor files
+# Data directories (comment out if you want to track data)
+data/
+logs/
+
+# Docker
+.dockerignore
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
-# Operating system files
+# OS
 .DS_Store
 Thumbs.db
-Desktop.ini
 
-# Docker files (if they contain sensitive info)
-.docker/
-
-# Testing and coverage
-coverage/
-.nyc_output/
-.pytest_cache/
-htmlcov/
-
-# Build directories
-dist/
-build/
-*.egg-info/
-
-# Unraid specific
-*.img
-*.qcow2
-
-# Any other sensitive files
-secrets/
-private/
-*.key
-*.pem
-*.crt
+# Backup files
+*-backup-*/
+*.backup
