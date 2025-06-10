@@ -406,5 +406,95 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(shortcuts);
     }
     
+    /**
+     * Calculate and update sun times when location changes
+     */
+    function setupSunTimesCalculation() {
+        const locationSelect = document.getElementById('location');
+        const currentDate = projectData.currentDate;
+        
+        if (!locationSelect || !currentDate) return;
+        
+        locationSelect.addEventListener('change', async function() {
+            const selectedLocation = this.value;
+            
+            if (!selectedLocation) {
+                // Clear sun times if no location selected
+                updateSunTimesDisplay(null, null);
+                return;
+            }
+            
+            try {
+                // Show loading state
+                updateSunTimesDisplay('...', '...');
+                
+                // Calculate sun times
+                const response = await fetch('/api/calculate-sun-times', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        location_name: selectedLocation,
+                        date: currentDate
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        updateSunTimesDisplay(data.sunrise, data.sunset);
+                    } else {
+                        updateSunTimesDisplay(null, null);
+                    }
+                } else {
+                    // Location might not have coordinates
+                    updateSunTimesDisplay(null, null);
+                }
+            } catch (error) {
+                console.error('Error calculating sun times:', error);
+                updateSunTimesDisplay(null, null);
+            }
+        });
+    }
+    
+    /**
+     * Update sun times display in the form or create preview
+     */
+    function updateSunTimesDisplay(sunrise, sunset) {
+        // Try to find existing sun times preview
+        let sunTimesPreview = document.getElementById('sun-times-preview');
+        
+        if (!sunTimesPreview) {
+            // Create sun times preview element
+            const locationSection = document.querySelector('.form-section');
+            if (locationSection) {
+                sunTimesPreview = document.createElement('div');
+                sunTimesPreview.id = 'sun-times-preview';
+                sunTimesPreview.className = 'sun-times-preview';
+                sunTimesPreview.innerHTML = `
+                    <div class="sun-times-preview-content">
+                        <span class="sun-times-label">☀️ Sun Times:</span>
+                        <span class="sun-times-values"></span>
+                    </div>
+                `;
+                locationSection.appendChild(sunTimesPreview);
+            }
+        }
+        
+        if (sunTimesPreview) {
+            const valuesSpan = sunTimesPreview.querySelector('.sun-times-values');
+            if (sunrise && sunset) {
+                valuesSpan.textContent = `🔼 ${sunrise} | 🔽 ${sunset}`;
+                sunTimesPreview.style.display = 'block';
+            } else {
+                sunTimesPreview.style.display = 'none';
+            }
+        }
+    }
+    
+    // Initialize sun times calculation
+    setupSunTimesCalculation();
+    
     console.log('Enhanced day editor initialized successfully');
 });

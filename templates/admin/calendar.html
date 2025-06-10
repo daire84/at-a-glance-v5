@@ -90,6 +90,7 @@
                     <th class="departments-col">Department Tags</th>
                     <th class="notes-col">Notes</th>
                     <th class="second-unit-col">Second Unit</th>
+                    <th class="sun-times-col">Sun Times</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,6 +135,14 @@
                             {% if day.secondUnitLocation %}
                             <div class="second-unit-location">{{ day.secondUnitLocation }}</div>
                             {% endif %}
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="sun-times-cell">
+                        {% if day.sunrise and day.sunset %}
+                        <div class="sun-times-content">
+                            <div class="sunrise-time">{{ day.sunrise }}</div>
+                            <div class="sunset-time">{{ day.sunset }}</div>
                         </div>
                         {% endif %}
                     </td>

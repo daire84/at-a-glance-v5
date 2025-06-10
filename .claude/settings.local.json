@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(grep:*)",
+      "Bash(rm:*)",
+      "Bash(node:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(cat:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker restart:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker stop:*)",
+      "Bash(docker rm:*)",
+      "Bash(docker compose build:*)",
+      "Bash(docker-compose build:*)",
+      "Bash(docker build:*)",
+      "Bash(docker run:*)",
+      "Bash(docker logs:*)",
+      "Bash(mv:*)",
+      "Bash(rg:*)"
+    ],
+    "deny": []
+  }
+}

@@ -284,3 +284,37 @@
         height: 14px;
     }
 }
+
+/* === SUN TIMES PREVIEW IN DAY EDITOR === */
+.sun-times-preview {
+    margin-top: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    background-color: var(--background-alt, #f8f9fa);
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: none; /* Hidden by default */
+}
+
+.sun-times-preview-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sun-times-label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.sun-times-values {
+    color: var(--text-light);
+    font-family: monospace;
+    font-size: 0.8rem;
+}
+
+/* Dark mode adjustments */
+body:not(.light-theme) .sun-times-preview {
+    background-color: var(--background-alt, #2a2a2a);
+    border-color: var(--border-color, #404040);
+}

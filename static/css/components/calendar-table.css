@@ -93,6 +93,7 @@
   .departments-col { width: 110px; }
   .notes-col { width: 160px; }
   .second-unit-col { width: 90px; }
+  .sun-times-col { width: 65px; text-align: center; }
   
   /* === SECOND UNIT COLUMN STYLES === */
   .second-unit-cell {
@@ -113,6 +114,112 @@
   .hide-col-second-unit .second-unit-col,
   .hide-col-second-unit .second-unit-cell {
     display: none;
+  }
+
+  /* === SUN TIMES COLUMN STYLES === */
+  .sun-times-cell {
+    font-size: 0.7rem;
+    line-height: 1.1;
+    padding: 0.3rem 0.2rem;
+    text-align: center;
+    vertical-align: middle;
+    min-width: 65px;
+    max-width: 65px;
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+  }
+  
+  .sun-times-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  
+  .sunrise-time,
+  .sunset-time {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: normal;
+    white-space: nowrap;
+    line-height: 1.2;
+    margin: 1px 0;
+    color: var(--text-color);
+    position: relative;
+    padding-left: 8px;
+  }
+  
+  /* Subtle visual indicators using CSS */
+  .sunrise-time::before {
+    content: '●';
+    position: absolute;
+    left: 0;
+    font-size: 0.5rem;
+    color: #fbbf24;
+    top: 1px;
+  }
+  
+  .sunset-time::before {
+    content: '●';
+    position: absolute;
+    left: 0;
+    font-size: 0.5rem;
+    color: #a78bfa;
+    top: 1px;
+  }
+  
+  /* Dark mode - use same neutral colors for text, keep colored dots */
+  body:not(.light-theme) .sunrise-time,
+  body:not(.light-theme) .sunset-time {
+    color: var(--text-color);
+  }
+  
+  /* Accessibility: Add tooltip behavior */
+  .sun-times-cell {
+    position: relative;
+  }
+  
+  .sun-times-cell:hover::after {
+    content: "Sunrise & Sunset Times";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+  
+  /* Responsive - hide sun times on smaller screens but keep available on larger screens */
+  @media (max-width: 900px) {
+    .sun-times-col,
+    .sun-times-cell {
+      display: none;
+    }
+  }
+  
+  /* On larger screens, ensure sun times are visible and properly spaced */
+  @media (min-width: 901px) {
+    .sun-times-col,
+    .sun-times-cell {
+      display: table-cell;
+    }
   }
   
   /* === ROW STYLING - COLOR CODED === */

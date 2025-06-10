@@ -4,6 +4,7 @@ import logging
 from datetime import datetime, timedelta
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
+from .sun_utils import get_sun_times_for_location, format_sun_times_display, get_cache_size, clear_sun_times_cache
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +125,14 @@ def generate_calendar_days(project, existing_calendar=None):
                     "dayType": day_type,
                     "shootDay": shoot_day if is_shoot_day else None
                 })
+                
+                # Ensure sun time fields exist (for backward compatibility)
+                if 'sunrise' not in day:
+                    day['sunrise'] = None
+                if 'sunset' not in day:
+                    day['sunset'] = None
+                if 'sunTimes' not in day:
+                    day['sunTimes'] = None
             else:
                 # Create a new day entry
                 day = {
@@ -148,7 +157,10 @@ def generate_calendar_days(project, existing_calendar=None):
                     "locationArea": "",
                     "sequence": "",
                     "departments": [],
-                    "notes": ""
+                    "notes": "",
+                    "sunrise": None,
+                    "sunset": None,
+                    "sunTimes": None
                 }
             
             # Add special date info to notes ONLY if notes are empty or already contain special date info
@@ -202,6 +214,18 @@ def generate_calendar_days(project, existing_calendar=None):
         }
         
         calendar_data = calculate_location_counts(calendar_data)
+        
+        # Calculate sunrise/sunset times for days with locations
+        calendar_data = calculate_sun_times_for_calendar(calendar_data)
+        
+        # Log cache performance
+        cache_size = get_cache_size()
+        logger.info(f"Sun times cache size after calendar generation: {cache_size} entries")
+        
+        # Clear cache if it gets too large (>1000 entries) to prevent memory buildup
+        if cache_size > 1000:
+            clear_sun_times_cache()
+            logger.info("Cleared sun times cache due to size limit")
         
         # Keep any additional properties from the existing calendar
         if existing_calendar:
@@ -630,6 +654,75 @@ def calculate_department_counts(calendar_data):
         return calendar_data
 
 # This function will calculate how many times each location appears in the calendar
+def calculate_sun_times_for_calendar(calendar_data):
+    """
+    Calculate sunrise and sunset times for each day that has a location with coordinates
+    
+    Args:
+        calendar_data (dict): Calendar data with days array
+        
+    Returns:
+        dict: Updated calendar data with sun times added to days
+    """
+    try:
+        # Load locations data to get coordinates
+        data_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        locations_file = os.path.join(data_dir, 'data', 'locations.json')
+        
+        locations_map = {}
+        if os.path.exists(locations_file):
+            try:
+                with open(locations_file, 'r') as f:
+                    locations = json.load(f)
+                    # Create lookup map by location name
+                    locations_map = {loc['name']: loc for loc in locations if loc.get('name')}
+            except Exception as e:
+                logger.error(f"Error loading locations for sun calculations: {str(e)}")
+        
+        # Process each day to calculate sun times
+        for day in calendar_data.get('days', []):
+            location_name = day.get('location', '').strip()
+            
+            # Skip if no location specified
+            if not location_name:
+                continue
+                
+            # Get location data
+            location_data = locations_map.get(location_name)
+            if not location_data:
+                logger.debug(f"Location '{location_name}' not found in locations.json")
+                continue
+            
+            # Check if location has coordinates
+            latitude = location_data.get('latitude')
+            longitude = location_data.get('longitude')
+            
+            if latitude is None or longitude is None:
+                logger.debug(f"Location '{location_name}' has no coordinates")
+                continue
+            
+            # Calculate sun times for this day
+            try:
+                day_date = datetime.strptime(day['date'], '%Y-%m-%d')
+                sun_times = get_sun_times_for_location(location_data, day_date)
+                
+                if sun_times:
+                    day['sunrise'] = sun_times.get('sunrise')
+                    day['sunset'] = sun_times.get('sunset')
+                    day['sunTimes'] = format_sun_times_display(sun_times)
+                    logger.debug(f"Calculated sun times for {day['date']} at {location_name}: {day['sunTimes']}")
+                else:
+                    logger.warning(f"Failed to calculate sun times for {day['date']} at {location_name}")
+                    
+            except Exception as e:
+                logger.error(f"Error calculating sun times for {day['date']} at {location_name}: {str(e)}")
+        
+        return calendar_data
+        
+    except Exception as e:
+        logger.error(f"Error in calculate_sun_times_for_calendar: {str(e)}")
+        return calendar_data
+
 def calculate_location_counts(calendar_data):
     """
     Calculate how many times each location and location area appears in the calendar

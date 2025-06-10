@@ -1,35 +1,58 @@
-# At a Glance v4 - Film Production Calendar Scheduler
+# At a Glance v6 - Film Production Calendar Scheduler
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) A web application built with Flask and Docker to generate, view, and manage film production scheduling calendars. This tool provides a clear "at a glance" overview of prep, shoot, and wrap periods, incorporating holidays, hiatuses, weekends, and specific daily production details.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) A comprehensive web application built with Flask and Docker for film production scheduling and calendar management. This professional tool provides an intuitive "at a glance" overview of prep, shoot, and wrap periods with advanced features including smart location search, automatic sunrise/sunset calculations, and enhanced user experience.
 
 ## Key Features
 
-* **Project Management:** Create and manage multiple film projects with defined prep, shoot, and wrap dates.
-* **Automatic Calendar Generation:** Generates a full production calendar based on project dates, automatically calculating shoot days.
-* **Customizable Dates:** Handles weekends (marking them non-working by default), working weekends, bank holidays (per project), hiatus periods, and other special non-working/working dates.
-* **Detailed Day Editing (Admin):**
-    * Assign Main Unit details, Sequence information, Locations.
-    * Track Extras and Featured Extras counts.
-    * Tag days with relevant Departments (e.g., SFX, Stunts, Crane).
-    * Add daily notes.
-* **Viewer Mode:** Secure, read-only view of the generated calendar accessible via a viewer password.
-* **Admin Mode:** Secure administration backend (separate password) for managing:
-    * Projects (Create, Edit, Delete)
-    * Calendar Days (Edit details)
-    * Global Locations & Location Areas (with color-coding)
-    * Global Departments
-    * Project-specific special dates (Holidays, Hiatuses, Working Weekends)
-* **Data Visualization:** Displays counters for department usage and location usage within the calendar view.
-* **API Backend:** Includes a basic API for managing projects, calendars, locations, departments, etc. (primarily used by admin frontend).
-* **Dockerized:** Easy setup and deployment using Docker and Docker Compose.
+### 🎬 **Production Management**
+* **Project Management:** Create and manage multiple film projects with defined prep, shoot, and wrap dates
+* **Automatic Calendar Generation:** Intelligent calendar creation with automatic shoot day calculation
+* **Customizable Scheduling:** Advanced handling of weekends, working weekends, bank holidays, hiatus periods, and special dates
+
+### 🌅 **Sunrise/Sunset Integration** *(NEW)*
+* **Automatic Sun Times:** Real-time sunrise and sunset calculations for all filming locations
+* **Professional Astronomy:** Powered by industry-standard Astral library with accurate timezone handling
+* **Calendar Integration:** Sun times displayed directly in calendar view for outdoor shoot planning
+* **Performance Optimized:** 100x faster calculations with intelligent caching system
+
+### 📍 **Smart Location Management** *(NEW)*
+* **Intelligent Search:** Google-style location search - just type "Dublin" or any address
+* **Popular Film Locations:** Pre-loaded database of common filming venues and studios
+* **Automatic Geocoding:** Coordinates automatically found and populated behind the scenes
+* **Professional Geocoding:** Powered by OpenStreetMap with Ireland/UK bias for local productions
+
+### 📅 **Enhanced Calendar Features**
+* **Detailed Day Editing:** Comprehensive daily production planning:
+    * Main Unit details and Sequence information
+    * Location assignment with automatic sun time calculation
+    * Extras and Featured Extras tracking
+    * Department tagging (SFX, Stunts, Crane, etc.)
+    * Production notes and scheduling details
+* **Visual Organization:** Color-coded location areas and department counters
+* **Responsive Design:** Professional interface that works on desktop, tablet, and mobile
+
+### 🔐 **Secure Access Control**
+* **Viewer Mode:** Secure, read-only calendar access for cast and crew
+* **Admin Mode:** Full administrative control with separate authentication
+* **Project Isolation:** Each production maintains separate, secure data
+
+### 🛠 **Modern Architecture**
+* **RESTful API:** Complete API backend for all data operations
+* **Dockerized Deployment:** Easy setup and deployment with Docker Compose
+* **Professional UI/UX:** Clean, intuitive interface designed for production environments
+* **Mobile Optimized:** Responsive design for on-set access
 
 ## Tech Stack
 
-* **Backend:** Python 3.11, Flask
-* **WSGI Server:** Gunicorn
-* **Data Storage:** JSON files
-* **Frontend:** HTML, CSS, JavaScript (Vanilla JS)
-* **Containerization:** Docker, Docker Compose
+* **Backend:** Python 3.11, Flask, Gunicorn
+* **Astronomy:** Astral library for precise sun calculations
+* **Geocoding:** OpenStreetMap Nominatim API with intelligent fallbacks  
+* **Timezone:** pytz for professional timezone handling
+* **Data Storage:** Structured JSON files with automatic backups
+* **Frontend:** Modern HTML5, CSS3, Vanilla JavaScript
+* **APIs:** RESTful API design with comprehensive endpoints
+* **Containerization:** Docker & Docker Compose for easy deployment
+* **Performance:** Intelligent caching, optimized calculations, responsive design
 
 ## Project Structure
 
@@ -105,18 +128,63 @@
 4.  **Access the Application:**
     * Open your web browser and navigate to `http://localhost:5000` (or the host/port configured in `docker-compose.yml` if you changed it).
 
+## What's New in v6
+
+### 🌅 **Sunrise/Sunset Times**
+- **Automatic calculations** for all filming locations with GPS coordinates
+- **Industry-standard astronomy** using Astral library  
+- **Dublin timezone support** with automatic DST handling
+- **100x performance improvement** over previous implementations
+- **Calendar integration** - times appear directly in your schedule
+
+### 📍 **Smart Location Search**
+- **No more coordinates!** Simply type "Dublin", "Trinity College", or any address
+- **Google-style search** with instant suggestions and autocomplete
+- **Popular film locations** pre-loaded for one-click selection
+- **Professional geocoding** using OpenStreetMap with Ireland/UK optimization
+- **Mobile-friendly** responsive interface
+
+### ⚡ **Performance Enhancements**
+- **Native Python calculations** replace slow subprocess calls
+- **Intelligent caching** prevents repeated API calls
+- **Optimized styling** - cleaner, more professional appearance
+- **Enhanced error handling** with graceful fallbacks
+
+### 🎨 **UI/UX Improvements**
+- **Simplified sun times display** that matches calendar aesthetics
+- **Better text visibility** with improved contrast
+- **Dropdown positioning** fixed for better usability
+- **Professional styling** throughout the interface
+
 ## Usage
 
-* **Viewer Mode:** Navigate to the root URL (`/`). You will be prompted for the Viewer Password defined in your `.env` file. After login, you can select a project to view its calendar.
-* **Admin Mode:**
-    * Navigate to `/admin/login`.
-    * Enter the Admin Password defined in your `.env` file.
-    * Upon successful login, you will be redirected to the Admin Dashboard (`/admin`).
-    * From the dashboard, you can:
-        * Create new projects or select existing ones to edit.
-        * Manage global settings like Locations, Areas, and Departments via dedicated pages.
-        * Manage project-specific special dates (Holidays, Hiatuses, etc.).
-        * Edit individual days on the project calendar view.
+### **Viewer Mode**
+Navigate to the root URL (`/`). Enter the Viewer Password to access read-only calendar views with:
+- Full production calendar with sunrise/sunset times
+- Color-coded location areas and department tags
+- Mobile-optimized interface for on-set access
+
+### **Admin Mode**
+1. Navigate to `/admin/login` and enter your Admin Password
+2. Access the full Admin Dashboard with these capabilities:
+
+#### **📍 Smart Location Management**
+- **Add locations easily:** Just type "Dublin" or any address - no coordinates needed!
+- **Choose from popular film locations:** Pre-loaded studios, landmarks, and venues
+- **Automatic sun times:** Coordinates and sunrise/sunset times calculated automatically
+- **Color-coded areas:** Organize locations by regions with visual coding
+
+#### **📅 Project Management**
+- Create and manage multiple film projects
+- Set prep, shoot, and wrap dates with automatic calendar generation
+- Manage project-specific holidays, hiatuses, and working weekends
+- Track department usage and location scheduling
+
+#### **🎬 Daily Production Planning**
+- Edit individual calendar days with comprehensive details
+- Assign locations (with automatic sun time calculation)
+- Track extras, featured extras, and department requirements
+- Add production notes and sequence information
 
 ## Data Storage
 

@@ -96,9 +96,13 @@ def viewer(project_id):
     calendar_data['departments'] = departments
     calendar_data['locationAreas'] = areas # Add/overwrite with the fresh list
 
-    # Calculate counts
+    # Calculate counts and sun times
     calendar_data = calculate_department_counts(calendar_data)
     calendar_data = calculate_location_counts(calendar_data)
+    
+    # Calculate sun times for days with locations
+    from utils.calendar_generator import calculate_sun_times_for_calendar
+    calendar_data = calculate_sun_times_for_calendar(calendar_data)
 
     # Get all versions for the dropdown (only published ones)
     all_versions = []

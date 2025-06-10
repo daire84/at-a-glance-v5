@@ -185,4 +185,172 @@
 /* Note: Modal styles (.modal, .modal-content, etc.) removed. */
 /* Rely on common styles from modals.css */
 
+/* === LOCATION SEARCH STYLES === */
+/* Smart location search interface */
+.form-group {
+  position: relative;
+}
+
+/* Create a search container to control positioning */
+.search-container {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Location search input */
+#location-search {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+#location-search:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Search results dropdown - positioned immediately below input */
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+}
+
+.search-results.show {
+  display: block;
+}
+
+/* Individual search result */
+.search-result {
+  padding: 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid #e5e5e5;
+  transition: background-color 0.2s ease;
+  background: white;
+}
+
+.search-result:hover {
+  background-color: #f8f9ff;
+}
+
+.search-result:last-child {
+  border-bottom: none;
+}
+
+.search-result-title {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.search-result-address {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Popular locations section */
+.popular-locations {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+}
+
+.popular-locations h4 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Popular locations grid */
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+/* Popular location item */
+.popular-location {
+  padding: 0.6rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.popular-location:hover {
+  background-color: #f8f9ff;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.popular-location-name {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.popular-location-country {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Selected address field styling */
+#location-address {
+  background-color: #f8f9fa;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Loading state */
+.search-loading {
+  padding: 1rem;
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* No results state */
+.search-no-results {
+  padding: 1rem;
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .popular-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-results {
+    position: fixed;
+    top: auto;
+    left: 1rem;
+    right: 1rem;
+    max-height: 50vh;
+  }
+}
+
 /* --- End Location Management Styles --- */

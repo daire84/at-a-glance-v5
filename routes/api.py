@@ -7,6 +7,7 @@ from flask import Blueprint, jsonify, request # <-- Ensure this line is correct
 
 from utils.decorators import admin_required # Absolute import
 from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, PROJECTS_DIR, logger, update_all_projects_department_counts, recalculate_shoot_days, get_project_versions, create_project_version, publish_project_version, get_project_workspace, save_project_workspace, migrate_project_to_versioned_structure # Absolute import
+from utils.geocoding import geocode_address, get_popular_film_locations # Absolute import
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -225,6 +226,59 @@ def api_move_calendar_day(project_id):
         return jsonify({'error': f'Error moving calendar day: {str(e)}'}), 500
 
 
+# --- Helper Functions for Location Data ---
+def validate_coordinates(latitude, longitude):
+    """Validate coordinate values and consistency"""
+    has_lat = latitude is not None and str(latitude).strip() != ''
+    has_lng = longitude is not None and str(longitude).strip() != ''
+    
+    # Both coordinates must be provided together or both must be empty
+    if has_lat != has_lng:
+        return False, "Both latitude and longitude must be provided together, or both must be empty"
+    
+    if has_lat and has_lng:
+        try:
+            lat_val = float(latitude)
+            lng_val = float(longitude)
+            
+            # Validate coordinate ranges
+            if not (-90 <= lat_val <= 90):
+                return False, "Latitude must be between -90 and 90 degrees"
+            if not (-180 <= lng_val <= 180):
+                return False, "Longitude must be between -180 and 180 degrees"
+                
+        except (ValueError, TypeError):
+            return False, "Coordinates must be valid decimal numbers"
+    
+    return True, None
+
+def normalize_location_data(location):
+    """Ensure location has all required fields with proper defaults"""
+    normalized = {
+        'id': location.get('id'),
+        'name': location.get('name', ''),
+        'areaId': location.get('areaId', ''),
+        'address': location.get('address', ''),
+        'notes': location.get('notes', ''),
+        'latitude': location.get('latitude'),
+        'longitude': location.get('longitude')
+    }
+    
+    # Ensure coordinates are properly typed
+    if normalized['latitude'] is not None:
+        try:
+            normalized['latitude'] = float(normalized['latitude'])
+        except (ValueError, TypeError):
+            normalized['latitude'] = None
+    
+    if normalized['longitude'] is not None:
+        try:
+            normalized['longitude'] = float(normalized['longitude'])
+        except (ValueError, TypeError):
+            normalized['longitude'] = None
+    
+    return normalized
+
 # --- Location API Routes ---
 @api_bp.route('/locations', methods=['GET', 'POST'])
 @admin_required
@@ -236,7 +290,10 @@ def api_locations():
         locations = []
         if os.path.exists(locations_file):
             try:
-                with open(locations_file, 'r') as f: locations = json.load(f)
+                with open(locations_file, 'r') as f: 
+                    raw_locations = json.load(f)
+                    # Normalize all locations to ensure consistent data structure
+                    locations = [normalize_location_data(loc) for loc in raw_locations]
             except Exception as e: logger.error(f"API Error reading locations: {e}")
         return jsonify(locations)
     elif request.method == 'POST':
@@ -244,6 +301,17 @@ def api_locations():
             location_data = request.get_json()
             if 'id' not in location_data or not location_data['id']:
                 location_data['id'] = str(uuid.uuid4())
+            
+            # Validate coordinates before processing
+            is_valid, error_msg = validate_coordinates(
+                location_data.get('latitude'), 
+                location_data.get('longitude')
+            )
+            if not is_valid:
+                return jsonify({'error': error_msg}), 400
+            
+            # Normalize the location data
+            location_data = normalize_location_data(location_data)
 
             locations = []
             if os.path.exists(locations_file):
@@ -272,11 +340,23 @@ def api_location(location_id):
     if location_index is None: return jsonify({'error': 'Location not found'}), 404
 
     if request.method == 'GET':
-        return jsonify(locations[location_index])
+        return jsonify(normalize_location_data(locations[location_index]))
     elif request.method == 'PUT':
         try:
             location_data = request.get_json()
             location_data['id'] = location_id # Ensure ID consistency
+            
+            # Validate coordinates before processing
+            is_valid, error_msg = validate_coordinates(
+                location_data.get('latitude'), 
+                location_data.get('longitude')
+            )
+            if not is_valid:
+                return jsonify({'error': error_msg}), 400
+            
+            # Normalize the location data
+            location_data = normalize_location_data(location_data)
+            
             locations[location_index] = location_data
             with open(locations_file, 'w') as f: json.dump(locations, f, indent=2)
             return jsonify(location_data)
@@ -291,6 +371,54 @@ def api_location(location_id):
         except Exception as e:
              logger.error(f"API Error deleting location {location_id}: {e}")
              return jsonify({'error': str(e)}), 500
+
+
+# --- Geocoding API Routes ---
+@api_bp.route('/geocode', methods=['GET'])
+@admin_required
+def api_geocode():
+    """Geocode an address or place name"""
+    try:
+        query = request.args.get('q', '').strip()
+        if not query:
+            return jsonify({'error': 'Query parameter "q" is required'}), 400
+        
+        limit = int(request.args.get('limit', 5))
+        
+        # Geocode the query
+        results = geocode_address(query, limit)
+        
+        # Convert to JSON-serializable format
+        response_data = []
+        for result in results:
+            response_data.append({
+                'display_name': result.display_name,
+                'latitude': result.latitude,
+                'longitude': result.longitude,
+                'city': result.city,
+                'country': result.country,
+                'formatted_address': result.formatted_address
+            })
+        
+        return jsonify({
+            'query': query,
+            'results': response_data
+        })
+        
+    except Exception as e:
+        logger.error(f"Geocoding API error: {e}")
+        return jsonify({'error': 'Geocoding service temporarily unavailable'}), 500
+
+@api_bp.route('/popular-locations', methods=['GET'])
+@admin_required
+def api_popular_locations():
+    """Get popular filming locations for quick selection"""
+    try:
+        locations = get_popular_film_locations()
+        return jsonify(locations)
+    except Exception as e:
+        logger.error(f"Popular locations API error: {e}")
+        return jsonify({'error': 'Could not load popular locations'}), 500
 
 
 # --- Area API Routes ---
@@ -852,4 +980,66 @@ def api_migrate_project(project_id):
         
     except Exception as e:
         logger.error(f"Error migrating project {project_id}: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@api_bp.route('/calculate-sun-times', methods=['POST'])
+@admin_required
+def api_calculate_sun_times():
+    """Calculate sunrise/sunset times for a location and date"""
+    try:
+        from utils.sun_utils_simple import get_sun_times_for_location
+        from datetime import datetime
+        
+        data = request.get_json()
+        location_name = data.get('location_name')
+        date_str = data.get('date')
+        
+        if not location_name or not date_str:
+            return jsonify({'error': 'location_name and date are required'}), 400
+        
+        # Load locations to find coordinates
+        locations_file = os.path.join(DATA_DIR, 'locations.json')
+        if not os.path.exists(locations_file):
+            return jsonify({'error': 'No locations file found'}), 404
+            
+        with open(locations_file, 'r') as f:
+            locations = json.load(f)
+        
+        # Find the location
+        location_data = None
+        for loc in locations:
+            if loc.get('name') == location_name:
+                location_data = loc
+                break
+        
+        if not location_data:
+            return jsonify({'error': f'Location "{location_name}" not found'}), 404
+        
+        # Check if location has coordinates
+        if not location_data.get('latitude') or not location_data.get('longitude'):
+            return jsonify({'error': f'Location "{location_name}" has no coordinates'}), 400
+        
+        # Parse date
+        try:
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+        
+        # Calculate sun times
+        sun_times = get_sun_times_for_location(location_data, date_obj)
+        
+        if sun_times:
+            return jsonify({
+                'success': True,
+                'sunrise': sun_times.get('sunrise'),
+                'sunset': sun_times.get('sunset'),
+                'location': location_name,
+                'date': date_str
+            })
+        else:
+            return jsonify({'error': 'Failed to calculate sun times'}), 500
+            
+    except Exception as e:
+        logger.error(f"Error calculating sun times: {str(e)}")
         return jsonify({'error': str(e)}), 500
