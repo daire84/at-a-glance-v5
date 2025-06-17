@@ -22,7 +22,8 @@ class CalendarView {
                 'filter-hiatus': true,
                 'filter-shoot': true,
                 'filter-col-sequence': true,
-                'filter-col-second-unit': true
+                'filter-col-second-unit': true,
+                'filter-col-sun-times': true
             },
             calendar: {
                 // Only these filters work in calendar view
@@ -32,7 +33,8 @@ class CalendarView {
                 'filter-hiatus': true,         // Can hide hiatus days
                 'filter-shoot': false,         // Shoot days still show as calendar days
                 'filter-col-sequence': false,  // No columns in calendar view
-                'filter-col-second-unit': false // No columns in calendar view
+                'filter-col-second-unit': false, // No columns in calendar view
+                'filter-col-sun-times': false  // No columns in calendar view
             }
         };
         
