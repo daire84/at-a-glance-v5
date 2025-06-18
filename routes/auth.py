@@ -18,7 +18,7 @@ def login():
         return redirect(url_for('admin.admin_dashboard')) # Use blueprint name 'admin.'
     # If already logged in as viewer, redirect to home
     if session.get('user_role') == 'viewer':
-        return redirect(url_for('main.index')) # Use blueprint name 'main.'
+        return redirect(url_for('main.dashboard')) # Use blueprint name 'main.'
 
     if request.method == 'POST':
         # Ensure environment variable is read correctly
@@ -27,7 +27,7 @@ def login():
             session['user_role'] = 'viewer'
             session.permanent = True # Make session persistent
             flash('You were successfully logged in', 'success')
-            return redirect(next_page or url_for('main.index')) # Use blueprint name 'main.'
+            return redirect(next_page or url_for('main.dashboard')) # Use blueprint name 'main.'
         else:
             error = 'Invalid password'
     # Pass next_page to template if needed for form action or links

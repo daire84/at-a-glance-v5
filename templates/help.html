@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Help & About - STRIPS{% endblock %}
+
+{% block content %}
+<div class="help-container">
+    <!-- Help Header -->
+    <div class="section-header">
+        <div class="section-title">
+            <span class="nav-icon">❔</span>
+            Help & About
+        </div>
+        <a href="/" class="btn btn-secondary">
+            <span class="nav-icon">🏠</span>
+            Back to Welcome
+        </a>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="help-nav">
+        <div class="help-nav-cards">
+            <div class="help-nav-card">
+                <h3>📖 Getting Started</h3>
+                <p>Learn the basics of using STRIPS for your film production scheduling.</p>
+            </div>
+            <div class="help-nav-card">
+                <h3>👥 User Roles</h3>
+                <p>Understand the different access levels and what each role can do.</p>
+            </div>
+            <div class="help-nav-card">
+                <h3>📅 Calendar Features</h3>
+                <p>Explore the powerful calendar and scheduling features available.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Help Content -->
+    <div class="help-content">
+        <div class="help-section">
+            <h2 class="help-section-title">About STRIPS</h2>
+            <div class="help-section-content">
+                <p>STRIPS is a professional film production scheduling application designed to streamline the complex process of managing film shoots, crew, and locations.</p>
+                
+                <h3>Key Features</h3>
+                <ul class="feature-list">
+                    <li><strong>Project Management</strong> - Create and manage multiple film production projects</li>
+                    <li><strong>Calendar Scheduling</strong> - Visual calendar interface for managing shoot dates</li>
+                    <li><strong>Location Management</strong> - Track and organize filming locations</li>
+                    <li><strong>Department Coordination</strong> - Manage different departments and crew assignments</li>
+                    <li><strong>Real-time Updates</strong> - Keep everyone informed with live schedule updates</li>
+                    <li><strong>Mobile Responsive</strong> - Access your schedules from any device</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <h2 class="help-section-title">User Access Levels</h2>
+            <div class="help-section-content">
+                <div class="access-levels">
+                    <div class="access-level">
+                        <h4><span class="nav-icon">👁️</span> Viewer Access</h4>
+                        <p>Perfect for crew members who need to view schedules and stay informed about upcoming shoots.</p>
+                        <ul>
+                            <li>View project calendars</li>
+                            <li>Access location details</li>
+                            <li>See department information</li>
+                            <li>Check shoot schedules</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="access-level">
+                        <h4><span class="nav-icon">⚙️</span> Admin Access</h4>
+                        <p>Full management control for producers, ADs, and production managers.</p>
+                        <ul>
+                            <li>Create and edit projects</li>
+                            <li>Manage shoot schedules</li>
+                            <li>Add and modify locations</li>
+                            <li>Configure departments</li>
+                            <li>Manage user access</li>
+                            <li>Export and share schedules</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <h2 class="help-section-title">Getting Started</h2>
+            <div class="help-section-content">
+                <div class="getting-started-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Choose Your Access</h4>
+                            <p>From the welcome page, select either Viewer or Admin access based on your role in the production.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Login</h4>
+                            <p>Use your project code (for viewers) or admin credentials to access the system.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Navigate Your Dashboard</h4>
+                            <p>View available projects and click on any project to see its detailed calendar and information.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Explore Features</h4>
+                            <p>Use the calendar view to see shoot schedules, locations, and department assignments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <h2 class="help-section-title">Need More Help?</h2>
+            <div class="help-section-content">
+                <p>If you need additional assistance or have questions about using STRIPS, please contact your production administrator or technical support.</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <strong>Technical Support:</strong> Contact your system administrator
+                    </div>
+                    <div class="contact-item">
+                        <strong>Production Questions:</strong> Reach out to your production manager
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

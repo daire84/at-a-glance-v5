@@ -89,7 +89,7 @@
         {% if session.get('user_role') == 'admin' %}
             <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button">Edit Calendar</a>
         {% endif %}
-        <a href="{{ url_for('main.index') }}" class="button secondary">Back to Dashboard</a>
+        <a href="{{ url_for('main.dashboard') }}" class="button secondary">Back to Dashboard</a>
     </div>
 </div>
 

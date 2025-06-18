@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to STRIPS - Film Production Scheduler{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/welcome.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <!-- Animated Background -->
+    <div class="welcome-bg">
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+        <div class="bg-circle bg-circle-3"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="welcome-hero">
+        <div class="hero-logo">
+            <div class="hero-logo-icon">S</div>
+            <h1 class="hero-title">STRIPS</h1>
+        </div>
+        <p class="hero-subtitle">Film Production Scheduler</p>
+        <p class="hero-description">
+            Professional scheduling for film productions. Manage your shoots, crew, and locations with precision and style.
+        </p>
+    </div>
+
+    <!-- Navigation Cards -->
+    <div class="welcome-nav">
+        <div class="nav-cards">
+            <!-- Viewer Access -->
+            <div class="nav-card nav-card-viewer">
+                <div class="nav-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                <h3 class="nav-card-title">Viewer Access</h3>
+                <p class="nav-card-description">
+                    View schedules and project information. Perfect for crew members who need to see upcoming shoots and locations.
+                </p>
+                <div class="nav-card-features">
+                    <span class="nav-feature">📋 View Schedules</span>
+                    <span class="nav-feature">📍 Location Details</span>
+                    <span class="nav-feature">👥 Department Info</span>
+                </div>
+                <a href="{{ url_for('auth.login') }}" class="nav-card-button btn-viewer">
+                    Enter with Project Code
+                </a>
+            </div>
+
+            <!-- Admin Access -->
+            <div class="nav-card nav-card-admin">
+                <div class="nav-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6"></path>
+                        <path d="m15.5 3.5-3 3-3-3"></path>
+                        <path d="m15.5 20.5-3-3-3 3"></path>
+                        <path d="M1 12h6m6 0h6"></path>
+                        <path d="m3.5 15.5 3-3 3 3"></path>
+                        <path d="m20.5 15.5-3-3-3 3"></path>
+                    </svg>
+                </div>
+                <h3 class="nav-card-title">Admin Access</h3>
+                <p class="nav-card-description">
+                    Full management control. Create projects, manage schedules, add crew, and configure all aspects of your productions.
+                </p>
+                <div class="nav-card-features">
+                    <span class="nav-feature">🏗️ Create Projects</span>
+                    <span class="nav-feature">⚙️ Manage Settings</span>
+                    <span class="nav-feature">📊 View Analytics</span>
+                </div>
+                <a href="{{ url_for('auth.admin_login') }}" class="nav-card-button btn-admin">
+                    Admin Dashboard
+                </a>
+            </div>
+
+            <!-- Help & About -->
+            <div class="nav-card nav-card-help">
+                <div class="nav-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <path d="m12 17h.01"></path>
+                    </svg>
+                </div>
+                <h3 class="nav-card-title">Help & About</h3>
+                <p class="nav-card-description">
+                    Learn how to use STRIPS effectively. Find tutorials, guides, and information about the application.
+                </p>
+                <div class="nav-card-features">
+                    <span class="nav-feature">📖 User Guides</span>
+                    <span class="nav-feature">🎓 Tutorials</span>
+                    <span class="nav-feature">💡 Tips & Tricks</span>
+                </div>
+                <a href="{{ url_for('main.help') }}" class="nav-card-button btn-help">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="welcome-stats">
+        <div class="stat-item">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-content">
+                <span class="stat-label">Built for</span>
+                <span class="stat-value">Film Productions</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-content">
+                <span class="stat-label">Performance</span>
+                <span class="stat-value">Lightning Fast</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">📱</div>
+            <div class="stat-content">
+                <span class="stat-label">Works on</span>
+                <span class="stat-value">All Devices</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🔒</div>
+            <div class="stat-content">
+                <span class="stat-label">Security</span>
+                <span class="stat-value">Enterprise Grade</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/welcome.js') }}"></script>
+{% endblock %}
