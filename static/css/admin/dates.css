@@ -105,6 +105,13 @@ gap: 0.4rem; /* Space between buttons */
 flex-shrink: 0; /* Prevent actions from shrinking */
 }
 
+/* Make admin action buttons smaller and more contained */
+.date-action .btn {
+  padding: 0.3rem 0.6rem; /* Smaller padding */
+  font-size: 0.8rem; /* Smaller font */
+  border-radius: 4px; /* Smaller border radius */
+}
+
 /* === HIATUS PERIOD LIST & ITEM STYLES === */
 /* Individual hiatus period item */
 .hiatus-period {
@@ -173,5 +180,32 @@ justify-content: center; /* Center button horizontally */
 
 /* Note: Modal styles (.modal, .modal-content, etc.) removed. */
 /* Rely on common styles from modals.css */
+
+/* Light mode overrides */
+body.light-theme .section-card {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .section-header {
+    background-color: var(--primary-color);
+}
+
+body.light-theme .date-display,
+body.light-theme .hiatus-label {
+    color: var(--text-primary);
+}
+
+body.light-theme .date-description,
+body.light-theme .hiatus-range,
+body.light-theme .hiatus-visibility,
+body.light-theme .empty-state {
+    color: var(--text-secondary);
+}
+
+body.light-theme .date-item,
+body.light-theme .hiatus-period {
+    border-bottom-color: var(--border-color);
+}
 
 /* --- End Special Dates Management Styles --- */

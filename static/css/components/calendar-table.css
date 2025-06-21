@@ -64,6 +64,26 @@
   body.light-theme .calendar-table td {
     border-color: #ccc; /* Darker border for light mode */
   }
+
+  /* Light mode text overrides for better contrast on light backgrounds */
+  body.light-theme .date-display,
+  body.light-theme .main-unit-cell,
+  body.light-theme .location-name,
+  body.light-theme .notes-cell,
+  body.light-theme .day-cell,
+  body.light-theme .extras-cell,
+  body.light-theme .featured-extras-cell,
+  body.light-theme .sequence-cell {
+    color: #2c3e50; /* Dark text for light mode */
+  }
+
+  body.light-theme .date-day,
+  body.light-theme .date-description,
+  body.light-theme .location-area,
+  body.light-theme .sunrise-time,
+  body.light-theme .sunset-time {
+    color: #5a6c7d; /* Medium gray for secondary text in light mode */
+  }
   
   /* Update table header styles to use variables */
   .calendar-table th {
@@ -174,8 +194,13 @@
     position: absolute;
     left: 0;
     font-size: 0.5rem;
-    color: #a78bfa;
+    color: #c084fc; /* Brighter purple for better visibility in dark mode */
     top: 1px;
+  }
+
+  /* Light mode override for sunset dot */
+  body.light-theme .sunset-time::before {
+    color: #8b5cf6; /* Darker purple for light mode */
   }
   
   /* Dark mode - use same neutral colors for text, keep colored dots */

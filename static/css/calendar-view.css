@@ -995,3 +995,32 @@
         border: 0.5pt solid #ccc !important;
     }
 }
+
+/* === LIGHT MODE OVERRIDES === */
+body.light-theme .view-toggle-container {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .view-toggle {
+    background-color: var(--background-primary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .view-toggle-btn {
+    color: var(--text-primary);
+}
+
+body.light-theme .view-toggle-btn:hover {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+body.light-theme .view-toggle-btn.active {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+body.light-theme .filter-notice-text {
+    color: var(--text-primary);
+}

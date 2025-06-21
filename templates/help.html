@@ -2,6 +2,10 @@
 
 {% block title %}Help & About - STRIPS{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="help-container">
     <!-- Help Header -->

@@ -1,16 +1,17 @@
-/* Form Styles */
+/* STRIPS Form System */
 
 .form-container {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .form-section {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -21,9 +22,10 @@
 }
 
 .form-section h3 {
-  font-size: 1.2rem;
-  color: var(--primary-color);
-  margin-bottom: 1.25rem;
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-lg);
 }
 
 .form-row {
@@ -52,16 +54,17 @@ label {
   color: var(--text-color);
 }
 
-/* Ensure label text is always readable in both themes */
+/* Ensure label text is always readable in dark theme */
 body:not(.light-theme) label,
-body:not(.light-theme) .form-section h3 {
-  color: #625f5f;  
+body:not(.light-theme) .form-section h3,
+body:not(.light-theme) .form-section-title,
+body:not(.light-theme) .form-section-description {
+  color: var(--text-primary);  /* Use proper text color variable */
 }
 
 /* Add styles for field groups like "Project Information" */
-body:not(.light-theme) .meta-label,
-body:not(.light-theme) .form-section h3 {
-  color: #2e2d2d;  
+body:not(.light-theme) .meta-label {
+  color: var(--text-primary);  
 }
 
 input[type="text"],
@@ -335,3 +338,265 @@ textarea:invalid {
 /* labels, or layout containers specific to that page. */
 
 /* --- End Day Editor Styles --- */
+
+/* === ENHANCED FORM ELEMENTS (STRIPS THEME) === */
+
+/* Form Groups */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Form Labels */
+.form-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Form Inputs */
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1rem;
+    color: var(--input-text);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--input-placeholder);
+}
+
+/* Focus States */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
+}
+
+/* Form Validation States */
+.form-input.error,
+.form-select.error,
+.form-textarea.error {
+    border-color: var(--error-color);
+}
+
+.form-input.success,
+.form-select.success,
+.form-textarea.success {
+    border-color: var(--success-color);
+}
+
+.form-error {
+    color: var(--error-text);
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.form-success {
+    color: var(--success-text);
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/* Form Layouts */
+.form-grid {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.form-grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Checkbox and Radio Styles */
+.form-checkbox,
+.form-radio {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.form-checkbox input[type="checkbox"],
+.form-radio input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary-blue);
+}
+
+.form-checkbox label,
+.form-radio label {
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: normal;
+    margin-bottom: 0;
+}
+
+/* File Input */
+.form-file {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.form-file input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.form-file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 0.75rem 1rem;
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.form-file-label:hover {
+    background: var(--background-tertiary);
+    border-color: var(--primary-blue);
+}
+
+/* Switch Toggle */
+.form-switch {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 3rem;
+    height: 1.5rem;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: var(--transition-normal);
+    border-radius: 1.5rem;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 1.25rem;
+    width: 1.25rem;
+    left: 0.125rem;
+    bottom: 0.125rem;
+    background-color: white;
+    transition: var(--transition-normal);
+    border-radius: 50%;
+}
+
+.switch input:checked + .switch-slider {
+    background-color: var(--primary-blue);
+}
+
+.switch input:checked + .switch-slider:before {
+    transform: translateX(1.5rem);
+}
+
+/* Light mode overrides */
+body.light-theme .form-container {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .form-input,
+body.light-theme .form-select,
+body.light-theme .form-textarea {
+    background: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+}
+
+body.light-theme .form-label {
+    color: var(--text-secondary);
+}
+
+body.light-theme .form-checkbox label,
+body.light-theme .form-radio label {
+    color: var(--text-primary);
+}
+
+/* Additional light mode overrides for standard form elements */
+body.light-theme label,
+body.light-theme .form-section h3,
+body.light-theme .form-section-title,
+body.light-theme .form-section-description {
+    color: var(--text-primary);
+}
+
+body.light-theme input[type="text"],
+body.light-theme input[type="number"],
+body.light-theme input[type="date"],
+body.light-theme input[type="email"],
+body.light-theme input[type="password"],
+body.light-theme select,
+body.light-theme textarea {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+}
+
+body.light-theme .field-hint {
+    color: var(--text-secondary);
+}

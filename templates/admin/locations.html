@@ -1,40 +1,73 @@
 {% extends "base.html" %}
 
-{% block title %}Location Management - Schedule, At a Glance!{% endblock %}
+{% block title %}Location Management - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/locations.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>Location Management</h2>
-    <div class="admin-actions">
-        <button id="add-location-btn" class="button">Add Location</button>
-        <button id="add-area-btn" class="button">Add Location Area</button>
-        {# Added a Back to Dashboard link for consistency #}
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+<!-- Admin Locations Header -->
+<div class="admin-locations-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">📍</span>
+                Location Management
+            </h1>
+            <p class="admin-page-description">
+                Manage filming locations and organize them into color-coded areas
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            <button id="add-location-btn" class="btn btn-secondary">
+                <span class="nav-icon">➕</span>
+                Add Location
+            </button>
+            <button id="add-area-btn" class="btn btn-primary">
+                <span class="nav-icon">📍</span>
+                Add Area
+            </button>
+        </div>
     </div>
 </div>
 
-<!-- Admin Navigation Tabs -->
-<div class="admin-tabs">
-    {# Points to 'admin_dashboard' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_dashboard') }}">Projects</a>
-    {# Points to 'admin_locations' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_locations') }}" class="active">Locations</a>
-    {# Points to 'admin_departments' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
-    {# Points to 'admin_dates' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_dates') }}">Special Dates</a>
-    {# Points to the 'help' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_help') }}">Help</a>
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab active">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
 </div>
 
-<div class="content-container">
-    <div class="location-list">
-        <h3>Locations</h3>
-        <p>Manage filming locations and assign them to location areas for color coding.</p>
+<!-- Locations Content -->
+<div class="admin-content">
+    <div class="admin-section">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="nav-icon">📍</span>
+                Locations
+            </div>
+            <p class="section-description">Manage filming locations and assign them to location areas for color coding.</p>
+        </div>
         
         <table class="location-table" id="location-table">
             <thead>
@@ -51,22 +84,41 @@
         </table>
         
         <div id="no-locations" class="empty-state">
-            <p>No locations have been added yet.</p>
-            <p>Click "Add Location" to create your first location.</p>
+            <div class="empty-state-icon">📍</div>
+            <h3 class="empty-state-title">No Locations Yet</h3>
+            <p class="empty-state-description">
+                Add filming locations to organize your production schedule.
+            </p>
+            <button class="btn btn-primary" onclick="document.getElementById('add-location-btn').click()">
+                <span class="nav-icon">➕</span>
+                Add First Location
+            </button>
         </div>
     </div>
     
-    <div class="location-area-section">
-        <h3>Location Areas</h3>
-        <p>Create groups of locations with color coding to help visually identify areas on the calendar.</p>
+    <div class="admin-section">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="nav-icon">🎨</span>
+                Location Areas
+            </div>
+            <p class="section-description">Create groups of locations with color coding to help visually identify areas on the calendar.</p>
+        </div>
         
         <div class="area-grid" id="area-grid">
             <!-- Area cards will be added here dynamically -->
         </div>
         
         <div id="no-areas" class="empty-state">
-            <p>No location areas have been defined yet.</p>
-            <p>Click "Add Location Area" to create your first area.</p>
+            <div class="empty-state-icon">🎨</div>
+            <h3 class="empty-state-title">No Areas Defined</h3>
+            <p class="empty-state-description">
+                Create color-coded location areas to organize your filming locations.
+            </p>
+            <button class="btn btn-primary" onclick="document.getElementById('add-area-btn').click()">
+                <span class="nav-icon">➕</span>
+                Create First Area
+            </button>
         </div>
     </div>
 </div>
@@ -125,8 +177,14 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="button secondary" data-close-modal="location-modal">Cancel</button>
-            <button class="button" id="save-location-btn">Save Location</button>
+            <button class="btn btn-secondary" data-close-modal="location-modal">
+                <span class="nav-icon">❌</span>
+                Cancel
+            </button>
+            <button class="btn btn-primary" id="save-location-btn">
+                <span class="nav-icon">💾</span>
+                Save Location
+            </button>
         </div>
     </div>
 </div>
@@ -154,8 +212,14 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="button secondary" data-close-modal="area-modal">Cancel</button>
-            <button class="button" id="save-area-btn">Save Area</button>
+            <button class="btn btn-secondary" data-close-modal="area-modal">
+                <span class="nav-icon">❌</span>
+                Cancel
+            </button>
+            <button class="btn btn-primary" id="save-area-btn">
+                <span class="nav-icon">💾</span>
+                Save Area
+            </button>
         </div>
     </div>
 </div>
@@ -315,8 +379,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${area ? area.color : ''}
                 </td>
                 <td>
-                    <button class="button small edit-location" data-id="${location.id}">Edit</button>
-                    <button class="button small danger delete-location" data-id="${location.id}">Delete</button>
+                    <button class="btn btn-secondary btn-small edit-location" data-id="${location.id}">
+                        <span class="nav-icon">✏️</span>
+                        Edit
+                    </button>
+                    <button class="btn btn-danger btn-small delete-location" data-id="${location.id}">
+                        <span class="nav-icon">🗑️</span>
+                        Delete
+                    </button>
                 </td>
             `;
             
@@ -362,8 +432,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="area-card-header">
                     <div class="area-name">${area.name}</div>
                     <div class="area-actions">
-                        <button class="button small edit-area" data-id="${area.id}">Edit</button>
-                        <button class="button small danger delete-area" data-id="${area.id}">Delete</button>
+                        <button class="btn btn-secondary btn-small edit-area" data-id="${area.id}">
+                            <span class="nav-icon">✏️</span>
+                            Edit
+                        </button>
+                        <button class="btn btn-danger btn-small delete-area" data-id="${area.id}">
+                            <span class="nav-icon">🗑️</span>
+                            Delete
+                        </button>
                     </div>
                 </div>
                 <div class="area-color" style="background-color: ${area.color}"></div>

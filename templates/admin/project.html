@@ -1,28 +1,89 @@
 {% extends "base.html" %}
 
-{% block title %}{{ 'New Project' if not project.id else 'Edit Project' }} - Film Production Scheduler{% endblock %}
+{% block title %}{{ 'New Project' if not project.id else 'Edit Project' }} - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/buttons.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/cards.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>{{ 'Create New Project' if not project.id else 'Edit Project Details' }}</h2>
-    <div class="admin-actions">
-        {% if project.id %}
-            {# Points to 'admin_calendar' function in 'admin' blueprint, passing project.id #}
-            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button">Go to Calendar</a>
-        {% endif %}
-        {# Points to 'admin_dashboard' function in 'admin' blueprint #}
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+<!-- Admin Page Header -->
+<div class="admin-page-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">{{ '📄' if not project.id else '✏️' }}</span>
+                {{ 'Create New Project' if not project.id else 'Edit Project Details' }}
+            </h1>
+            <p class="admin-page-description">
+                {{ 'Set up a new film production project' if not project.id else 'Modify project settings and information' }}
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            {% if project.id %}
+                <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary">
+                    <span class="nav-icon">📅</span>
+                    Go to Calendar
+                </a>
+            {% endif %}
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">
+                <span class="nav-icon">🔙</span>
+                Back to Dashboard
+            </a>
+        </div>
     </div>
 </div>
 
-<div class="form-container">
-    <form method="POST" class="project-form">
-        <div class="form-section">
-            <h3>Project Information</h3>
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        {% if project.id %}
+        <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="admin-nav-tab active">
+            <span class="nav-icon">✏️</span>
+            Edit Project
+        </a>
+        <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Calendar
+        </a>
+        {% endif %}
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
+</div>
+
+<!-- Project Form Content -->
+<div class="admin-content">
+    <div class="admin-form-container">
+        <form method="POST" class="admin-project-form card">
+            <div class="form-section">
+                <div class="form-section-header">
+                    <h3 class="form-section-title">
+                        <span class="nav-icon">📋</span>
+                        Project Information
+                    </h3>
+                    <p class="form-section-description">Basic project details and identification</p>
+                </div>
             
             <div class="form-row">
                 <div class="form-group">
@@ -61,8 +122,14 @@
             </div>
         </div>
         
-        <div class="form-section">
-            <h3>Key Crew</h3>
+            <div class="form-section">
+                <div class="form-section-header">
+                    <h3 class="form-section-title">
+                        <span class="nav-icon">👥</span>
+                        Key Crew
+                    </h3>
+                    <p class="form-section-description">Department heads and key personnel</p>
+                </div>
             
             <div class="form-row">
                 <div class="form-group">
@@ -77,8 +144,14 @@
             </div>
         </div>
         
-        <div class="form-section">
-            <h3>Script Information</h3>
+            <div class="form-section">
+                <div class="form-section-header">
+                    <h3 class="form-section-title">
+                        <span class="nav-icon">📜</span>
+                        Script Information
+                    </h3>
+                    <p class="form-section-description">Script details and revision tracking</p>
+                </div>
             
             <div class="form-row">
                 <div class="form-group">
@@ -123,8 +196,14 @@
             </div>
         </div>
         
-        <div class="form-section">
-            <h3>Production Dates</h3>
+            <div class="form-section">
+                <div class="form-section-header">
+                    <h3 class="form-section-title">
+                        <span class="nav-icon">📅</span>
+                        Production Dates
+                    </h3>
+                    <p class="form-section-description">Key dates for production schedule</p>
+                </div>
             
             <div class="form-row">
                 <div class="form-group">
@@ -149,8 +228,14 @@
             </div>
         </div>
         
-        <div class="form-section">
-            <h3>Notes</h3>
+            <div class="form-section">
+                <div class="form-section-header">
+                    <h3 class="form-section-title">
+                        <span class="nav-icon">📝</span>
+                        Notes
+                    </h3>
+                    <p class="form-section-description">Additional project notes and information</p>
+                </div>
             
             <div class="form-row">
                 <div class="form-group full-width">
@@ -160,14 +245,24 @@
             </div>
         </div>
         
-        <div class="form-actions">
-            {# Points to 'admin_dashboard' function in 'admin' blueprint #}
-            <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Cancel</a>
-            <button type="submit" class="button">Save Project</button>
-        </div>
-    </form> {# Removed the extra closing </div> tag from the original snippet #}
-    
-    {% endblock %}
+            <div class="form-actions">
+                <div class="form-actions-left">
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">
+                        <span class="nav-icon">❌</span>
+                        Cancel
+                    </a>
+                </div>
+                <div class="form-actions-right">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="nav-icon">💾</span>
+                        {{ 'Create Project' if not project.id else 'Save Changes' }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
 
 {% block scripts %}
 <script>

@@ -1,5 +1,82 @@
-/* Import unified STRIPS design system variables */
-@import url('./variables.css');
+/* Theme CSS Variables - Replace your current :root variables in static/css/style.css */
+
+:root {
+  /* Base Theme - Dark Mode by Default */
+  
+  /* Base colors */
+  --primary-color: #5b5b5c;        /* Slate blue-gray */
+  --primary-light: #514f54;        /* Lighter blue-gray */
+  --primary-dark: #656a6c;         /* Darker blue-gray */
+  --accent-color: #0b5fb3;         /* Muted blue */
+  --accent-light: #3e8fd1;         /* Lightened accent */
+  --accent-dark: #8a8c8d;          /* Darker muted blue */
+  
+  /* Text colors */
+  --text-color: #e0e2e7;           /* Light gray text */
+  --text-light: #d7d9dd;           /* Medium-light gray for secondary text */
+  --text-dark: #1c1c20;            /* Dark text for special cases */
+  
+  /* Background colors */
+  --background-color: #1e1e20;     /* Dark background */
+  --background-alt: #2a2a2c;       /* Slightly lighter background */
+  
+  /* Other UI colors */
+  --border-color: #444548;         /* Dark theme borders */
+  --header-text-color: #ffffff;    /* White header text */
+  --title-text-color: #fb203d;     /* Red title color */
+  --page-title-color: white;       /* Will change with theme */
+
+  /* Status colors */
+  --success-color: #7eb58d;        /* Muted green */
+  --error-color: #d64c4c;          /* Muted red */
+  --warning-color: #e6a954;        /* Muted orange */
+
+  /* Calendar row colors - Dark Theme (THESE WILL NOW BE EFFECTIVE) */
+  --weekend-color: #7f7f83;        /* Slate blue-gray for weekends */
+  --prep-color: #477551;           /* Forest green for prep days */
+  --shoot-color: #2d4561;          /* Navy blue for shoot days */
+  --hiatus-color: #5a3a3a;         /* Burgundy for hiatus periods */
+  --holiday-color: #5a4a2f;        /* Amber/golden for holidays */
+  --working-weekend-color: #355a35; /* Emerald green for working weekends */
+}
+
+/* Light Theme Variables */
+body.light-theme {
+  /* Base colors */
+  --primary-color: #546e7a;        /* Blue-gray */
+  --primary-light: #78909c;        /* Lighter blue-gray */
+  --primary-dark: #37474f;         /* Darker blue-gray */
+  --accent-color: #29b6f6;         /* Bright blue */
+  --accent-light: #4fc3f7;         /* Lightened accent */
+  --accent-dark: #0288d1;          /* Darker blue */
+  
+  /* Text colors */
+  --text-color: #37474f;           /* Dark text */
+  --text-light: #546e7a;           /* Medium dark for secondary text */
+  --text-dark: #263238;            /* Very dark text for emphasis */
+  
+  /* Background colors */
+  --background-color: #f5f7f8;     /* Light background */
+  --background-alt: #ffffff;       /* White background */
+  
+  /* Other UI colors */
+  --border-color: #cfd8dc;         /* Light borders */
+  --header-text-color: #ffffff;    /* Keep white text for headers */
+  --title-text-color: #fb203d;     /* Keep red title color */
+  
+  /* Status colors - slightly muted for light theme */
+  --success-color: #4caf50;        /* Green */
+  --error-color: #f44336;          /* Red */
+  --warning-color: #ff9800;        /* Orange */
+
+  /* Calendar row colors - Light Theme (Still managed by JS or can be moved here too if preferred) */
+  --weekend-color: #e8e8f0;        /* Light blue-gray for weekends */
+  --prep-color: #e0f0e0;           /* Light green for prep days */
+  --shoot-color: #e0e8f0;          /* Light blue for shoot days */
+  --hiatus-color: #f0e0e0;         /* Light red for hiatus */
+  --holiday-color: #f0e8d0;        /* Light amber for holidays */
+  --working-weekend-color: #d8f0d8; /* Light green for working weekends */
+}
 
 /* === CSS RESET === */
 /* Basic reset to remove default browser styling inconsistencies */
@@ -13,20 +90,15 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol {
 }
 
 /* === BASE BODY & CONTAINER STYLES === */
-/* Import Inter font for modern typography */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 body {
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-normal);
-  color: var(--text-primary);
-  background-color: var(--background-primary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-size: var(--font-size-sm);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* System font stack */
+  line-height: 1.4;  /* Reduced line height for compactness */
+  color: var(--text-color); /* Default text color */
+  background-color: var(--background-color); /* Default background color */
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+  display: flex; /* Use flexbox for sticky footer layout */
+  flex-direction: column; /* Stack header, main, footer vertically */
+  font-size: 14px;  /* Reduced base font size */
 }
 
 /* Global container for centering content */

@@ -375,3 +375,117 @@
       align-self: center;
     }
   }
+
+  /* === COMPREHENSIVE LIGHT MODE OVERRIDES === */
+  body.light-theme .filter-panel,
+  body.light-theme .search-filter-section,
+  body.light-theme .filter-info-container,
+  body.light-theme .compact-filters-wrapper {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+  }
+
+  /* Fix "Filters & Search" header text */
+  body.light-theme .filter-panel h4,
+  body.light-theme .search-title,
+  body.light-theme .location-filter-title,
+  body.light-theme .compact-filters-title {
+    color: var(--text-primary);
+  }
+
+  /* Fix filter section headers and labels */
+  body.light-theme .filter-section h5,
+  body.light-theme .toggle-label,
+  body.light-theme .filter-info-text,
+  body.light-theme .compact-filter-group h5 {
+    color: var(--text-primary);
+  }
+
+  /* Fix stats section text - use actual selectors */
+  body.light-theme .search-description,
+  body.light-theme .stats-row,
+  body.light-theme .stats-row *,
+  body.light-theme .filter-info-details,
+  body.light-theme .compact-filter-stats,
+  body.light-theme .compact-filter-stat-label,
+  body.light-theme .compact-filter-stat-value,
+  body.light-theme #filter-stats-visible,
+  body.light-theme #filter-stats-total,
+  body.light-theme #filter-stats-shoot-days,
+  body.light-theme #filter-stats-second-unit {
+    color: var(--text-secondary);
+  }
+
+  /* Fix search input and components */
+  body.light-theme #calendar-search,
+  body.light-theme .compact-search-input {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+  }
+
+  body.light-theme #clear-search,
+  body.light-theme .compact-search-clear {
+    color: var(--text-secondary);
+  }
+
+  body.light-theme #clear-search:hover,
+  body.light-theme .compact-search-clear:hover {
+    color: var(--primary-blue);
+  }
+
+  body.light-theme .search-status,
+  body.light-theme .compact-search-status {
+    color: var(--text-secondary);
+    background-color: rgba(79, 195, 247, 0.1);
+  }
+
+  body.light-theme #search-term {
+    color: var(--primary-blue);
+  }
+
+  body.light-theme #search-results-count {
+    color: var(--text-primary);
+  }
+
+  /* Fix location filter boxes */
+  body.light-theme .location-areas,
+  body.light-theme .location-counters {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+  }
+
+  body.light-theme .areas-title,
+  body.light-theme .counter-title {
+    color: var(--text-primary);
+  }
+
+  body.light-theme .area-tag,
+  body.light-theme .counter-item {
+    color: var(--text-primary);
+  }
+
+  body.light-theme .area-count,
+  body.light-theme .counter-value,
+  body.light-theme .counter-label {
+    color: var(--text-primary);
+  }
+
+  /* Fix Interactive Location Filtering container */
+  body.light-theme .location-filter-section {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+  }
+
+  body.light-theme .location-filter-title {
+    color: var(--text-primary);
+  }
+
+  body.light-theme .filter-help-text {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+  }
+
+  body.light-theme .filter-help-text small {
+    color: var(--text-primary);
+  }

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Calendar Editor - Schedule, At a Glance!{% endblock %}
+{% block title %}Calendar Editor - STRIPS{% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-viewer.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-table.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-counters.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-filters.css') }}">
@@ -10,19 +11,74 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/version-manager.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar-view.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-mobile.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-print.css') }}">{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-print.css') }}">
+{% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>Calendar Editor - {{ project.title or 'Untitled Project' }}</h2>
-    <div class="admin-actions">
-        <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="button">Edit Project Details</a>
-        <a href="{{ url_for('admin.admin_dates', project_id=project.id) }}" class="button">Special Dates</a>
-        <a href="{{ url_for('admin.admin_locations') }}" class="button">Locations</a>
-        <a href="{{ url_for('admin.admin_departments') }}" class="button">Departments</a>
-        <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="button secondary">View Calendar</a>
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+<!-- Admin Calendar Header -->
+<div class="admin-calendar-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">📅</span>
+                Calendar Editor
+            </h1>
+            <div class="admin-project-info">
+                <span class="project-title">{{ project.title or 'Untitled Project' }}</span>
+                {% if project.version %}
+                    <span class="project-version">{{ project.version }}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="admin-header-actions">
+            <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="btn btn-secondary btn-small">
+                <span class="nav-icon">✏️</span>
+                Edit Project
+            </a>
+            <a href="{{ url_for('admin.admin_dates', project_id=project.id) }}" class="btn btn-secondary btn-small">
+                <span class="nav-icon">📅</span>
+                Special Dates
+            </a>
+            <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="btn btn-primary">
+                <span class="nav-icon">👁️</span>
+                View Calendar
+            </a>
+        </div>
     </div>
+</div>
+
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="admin-nav-tab">
+            <span class="nav-icon">✏️</span>
+            Edit Project
+        </a>
+        <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="admin-nav-tab active">
+            <span class="nav-icon">📅</span>
+            Calendar
+        </a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
 </div>
 
 {% if calendar and calendar.days %}
@@ -46,29 +102,34 @@
 
     {% include 'components/_project_header.html' %}
 
-    <!-- Calendar Filter Panel -->
-    {% include 'components/_filter_panel.html' %}
+    <!-- Compact Horizontal Filters -->
+    {% include 'components/_compact_filters.html' %}
 
-    <div class="calendar-actions">
-        <h3>Shoot Days</h3>
-        <!-- Enhanced Go to Today Button (centered) -->
-        <button class="button enhanced-today-btn" id="go-to-today-btn">
-            <div class="today-btn-content">
-                <i class="fas fa-calendar-day"></i>
-                <span class="today-btn-main">Go to Today</span>
-                <span class="today-btn-sub">Loading...</span>
+    <div class="admin-calendar-actions">
+        <div class="calendar-section-header">
+            <h3 class="section-title">
+                <span class="nav-icon">🎦</span>
+                Shoot Days
+            </h3>
+            <div class="action-buttons">
+                <button class="btn btn-secondary enhanced-today-btn" id="go-to-today-btn">
+                    <div class="today-btn-content">
+                        <span class="nav-icon">📅</span>
+                        <span class="today-btn-main">Go to Today</span>
+                        <span class="today-btn-sub">Loading...</span>
+                    </div>
+                </button>
+                <button class="btn btn-primary" id="regenerate-calendar">
+                    <span class="nav-icon">🔄</span>
+                    Regenerate Calendar
+                </button>
             </div>
-        </button>
-        <div class="action-buttons">
-            <button class="button" id="regenerate-calendar">Regenerate Calendar</button>
         </div>
     </div>
 
     {% include 'components/_department_counters.html' %}
 
     {% include 'components/_location_filter_section.html' %}
-
-    {% include 'components/_search_filter.html' %}  <!-- Add this line -->
 
     {% include 'components/_location_areas.html' %}
 
@@ -153,10 +214,19 @@
     </div>
 </div>
 {% else %}
-<div class="empty-state">
-    <p>Calendar data is not available for this project.</p>
-    <p>Click "Regenerate Calendar" to create the calendar based on project dates.</p>
-    <button class="button" id="regenerate-calendar">Regenerate Calendar</button>
+<div class="admin-content">
+    <div class="empty-state">
+        <div class="empty-state-icon">📅</div>
+        <h3 class="empty-state-title">No Calendar Data</h3>
+        <p class="empty-state-description">
+            Calendar data is not available for this project.<br>
+            Generate the calendar based on your project dates to get started.
+        </p>
+        <button class="btn btn-primary" id="regenerate-calendar">
+            <span class="nav-icon">🔄</span>
+            Generate Calendar
+        </button>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

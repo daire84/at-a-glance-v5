@@ -1,28 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}Help - Film Production Scheduler{% endblock %}
+{% block title %}Help & Documentation - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>Help & Documentation</h2>
-    <div class="admin-actions">
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+<!-- Admin Help Header -->
+<div class="admin-help-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">❔</span>
+                Help & Documentation
+            </h1>
+            <p class="admin-page-description">
+                Complete guide to using STRIPS film production scheduler
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">
+                <span class="nav-icon">🔙</span>
+                Back to Dashboard
+            </a>
+        </div>
     </div>
 </div>
 
-<!-- Admin Navigation Tabs -->
-<div class="admin-tabs">
-    <a href="{{ url_for('admin.admin_dashboard') }}">Projects</a>
-    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
-    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
-    <a href="{{ url_for('admin.admin_dates') }}">Special Dates</a>
-    <a href="{{ url_for('admin.admin_help') }}" class="active">Help</a>
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab active">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
 </div>
 
+<!-- Help Content -->
+<div class="admin-content">
 <div class="help-container">
     <!-- Table of Contents Sidebar -->
     <div class="help-sidebar">
@@ -59,9 +92,9 @@
     <div class="help-content">
         <!-- Introduction Section -->
         <section id="introduction" class="help-section">
-            <h2>Introduction to "At a Glance" Film Production Scheduler</h2>
+            <h2>Introduction to STRIPS Film Production Scheduler</h2>
             <div class="section-content">
-                <p>Welcome to the "At a Glance" Film Production Scheduler - your comprehensive tool for managing production calendars for film and television projects.</p>
+                <p>Welcome to STRIPS (Schedule, Track, Revise, Integrate, Plan, Schedule) - your comprehensive tool for managing production calendars for film and television projects.</p>
                 
                 <p>This application was designed specifically for film production teams to easily visualize, plan, and update shooting schedules. The interface prioritizes clarity and efficiency, allowing production teams to:</p>
                 
@@ -307,6 +340,7 @@
             </div>
         </section>
     </div>
+</div>
 </div>
 {% endblock %}
 

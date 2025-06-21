@@ -149,6 +149,10 @@
     max-width: 400px;
 }
 
+.notification-container:empty {
+    display: none;
+}
+
 .notification {
     background-color: var(--background-alt);
     border: 1px solid var(--border-color);
@@ -207,4 +211,58 @@
         align-items: flex-start;
         gap: 0.5rem;
     }
+}
+
+/* Light mode overrides */
+body.light-theme .version-manager-section {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .version-manager-header {
+    border-bottom-color: var(--border-color);
+}
+
+body.light-theme .version-manager-header h3 {
+    color: var(--text-primary);
+}
+
+body.light-theme .workspace-indicator {
+    background-color: var(--background-primary);
+    border-color: var(--warning-color);
+}
+
+body.light-theme .draft-message {
+    color: var(--text-secondary);
+}
+
+body.light-theme .version-list.loading {
+    color: var(--text-secondary);
+}
+
+body.light-theme .version-item {
+    background-color: var(--background-primary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .version-item.published {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: var(--success-color);
+}
+
+body.light-theme .version-dates {
+    color: var(--text-secondary);
+}
+
+body.light-theme .version-notes {
+    color: var(--text-primary);
+}
+
+body.light-theme .empty-state {
+    color: var(--text-secondary);
+}
+
+body.light-theme .notification {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
 }

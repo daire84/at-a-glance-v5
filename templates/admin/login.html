@@ -1,53 +1,85 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Login - Film Scheduler{% endblock %}
+{% block title %}Admin Login - STRIPS{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="content-container login-container">
-    <h2>Admin Login</h2>
-
-    {# Standard Flask flash message handling #}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="flash-message {{ category }}">{{ message }}
-                <button type="button" class="close-button" onclick="this.parentElement.style.display='none';">&times;</button>
+<div class="login-page login-page-admin">
+    <div class="login-container">
+        <!-- STRIPS Admin Login Header -->
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="login-logo-icon admin-logo">S</div>
+                <h1 class="login-title">STRIPS</h1>
             </div>
-          {% endfor %}
+            <h2 class="login-subtitle admin-subtitle">Admin Access</h2>
+            <p class="login-description">
+                Full management access for production administrators, ADs, and coordinators.
+            </p>
         </div>
-      {% endif %}
-    {% endwith %}
 
-    {# Display specific login error if passed from the route #}
-    {% if error %}
-    <div class="flash-message error">
-        {{ error }}
-        <button type="button" class="close-button" onclick="this.parentElement.style.display='none';">&times;</button>
-    </div>
-    {% endif %}
-
-    {# **** THIS FORM ACTION IS THE KEY DIFFERENCE **** #}
-    {# Form posts back to the 'admin_login' function in the 'auth' blueprint #}
-    <form method="POST" action="{{ url_for('auth.admin_login', next=request.args.get('next')) }}" class="form-container">
-        <div class="form-section">
-            <div class="form-row">
-                <div class="form-group full-width">
-                    <label for="password">Admin Password</label> {# Changed label slightly for clarity #}
-                    <input type="password" id="password" name="password" required>
+        <!-- Admin Login Form -->
+        <div class="login-form-wrapper">
+            {% if error %}
+                <div class="alert alert-error">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-message">{{ error }}</span>
                 </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('auth.admin_login', next=request.args.get('next')) }}" class="login-form">
+                <div class="form-group">
+                    <label for="password" class="form-label">Admin Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input login-input"
+                        placeholder="Enter admin password"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <div class="form-hint">
+                        Admin access provides full project management capabilities
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large login-button admin-login-button">
+                    <span class="nav-icon">🔐</span>
+                    Access Admin Dashboard
+                </button>
+            </form>
+        </div>
+
+        <!-- Alternative Access -->
+        <div class="login-alternatives">
+            <div class="alternative-divider">
+                <span class="divider-text">Alternative Access</span>
+            </div>
+            
+            <a href="{{ url_for('auth.login', next=request.args.get('next')) }}" class="btn btn-secondary btn-large">
+                <span class="nav-icon">👁️</span>
+                Viewer Login
+            </a>
+            
+            <div class="login-help">
+                <a href="{{ url_for('main.help') }}" class="help-link">
+                    <span class="nav-icon">❔</span>
+                    Learn about admin features
+                </a>
             </div>
         </div>
 
-        <div class="form-actions">
-            <button type="submit" class="button">Login</button>
-            {# Optional: Link back to viewer login if needed #}
-            {# <a href="{{ url_for('auth.login') }}" class="button secondary">Viewer Login</a> #}
+        <!-- Back to Welcome -->
+        <div class="login-footer">
+            <a href="{{ url_for('main.welcome') }}" class="back-link">
+                <span class="nav-icon">←</span>
+                Back to Welcome
+            </a>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}

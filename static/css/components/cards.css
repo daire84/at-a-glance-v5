@@ -1,0 +1,218 @@
+/* STRIPS Card System */
+
+/* Base Card Styles */
+.card {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+}
+
+/* Card Variants */
+.card-elevated {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-interactive {
+    cursor: pointer;
+}
+
+.card-interactive:hover,
+.card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-blue);
+    box-shadow: var(--shadow-blue-md);
+}
+
+/* Card Components */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+}
+
+.card-subtitle {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+}
+
+.card-body {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+    line-height: var(--line-height-relaxed);
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Project Card with Gradient Accent */
+.project-card {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-accent);
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-blue);
+    box-shadow: var(--shadow-blue-md);
+}
+
+.project-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.project-card-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+}
+
+.project-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.project-card-meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.project-card-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.project-card-stat {
+    text-align: center;
+}
+
+.project-card-stat-value {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-blue);
+}
+
+.project-card-stat-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: var(--spacing-xs);
+}
+
+/* Status Cards */
+.card-success {
+    border-color: var(--success-color);
+    background: var(--success-bg);
+}
+
+.card-warning {
+    border-color: var(--warning-color);
+    background: var(--warning-bg);
+}
+
+.card-error {
+    border-color: var(--error-color);
+    background: var(--error-bg);
+}
+
+.card-info {
+    border-color: var(--info-color);
+    background: var(--info-bg);
+}
+
+/* Compact Card */
+.card-compact {
+    padding: var(--spacing-md);
+}
+
+/* Wide Card */
+.card-wide {
+    padding: var(--spacing-xl);
+}
+
+/* Light mode overrides */
+body.light-theme .card {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .card-title {
+    color: var(--text-primary);
+}
+
+body.light-theme .card-subtitle {
+    color: var(--text-secondary);
+}
+
+body.light-theme .card-body {
+    color: var(--text-primary);
+}
+
+body.light-theme .project-card {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .project-card-title {
+    color: var(--text-primary);
+}
+
+body.light-theme .project-card-meta-item {
+    color: var(--text-secondary);
+}
+
+body.light-theme .project-card-stat-label {
+    color: var(--text-muted);
+}

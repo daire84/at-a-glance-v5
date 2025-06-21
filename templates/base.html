@@ -12,11 +12,13 @@
 
     <title>{% block title %}STRIPS - Film Production Scheduler{% endblock %}</title>
 
-    <!-- Theme System (Load First) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
-    
-    <!-- Existing Stylesheets -->
+    <!-- Core Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/cards.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/animations.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/modals.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-core.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-layout.css') }}">

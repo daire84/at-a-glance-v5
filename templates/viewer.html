@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}{{ project.title or 'Untitled Project' }} - Schedule, At a Glance!{% endblock %}
+{% block title %}{{ project.title or 'Untitled Project' }} - STRIPS{% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-viewer.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-table.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-counters.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-filters.css') }}">
@@ -10,127 +11,121 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar-view.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-mobile.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-print.css') }}">
-<style>
-    .version-selector {
-        margin-bottom: 1rem;
-        padding: 0.8rem;
-        background-color: var(--background-alt);
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    
-    .version-selector label {
-        font-weight: 500;
-        color: var(--text-color);
-    }
-    
-    .version-selector select {
-        padding: 0.4rem 0.8rem;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        background-color: var(--background-color);
-        color: var(--text-color);
-        font-size: 0.9rem;
-    }
-    
-    .no-published-version {
-        text-align: center;
-        padding: 3rem;
-        background-color: var(--background-alt);
-        border-radius: 6px;
-        margin: 2rem auto;
-        max-width: 600px;
-    }
-    
-    .no-published-version h3 {
-        color: var(--text-color);
-        margin-bottom: 1rem;
-    }
-    
-    .no-published-version p {
-        color: var(--text-light);
-        margin-bottom: 1.5rem;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
 
-<!-- Replace both sections in templates/viewer.html with this single unified header: -->
-
-<div class="admin-header viewer-header">
-    <!-- Left side spacer -->
-    <div class="header-spacer"></div>
-    
-    <!-- Center: Go to Today Button -->
-    <div class="header-center">
-        <button id="go-to-today-btn" class="button enhanced-today-btn">
-            <div class="today-btn-content">
-                <i class="fas fa-calendar-day"></i>
-                <span class="today-btn-main">Go to Today</span>
-                <span class="today-btn-sub">Loading...</span>
+<!-- Calendar Viewer Header -->
+<div class="calendar-viewer-header">
+    <div class="viewer-header-content">
+        <!-- Left: Project Info -->
+        <div class="viewer-header-left">
+            <h1 class="viewer-project-title">{{ project.title or 'Untitled Project' }}</h1>
+            <div class="viewer-project-meta">
+                <span class="meta-item">
+                    <span class="meta-icon">🎬</span>
+                    {{ project.director or 'No Director' }}
+                </span>
+                {% if project.shootStartDate %}
+                <span class="meta-item">
+                    <span class="meta-icon">📅</span>
+                    {{ project.shootStartDate }}
+                </span>
+                {% endif %}
             </div>
-        </button>
-    </div>
-    
-    <!-- Right side: Action buttons -->
-    <div class="admin-actions">
-        <button class="print-button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2 2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-            Print
-        </button>
-        {% if session.get('user_role') == 'admin' %}
-            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button">Edit Calendar</a>
-        {% endif %}
-        <a href="{{ url_for('main.dashboard') }}" class="button secondary">Back to Dashboard</a>
+        </div>
+
+        <!-- Center: Quick Actions -->
+        <div class="viewer-header-center">
+            <button id="go-to-today-btn" class="btn btn-primary">
+                <span class="nav-icon">📍</span>
+                Go to Today
+            </button>
+        </div>
+        
+        <!-- Right: Action Buttons -->
+        <div class="viewer-header-right">
+            <button class="btn btn-secondary" onclick="window.print()">
+                <span class="nav-icon">🖨️</span>
+                Print
+            </button>
+            {% if session.get('user_role') == 'admin' %}
+                <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary">
+                    <span class="nav-icon">✏️</span>
+                    Edit Calendar
+                </a>
+            {% endif %}
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">
+                <span class="nav-icon">← </span>
+                Dashboard
+            </a>
+        </div>
     </div>
 </div>
 
 {% if no_published_version %}
-    <div class="no-published-version">
-        <h3>No Published Version Available</h3>
-        <p>This project doesn't have any published versions yet.</p>
+    <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <h3 class="empty-state-title">No Published Version Available</h3>
+        <p class="empty-state-description">
+            This project doesn't have any published versions yet.
+            {% if session.get('user_role') == 'admin' %}
+                As an admin, you can access the calendar editor to create and publish versions.
+            {% else %}
+                Please check back later or contact the project administrator.
+            {% endif %}
+        </p>
         {% if session.get('user_role') == 'admin' %}
-            <p>Admins can access the calendar editor to create and publish versions.</p>
-            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button">Go to Calendar Editor</a>
-        {% else %}
-            <p>Please check back later or contact the project administrator.</p>
+            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary">
+                <span class="nav-icon">📝</span>
+                Go to Calendar Editor
+            </a>
         {% endif %}
     </div>
 {% elif calendar and calendar.days %}
-    <div class="calendar-container viewer-mode">
+    <div class="calendar-container">
         {% if versions and project.isVersioned %}
-            <div class="version-selector">
-                <label for="version-select">Version:</label>
-                <select id="version-select" onchange="changeVersion(this.value)">
-                    {% for version in versions %}
-                        <option value="{{ version.id }}" 
-                            {% if version.id == current_version_id %}selected{% endif %}>
-                            Version {{ version.versionNumber }}
-                            {% if version.isLatestPublished %}(Latest){% endif %}
-                            - {{ version.publishedAt.split('T')[0] if version.publishedAt else 'Not published' }}
-                        </option>
-                    {% endfor %}
-                </select>
+            <div class="version-selector-wrapper">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="nav-icon">📄</span>
+                        Version Control
+                    </div>
+                </div>
+                <div class="version-selector">
+                    <label for="version-select" class="form-label">Active Version:</label>
+                    <select id="version-select" class="form-select" onchange="changeVersion(this.value)">
+                        {% for version in versions %}
+                            <option value="{{ version.id }}" 
+                                {% if version.id == current_version_id %}selected{% endif %}>
+                                Version {{ version.versionNumber }}
+                                {% if version.isLatestPublished %} (Latest){% endif %}
+                                - {{ version.publishedAt.split('T')[0] if version.publishedAt else 'Not published' }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <div class="version-info">
+                        <span class="text-body-small">Viewing published calendar version</span>
+                    </div>
+                </div>
             </div>
         {% endif %}
 
         {% include 'components/_project_header.html' %}
-        {% include 'components/_filter_panel.html' %}
-        {% include 'components/_search_filter.html' %}  <!-- Add this line -->
-        {% include 'components/_department_counters.html' %}
-        {% include 'components/_location_filter_section.html' %}
-        {% include 'components/_location_areas.html' %}
-        {% include 'components/_location_counters.html' %}
-        {% include 'components/_calendar_mobile_controls.html' %}
 
+        <!-- Compact Horizontal Filters -->
+        {% include 'components/_compact_filters.html' %}
+
+        {% include 'components/_department_counters.html' %}
+
+        {% include 'components/_location_filter_section.html' %}
+
+        {% include 'components/_location_areas.html' %}
+
+        {% include 'components/_location_counters.html' %}
+
+        {% include 'components/_calendar_mobile_controls.html' %}
+        
         <div class="calendar-table-wrapper">
             <table class="calendar-table">
                 <thead>

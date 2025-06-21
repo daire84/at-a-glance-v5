@@ -442,3 +442,39 @@
     outline: 2px solid var(--primary-blue);
     outline-offset: 4px;
 }
+
+/* === LIGHT MODE OVERRIDES === */
+body.light-theme .nav-card {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .nav-card-title {
+    color: var(--text-primary);
+}
+
+body.light-theme .nav-card-description,
+body.light-theme .nav-feature,
+body.light-theme .hero-subtitle,
+body.light-theme .hero-description,
+body.light-theme .stat-label {
+    color: var(--text-secondary);
+}
+
+body.light-theme .stat-value {
+    color: var(--text-primary);
+}
+
+body.light-theme .nav-feature {
+    background: rgba(79, 195, 247, 0.1);
+}
+
+body.light-theme .stat-item {
+    background: rgba(79, 195, 247, 0.05);
+    border-color: rgba(79, 195, 247, 0.1);
+}
+
+body.light-theme .stat-item:hover {
+    background: rgba(79, 195, 247, 0.1);
+    border-color: rgba(79, 195, 247, 0.2);
+}
