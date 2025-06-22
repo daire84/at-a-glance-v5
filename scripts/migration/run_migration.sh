@@ -13,4 +13,4 @@ if ! docker ps --format '{{.Names}}' | grep -q 'film-scheduler-v5'; then
 fi
 
 echo "Executing migration script in container..."
-docker exec -it film-scheduler-v5 python migrate_projects.py
+docker exec -it film-scheduler-v5 python scripts/migration/migrate_projects.py
