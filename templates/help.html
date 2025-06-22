@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Help & About - STRIPS{% endblock %}
+{% block title %}Help & Documentation - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
@@ -12,136 +12,481 @@
     <div class="section-header">
         <div class="section-title">
             <span class="nav-icon">❔</span>
-            Help & About
+            Help & Documentation
         </div>
-        <a href="/" class="btn btn-secondary">
-            <span class="nav-icon">🏠</span>
-            Back to Welcome
-        </a>
+        <div class="header-actions">
+            {% if session.get('user_role') == 'admin' %}
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">
+                    <span class="nav-icon">🔙</span>
+                    Back to Dashboard
+                </a>
+            {% else %}
+                <a href="/" class="btn btn-secondary">
+                    <span class="nav-icon">🏠</span>
+                    Back to Welcome
+                </a>
+            {% endif %}
+        </div>
     </div>
 
-    <!-- Quick Navigation -->
+    <!-- Quick Navigation Cards -->
     <div class="help-nav">
         <div class="help-nav-cards">
             <div class="help-nav-card">
                 <h3>📖 Getting Started</h3>
                 <p>Learn the basics of using STRIPS for your film production scheduling.</p>
+                <a href="#getting-started" class="nav-card-link">Jump to Section</a>
             </div>
             <div class="help-nav-card">
                 <h3>👥 User Roles</h3>
                 <p>Understand the different access levels and what each role can do.</p>
+                <a href="#user-roles" class="nav-card-link">Jump to Section</a>
             </div>
             <div class="help-nav-card">
                 <h3>📅 Calendar Features</h3>
                 <p>Explore the powerful calendar and scheduling features available.</p>
+                <a href="#main-features" class="nav-card-link">Jump to Section</a>
+            </div>
+            <div class="help-nav-card">
+                <h3>🖨️ Printing & Sharing</h3>
+                <p>Learn how to create professional calendar printouts and share schedules.</p>
+                <a href="#printing" class="nav-card-link">Jump to Section</a>
             </div>
         </div>
     </div>
 
-    <!-- Main Help Content -->
-    <div class="help-content">
-        <div class="help-section">
-            <h2 class="help-section-title">About STRIPS</h2>
-            <div class="help-section-content">
-                <p>STRIPS is a professional film production scheduling application designed to streamline the complex process of managing film shoots, crew, and locations.</p>
-                
-                <h3>Key Features</h3>
-                <ul class="feature-list">
-                    <li><strong>Project Management</strong> - Create and manage multiple film production projects</li>
-                    <li><strong>Calendar Scheduling</strong> - Visual calendar interface for managing shoot dates</li>
-                    <li><strong>Location Management</strong> - Track and organize filming locations</li>
-                    <li><strong>Department Coordination</strong> - Manage different departments and crew assignments</li>
-                    <li><strong>Real-time Updates</strong> - Keep everyone informed with live schedule updates</li>
-                    <li><strong>Mobile Responsive</strong> - Access your schedules from any device</li>
+    <!-- Enhanced Layout with Sidebar -->
+    <div class="help-layout">
+        <!-- Table of Contents Sidebar -->
+        <div class="help-sidebar">
+            <div class="toc-container">
+                <h3>Contents</h3>
+                <ul class="toc-list">
+                    <li><a href="#introduction" class="toc-link">Introduction</a></li>
+                    <li><a href="#getting-started" class="toc-link">Getting Started</a></li>
+                    <li><a href="#user-roles" class="toc-link">User Access Levels</a></li>
+                    <li>
+                        <a href="#main-features" class="toc-link">Main Features</a>
+                        <ul>
+                            <li><a href="#calendar-management" class="toc-link">Calendar Management</a></li>
+                            <li><a href="#locations" class="toc-link">Locations & Areas</a></li>
+                            <li><a href="#departments" class="toc-link">Departments</a></li>
+                            <li><a href="#special-dates" class="toc-link">Special Dates</a></li>
+                            <li><a href="#versioning" class="toc-link">Versioning System</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#day-to-day" class="toc-link">Day-to-Day Usage</a>
+                        <ul>
+                            <li><a href="#filtering" class="toc-link">Filtering & Searching</a></li>
+                            <li><a href="#editing-days" class="toc-link">Editing Days</a></li>
+                            <li><a href="#drag-drop" class="toc-link">Drag & Drop</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#printing" class="toc-link">Printing & Sharing</a></li>
+                    <li><a href="#faq" class="toc-link">FAQ</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="help-section">
-            <h2 class="help-section-title">User Access Levels</h2>
-            <div class="help-section-content">
-                <div class="access-levels">
-                    <div class="access-level">
-                        <h4><span class="nav-icon">👁️</span> Viewer Access</h4>
-                        <p>Perfect for crew members who need to view schedules and stay informed about upcoming shoots.</p>
-                        <ul>
-                            <li>View project calendars</li>
-                            <li>Access location details</li>
-                            <li>See department information</li>
-                            <li>Check shoot schedules</li>
-                        </ul>
-                    </div>
+        <!-- Main Content Area -->
+        <div class="help-content">
+            <!-- Introduction Section -->
+            <section id="introduction" class="help-section">
+                <h2>Introduction to STRIPS Film Production Scheduler</h2>
+                <div class="section-content">
+                    <p>Welcome to STRIPS (Schedule, Track, Revise, Integrate, Plan, Schedule) - your comprehensive tool for managing production calendars for film and television projects.</p>
                     
-                    <div class="access-level">
-                        <h4><span class="nav-icon">⚙️</span> Admin Access</h4>
-                        <p>Full management control for producers, ADs, and production managers.</p>
-                        <ul>
-                            <li>Create and edit projects</li>
-                            <li>Manage shoot schedules</li>
-                            <li>Add and modify locations</li>
-                            <li>Configure departments</li>
-                            <li>Manage user access</li>
-                            <li>Export and share schedules</li>
-                        </ul>
+                    <p>This application was designed specifically for film production teams to easily visualize, plan, and update shooting schedules. The interface prioritizes clarity and efficiency, allowing production teams to:</p>
+                    
+                    <ul>
+                        <li>Create and manage detailed production calendars</li>
+                        <li>Track locations, departments, and resources</li>
+                        <li>Easily update schedules with drag-and-drop functionality</li>
+                        <li>Handle special production dates like holidays and hiatus periods</li>
+                        <li>Generate versions to track schedule changes over time</li>
+                        <li>Share calendars with team members via print-friendly views</li>
+                    </ul>
+                    
+                    <div class="help-image-container">
+                        <img src="{{ url_for('static', filename='images/help/app_overview.jpg') }}" alt="Application Overview" class="help-image">
+                        <p class="image-caption">Main calendar view showing a production schedule at a glance!</p>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <div class="help-section">
-            <h2 class="help-section-title">Getting Started</h2>
-            <div class="help-section-content">
-                <div class="getting-started-steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>Choose Your Access</h4>
-                            <p>From the welcome page, select either Viewer or Admin access based on your role in the production.</p>
-                        </div>
-                    </div>
+            <!-- Getting Started Section -->
+            <section id="getting-started" class="help-section">
+                <h2>Getting Started</h2>
+                <div class="section-content">
+                    <h3>Creating Your First Project</h3>
+                    <p>To get started with the Film Production Scheduler:</p>
                     
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>Login</h4>
-                            <p>Use your project code (for viewers) or admin credentials to access the system.</p>
-                        </div>
-                    </div>
+                    <ol>
+                        <li>
+                            <strong>Access the Admin Dashboard</strong> - Log in with admin credentials to access the main dashboard.
+                        </li>
+                        <li>
+                            <strong>Create a New Project</strong> - Click the "Create New Project" button on the dashboard.
+                        </li>
+                        <li>
+                            <strong>Enter Project Details</strong> - Fill in basic information like project title, director, producer, etc.
+                        </li>
+                        <li>
+                            <strong>Set Key Dates</strong> - Define your prep start date, shoot start date, and estimated wrap date.
+                        </li>
+                        <li>
+                            <strong>Save & Generate Calendar</strong> - Save your project to automatically generate a calendar based on your dates.
+                        </li>
+                    </ol>
                     
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>Navigate Your Dashboard</h4>
-                            <p>View available projects and click on any project to see its detailed calendar and information.</p>
-                        </div>
+                    <div class="tip-box">
+                        <h4>Tip: Production Dates</h4>
+                        <p>The system will automatically calculate shoot days starting from your Shoot Start Date. Weekends and holidays are marked accordingly but can be adjusted as needed.</p>
                     </div>
-                    
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4>Explore Features</h4>
-                            <p>Use the calendar view to see shoot schedules, locations, and department assignments.</p>
+                </div>
+            </section>
+
+            <!-- User Access Levels Section -->
+            <section id="user-roles" class="help-section">
+                <h2>User Access Levels</h2>
+                <div class="section-content">
+                    <div class="access-levels">
+                        <div class="access-level">
+                            <h4><span class="nav-icon">👁️</span> Viewer Access</h4>
+                            <p>Perfect for crew members who need to view schedules and stay informed about upcoming shoots.</p>
+                            <ul>
+                                <li>View project calendars with full scheduling details</li>
+                                <li>Access location details and area information</li>
+                                <li>See department information and requirements</li>
+                                <li>Check shoot schedules and sunrise/sunset times</li>
+                                <li>Filter and search through calendar data</li>
+                                <li>Print professional calendar layouts</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="access-level">
+                            <h4><span class="nav-icon">⚙️</span> Admin Access</h4>
+                            <p>Full management control for producers, ADs, and production managers.</p>
+                            <ul>
+                                <li>Create and edit projects with comprehensive details</li>
+                                <li>Manage shoot schedules with drag-and-drop functionality</li>
+                                <li>Add and modify locations with smart geocoding</li>
+                                <li>Configure departments and location areas</li>
+                                <li>Handle special dates, holidays, and hiatus periods</li>
+                                <li>Create and manage schedule versions</li>
+                                <li>Export and share schedules with professional printing</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <div class="help-section">
-            <h2 class="help-section-title">Need More Help?</h2>
-            <div class="help-section-content">
-                <p>If you need additional assistance or have questions about using STRIPS, please contact your production administrator or technical support.</p>
+            <!-- Main Features Section -->
+            <section id="main-features" class="help-section">
+                <h2>Main Features</h2>
                 
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <strong>Technical Support:</strong> Contact your system administrator
-                    </div>
-                    <div class="contact-item">
-                        <strong>Production Questions:</strong> Reach out to your production manager
+                <div id="calendar-management" class="subsection">
+                    <h3>Calendar Management</h3>
+                    <p>The heart of the application is the calendar view where you can see and manage the entire production schedule.</p>
+                    
+                    <h4>Calendar Components:</h4>
+                    <ul>
+                        <li><strong>Project Header</strong> - Displays project metadata and key information</li>
+                        <li><strong>Day Rows</strong> - Each row represents a calendar day with full details</li>
+                        <li><strong>Department Counters</strong> - Shows how many days each department is scheduled</li>
+                        <li><strong>Location Areas</strong> - Visual representation of shooting locations with color coding</li>
+                        <li><strong>Filter Panel</strong> - Powerful tools to customize the calendar view</li>
+                        <li><strong>Professional Branding</strong> - Clean layout with your STRIPS logo</li>
+                    </ul>
+                    
+                    <div class="help-image-container">
+                        <img src="{{ url_for('static', filename='images/help/calendar_anatomy.jpg') }}" alt="Calendar Components" class="help-image">
+                        <p class="image-caption">Anatomy of the calendar view</p>
                     </div>
                 </div>
-            </div>
+                
+                <div id="locations" class="subsection">
+                    <h3>Locations & Areas</h3>
+                    <p>Manage filming locations with smart search and organize them into geographic areas for better organization.</p>
+                    
+                    <h4>Location Features:</h4>
+                    <ul>
+                        <li>Smart location search - just type "Dublin" or any address</li>
+                        <li>Automatic geocoding with sunrise/sunset calculations</li>
+                        <li>Group locations into color-coded areas</li>
+                        <li>Popular film locations database for quick selection</li>
+                        <li>View location usage statistics and scheduling</li>
+                        <li>Filter calendar by location or area</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <h4>Pro Tip: Color Coding</h4>
+                        <p>Location areas are color-coded in the calendar, making it easy to visually track shooting locations at a glance. These colors are preserved in professional printouts.</p>
+                    </div>
+                </div>
+                
+                <div id="departments" class="subsection">
+                    <h3>Departments</h3>
+                    <p>Track which departments are needed on which days with the department tag system.</p>
+                    
+                    <h4>Department Features:</h4>
+                    <ul>
+                        <li>Create department tags with custom colors</li>
+                        <li>Assign departments to specific days (SFX, Stunts, Crane, etc.)</li>
+                        <li>View department usage statistics</li>
+                        <li>Track specialized equipment and crew needs</li>
+                        <li>Color-coded tags for visual organization</li>
+                    </ul>
+                </div>
+                
+                <div id="special-dates" class="subsection">
+                    <h3>Special Dates</h3>
+                    <p>Handle non-standard production days such as holidays, hiatus periods, and working weekends.</p>
+                    
+                    <h4>Special Dates Features:</h4>
+                    <ul>
+                        <li>Mark bank holidays with options for working/non-working</li>
+                        <li>Define hiatus periods when production pauses</li>
+                        <li>Schedule working weekends when shooting continues</li>
+                        <li>Add custom special dates like travel days or production meetings</li>
+                    </ul>
+                </div>
+                
+                <div id="versioning" class="subsection">
+                    <h3>Versioning System</h3>
+                    <p>Track changes to your schedule over time with the comprehensive versioning system.</p>
+                    
+                    <h4>Versioning Features:</h4>
+                    <ul>
+                        <li>Create named versions of your schedule</li>
+                        <li>Add version notes to track what changed</li>
+                        <li>Publish versions for wider team viewing</li>
+                        <li>Switch between versions to compare changes</li>
+                        <li>Maintain production history and decision tracking</li>
+                    </ul>
+                    
+                    <div class="help-image-container">
+                        <img src="{{ url_for('static', filename='images/help/versioning.jpg') }}" alt="Versioning System" class="help-image">
+                        <p class="image-caption">Working with schedule versions</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Day-to-Day Usage Section -->
+            <section id="day-to-day" class="help-section">
+                <h2>Day-to-Day Usage</h2>
+                
+                <div id="filtering" class="subsection">
+                    <h3>Filtering & Searching</h3>
+                    <p>Customize your view of the calendar with powerful filtering tools.</p>
+                    
+                    <h4>Filter Options:</h4>
+                    <ul>
+                        <li><strong>Day Types</strong> - Show/hide weekends, prep days, holidays, hiatus</li>
+                        <li><strong>Column Visibility</strong> - Show/hide specific columns like sequence, second unit</li>
+                        <li><strong>Location Filtering</strong> - Filter by specific locations or areas</li>
+                        <li><strong>Search</strong> - Find keywords across notes, locations, and scenes</li>
+                        <li><strong>Statistics</strong> - Live counters showing filtered results</li>
+                    </ul>
+                    
+                    <div class="help-image-container">
+                        <img src="{{ url_for('static', filename='images/help/filtering.jpg') }}" alt="Filtering Options" class="help-image">
+                        <p class="image-caption">Using filters and search to customize the view</p>
+                    </div>
+                </div>
+                
+                <div id="editing-days" class="subsection">
+                    <h3>Editing Days</h3>
+                    <p>Update information for individual production days with comprehensive editing tools.</p>
+                    
+                    <h4>Day Editing Features:</h4>
+                    <ul>
+                        <li>Edit main unit descriptions and scene details</li>
+                        <li>Assign locations to days (with automatic sun time calculation)</li>
+                        <li>Track extras counts and featured extras</li>
+                        <li>Add sequence/scene numbers and script information</li>
+                        <li>Tag departments needed for the day</li>
+                        <li>Add detailed production notes</li>
+                        <li>Track second unit activities and coordination</li>
+                    </ul>
+                </div>
+                
+                <div id="drag-drop" class="subsection">
+                    <h3>Drag & Drop Functionality</h3>
+                    <p>Quickly reschedule shoot days using the intuitive drag and drop feature.</p>
+                    
+                    <h4>How to Use Drag & Drop:</h4>
+                    <ol>
+                        <li>Click and hold on a shoot day row</li>
+                        <li>Drag to the desired new date</li>
+                        <li>Release to move the day and update the schedule</li>
+                    </ol>
+                    
+                    <div class="tip-box">
+                        <h4>Note:</h4>
+                        <p>Drag and drop is only available for shoot days and not for prep days, holidays, or hiatus periods to maintain schedule integrity.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Printing & Sharing Section -->
+            <section id="printing" class="help-section">
+                <h2>Printing & Sharing</h2>
+                <div class="section-content">
+                    <p>Share your production schedule with team members through professional printing and PDF generation.</p>
+                    
+                    <h4>Print Features:</h4>
+                    <ul>
+                        <li><strong>Professional Layout</strong> - Clean, branded printouts with STRIPS logo</li>
+                        <li><strong>Color Preservation</strong> - Department tags and location areas maintain colors</li>
+                        <li><strong>Smart Pagination</strong> - Project summary on page 1, calendar on subsequent pages</li>
+                        <li><strong>Clean Design</strong> - Interactive elements hidden for professional appearance</li>
+                    </ul>
+                    
+                    <h4>Printing Tips:</h4>
+                    <ul>
+                        <li><strong>Use Landscape Orientation</strong> - The calendar is optimized for landscape printing</li>
+                        <li><strong>Enable Background Graphics</strong> - Essential for preserving color coding</li>
+                        <li><strong>Filter Before Printing</strong> - Use filters to show only relevant information</li>
+                        <li><strong>Save as PDF</strong> - Use your browser's "Print to PDF" option for sharing</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <h4>Pro Tip: Color Printing</h4>
+                        <p>The calendar is designed to be readable in both color and black & white printing, but color printing preserves essential location area distinctions and department tag colors for production use.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section id="faq" class="help-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <h4>How do I add a new location?</h4>
+                        <p>Go to the "Locations" tab in the admin section, click "Add Location", and simply type the location name or address. The system will automatically find coordinates and calculate sunrise/sunset times.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>What happens if I change the shoot start date?</h4>
+                        <p>If you change the shoot start date, you'll need to regenerate the calendar. This will update the shoot day numbering but preserve any day-specific information you've added.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>How do I mark a weekend as a working day?</h4>
+                        <p>Go to the "Special Dates" tab, select your project, click "Add Working Weekend", and select the weekend date you want to mark as a working day.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>Can I export the calendar to other formats?</h4>
+                        <p>Currently, the best way to export is using the professional print function to create a PDF. The print layout preserves all color coding and provides production-ready documents.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>How do I share the calendar with someone who doesn't have access?</h4>
+                        <p>You can print the calendar as a PDF and share the file, or set them up with a viewer account that has read-only permissions to see the schedule.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>Why aren't the colors showing when I print?</h4>
+                        <p>Make sure "Background Graphics" is enabled in your browser's print settings. This is essential for preserving the color-coded department tags and location areas.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>How does the sunrise/sunset calculation work?</h4>
+                        <p>When you add a location, the system automatically finds its coordinates and calculates accurate sunrise and sunset times for each shooting day, accounting for timezone and daylight saving time.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="help-section">
+                <h2>Need More Help?</h2>
+                <div class="section-content">
+                    <p>If you need additional assistance or have questions about using STRIPS, please contact your production administrator or technical support.</p>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <strong>Technical Support:</strong> Contact your system administrator
+                        </div>
+                        <div class="contact-item">
+                            <strong>Production Questions:</strong> Reach out to your production manager
+                        </div>
+                        <div class="contact-item">
+                            <strong>Feature Requests:</strong> Share feedback with your technical team
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Highlight active section based on scroll position
+    const sections = document.querySelectorAll('.help-section');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    
+    // Add smooth scrolling to anchor links
+    document.querySelectorAll('.toc-link, .nav-card-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to target
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Update URL without full page reload
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+    
+    // Track scroll position and update active TOC link
+    function updateActiveTocLink() {
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            if (window.scrollY >= sectionTop - 100 && 
+                window.scrollY < sectionTop + sectionHeight - 100) {
+                currentSection = '#' + section.getAttribute('id');
+            }
+        });
+        
+        tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === currentSection) {
+                link.classList.add('active');
+                
+                // Expand parent list if this is a nested item
+                const parentLi = link.closest('li').parentElement;
+                if (parentLi && parentLi.tagName === 'UL') {
+                    const parentLink = parentLi.previousElementSibling;
+                    if (parentLink && parentLink.classList.contains('toc-link')) {
+                        parentLink.classList.add('active');
+                    }
+                }
+            }
+        });
+    }
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', updateActiveTocLink);
+    
+    // Initial call to highlight correct section
+    updateActiveTocLink();
+});
+</script>
 {% endblock %}

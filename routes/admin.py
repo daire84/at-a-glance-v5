@@ -336,5 +336,5 @@ def admin_dates(project_id=None):
 @admin_required
 def admin_help():
     """Help and documentation page"""
-    # Renders 'admin/help.html'
-    return render_template('admin/help.html')
+    # Renders unified help page instead of admin-specific one
+    return render_template('help.html')

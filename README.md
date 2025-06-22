@@ -29,6 +29,8 @@
     * Department tagging (SFX, Stunts, Crane, etc.)
     * Production notes and scheduling details
 * **Visual Organization:** Color-coded location areas and department counters
+* **Professional Branding:** Integrated logo system with gradient theming
+* **Print Optimization:** Production-ready printouts with color preservation
 * **Responsive Design:** Professional interface that works on desktop, tablet, and mobile
 
 ### 🔐 **Secure Access Control**
@@ -89,6 +91,12 @@
     │   ├── departments.json   # Global departments
     │   └── locations.json     # Global locations
     ├── logs/                  # Application logs
+    ├── docs/                  # Technical documentation and troubleshooting guides
+    │   ├── LOGO_IMPLEMENTATION.md    # Logo integration guide
+    │   ├── PRINT_OPTIMIZATION.md     # Print feature documentation
+    │   ├── SUNRISE_SUNSET_IMPLEMENTATION.md # Sun times feature guide
+    │   ├── DESIGN_SYSTEM.md          # UI/UX design guidelines
+    │   └── ...                       # Additional technical documentation
     └── README.md              # This file
 
 ## Setup and Installation
@@ -150,11 +158,17 @@
 - **Optimized styling** - cleaner, more professional appearance
 - **Enhanced error handling** with graceful fallbacks
 
-### 🎨 **UI/UX Improvements**
-- **Simplified sun times display** that matches calendar aesthetics
-- **Better text visibility** with improved contrast
-- **Dropdown positioning** fixed for better usability
-- **Professional styling** throughout the interface
+### 🎨 **Professional Branding & UI**
+- **Real logo integration** - Your professional STRIPS logo throughout the application
+- **Gradient theming** - Beautiful blue gradient branding in headers and titles
+- **Professional print layouts** - Clean, color-preserved printouts for client distribution
+- **Enhanced visual design** - Modern glassmorphism effects and polished aesthetics
+
+### 🖨️ **Print Optimization**
+- **Production-ready printouts** - Professional calendar exports with all functionality intact
+- **Color preservation** - Department tags, location areas, and script colors maintained in print
+- **Clean layout** - Interactive elements hidden, essential information beautifully formatted
+- **Smart pagination** - Project summary on page 1, calendar data on subsequent pages
 
 ## Usage
 
@@ -194,6 +208,17 @@ This application currently stores all its data as JSON files within the `data/` 
 * Each project's data (main details, calendar, holidays, etc.) is stored in a separate subdirectory under `data/projects/`, named with a unique UUID.
 
 **Important:** Ensure the volume mapped to `/app/data` in your `docker-compose.yml` is persistent and regularly backed up, as this contains all user-generated data.
+
+## Documentation
+
+Comprehensive technical documentation is available in the `/docs` directory:
+
+- **[Logo Implementation Guide](docs/LOGO_IMPLEMENTATION.md)** - Complete guide to the professional logo integration
+- **[Print Optimization](docs/PRINT_OPTIMIZATION.md)** - Detailed documentation of print feature enhancements  
+- **[Sunrise/Sunset Implementation](docs/SUNRISE_SUNSET_IMPLEMENTATION.md)** - Sun times calculation system
+- **[Design System](docs/DESIGN_SYSTEM.md)** - UI/UX guidelines and branding standards
+- **[Implementation Progress](docs/IMPLEMENTATION_PROGRESS.md)** - Feature development tracking
+- **[Troubleshooting Guides](docs/)** - Various technical guides for maintenance and troubleshooting
 
 ## Contributing
 

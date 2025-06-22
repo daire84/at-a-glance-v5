@@ -26,15 +26,24 @@
 .logo-icon {
     width: 40px;
     height: 40px;
-    background: var(--gradient-primary);
     border-radius: var(--border-radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: var(--font-weight-extrabold);
-    font-size: 1.5rem;
     box-shadow: var(--shadow-blue-sm);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.logo-image {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    transition: all var(--transition-normal);
+}
+
+.logo-icon:hover .logo-image {
+    transform: scale(1.05);
 }
 
 .app-title {

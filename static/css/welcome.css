@@ -84,16 +84,22 @@
 .hero-logo-icon {
     width: 80px;
     height: 80px;
-    background: var(--gradient-primary);
     border-radius: var(--radius-xl);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: 800;
-    font-size: 3rem;
     box-shadow: var(--shadow-blue-lg);
     animation: pulse 2s ease-in-out infinite;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.hero-logo-image {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    transition: all var(--transition-normal);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 }
 
 .hero-title {
@@ -350,7 +356,12 @@
     .hero-logo-icon {
         width: 60px;
         height: 60px;
-        font-size: 2rem;
+    }
+    
+    .hero-logo-image {
+        width: 48px;
+        height: 48px;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
     }
     
     .hero-title {

@@ -24,7 +24,9 @@
       "Bash(mv:*)",
       "Bash(rg:*)",
       "Bash(cp:*)",
-      "Bash(./dev-shell python:*)"
+      "Bash(./dev-shell python:*)",
+      "Bash(mkdir:*)",
+      "Bash(true)"
     ],
     "deny": []
   }
