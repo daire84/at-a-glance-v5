@@ -137,4 +137,136 @@
     margin-top: 1rem; /* Ensure space even if body has no margin */
 }
 
+/* === STRIPS MODAL ENHANCEMENTS === */
+
+/* Enhanced modal content with STRIPS theming */
+.modal-content {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+}
+
+/* STRIPS modal header with gradient accent */
+.modal-header {
+    position: relative;
+    border-bottom-color: var(--border-color);
+}
+
+.modal-header::before {
+    content: '';
+    position: absolute;
+    top: -1.5rem;
+    left: -1.5rem;
+    right: -1.5rem;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+/* Enhanced modal title */
+.modal-title {
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.modal-title .nav-icon {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Enhanced close button */
+.modal-close {
+    color: var(--text-secondary);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-normal);
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+    background: var(--background-hover);
+}
+
+/* Modal body enhancements */
+.modal-body {
+    color: var(--text-primary);
+}
+
+/* Modal footer enhancements */
+.modal-footer {
+    border-top-color: var(--border-color);
+}
+
+/* Modal variants */
+.modal-success .modal-header::before {
+    background: var(--success-color);
+}
+
+.modal-warning .modal-header::before {
+    background: var(--warning-color);
+}
+
+.modal-error .modal-header::before {
+    background: var(--error-color);
+}
+
+.modal-info .modal-header::before {
+    background: var(--info-color);
+}
+
+/* Confirmation modal styling */
+.modal-confirm .modal-content {
+    text-align: center;
+    max-width: 400px;
+}
+
+.modal-confirm .modal-body {
+    padding: var(--spacing-lg) 0;
+}
+
+.modal-confirm .modal-footer {
+    justify-content: center;
+}
+
+/* Large modal variant */
+.modal-large .modal-content {
+    max-width: 800px;
+}
+
+.modal-large .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Light mode overrides */
+body.light-theme .modal-content {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .modal-title {
+    color: var(--text-primary);
+}
+
+body.light-theme .modal-body {
+    color: var(--text-primary);
+}
+
+body.light-theme .modal-close {
+    color: var(--text-secondary);
+}
+
+body.light-theme .modal-close:hover {
+    color: var(--text-primary);
+    background: var(--background-hover);
+}
+
+body.light-theme .modal-footer {
+    border-top-color: var(--border-color);
+}
+
 /* --- End Common Modal Styles --- */

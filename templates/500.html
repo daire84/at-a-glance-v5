@@ -1,19 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}Server Error - Film Production Scheduler{% endblock %}
+{% block title %}Server Error - STRIPS{% endblock %}
 
-{# Optionally add specific styles for error pages if needed #}
-{# {% block styles %}
+{% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/errors.css') }}">
-{% endblock %} #}
+{% endblock %}
 
 {% block content %}
-<div class="error-container" style="text-align: center; padding: 2rem;"> {# Added some inline style for basic layout #}
-    <h2>500 - Server Error</h2>
-    <p>Something went wrong on the server. We've been notified and will look into it. Please try again later.</p> {# Slightly more informative message #}
-    {# Points to the 'index' function in the 'main' blueprint #}
-    <a href="{{ url_for('main.index') }}" class="button">Go to Home Page</a>
-    {# Optionally add a link to logout or contact support #}
-    {# <a href="{{ url_for('auth.logout') }}" class="button secondary">Logout</a> #}
+<!-- 500 Error Page -->
+<div class="error-page">
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">⚠️</div>
+            <h1 class="error-title">500 - Server Error</h1>
+            <p class="error-description">
+                Something went wrong on the server. We've been notified and will look into it.<br>
+                Please try again later or contact support if the problem persists.
+            </p>
+            <div class="error-actions">
+                <a href="{{ url_for('main.welcome') }}" class="btn btn-primary">
+                    <span class="nav-icon">🏠</span>
+                    Go to Home Page
+                </a>
+                <button onclick="window.location.reload()" class="btn btn-secondary">
+                    <span class="nav-icon">🔄</span>
+                    Try Again
+                </button>
+            </div>
+        </div>
+        
+        <!-- STRIPS Branding -->
+        <div class="error-branding">
+            <div class="logo-section">
+                <div class="logo-icon gradient-logo">
+                    <img src="{{ url_for('static', filename='images/favicon-96x96.png') }}" alt="STRIPS Logo" class="logo-image">
+                </div>
+                <span class="app-title">STRIPS</span>
+            </div>
+            <p class="brand-tagline">Film Production Scheduler</p>
+        </div>
+    </div>
 </div>
 {% endblock %}

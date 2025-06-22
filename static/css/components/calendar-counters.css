@@ -73,6 +73,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #333 !important; /* Dark text for better contrast in both modes */
 }
 
 .counter-value,
@@ -80,6 +81,10 @@
   font-size: 1rem;
   font-weight: 600;
   margin-top: 0.2rem;
+}
+
+.counter-value {
+  color: #333 !important; /* Dark text for better contrast in both modes */
 }
 
 /* === LOCATION COUNTERS SPECIFIC STYLES === */
@@ -103,13 +108,13 @@
 }
 
 .location-counters .counter-label {
-  color: var(--text-dark);
+  color: #333 !important; /* Dark text for better contrast in both modes */
   font-weight: 500;
   font-size: 0.75rem;
 }
 
 .location-counters .counter-value {
-  color: var(--text-dark);
+  color: #333 !important; /* Dark text for better contrast in both modes */
   font-size: 1.0rem;
   font-weight: 700;
 }
@@ -170,4 +175,22 @@
   .area-tags {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* === LIGHT MODE OVERRIDES === */
+body.light-theme .department-counters,
+body.light-theme .location-counters,
+body.light-theme .location-areas {
+  background-color: var(--background-secondary);
+  border-color: var(--border-color);
+}
+
+body.light-theme .counter-grid,
+body.light-theme .area-tags {
+  background-color: var(--background-secondary);
+}
+
+body.light-theme .counter-title,
+body.light-theme .areas-title {
+  color: var(--text-primary);
 }

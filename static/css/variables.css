@@ -1,0 +1,248 @@
+/* STRIPS Design System Variables - Unified System */
+
+/* === CORE CSS VARIABLES === */
+:root {
+    /* === BRAND COLORS === */
+    --primary-blue: #4FC3F7;          /* STRIPS brand blue */
+    --primary-pink: #FF6B9D;          /* STRIPS brand pink */
+    --primary-yellow: #FFD54F;        /* STRIPS brand yellow */
+    
+    /* Legacy color mapping for backwards compatibility */
+    --accent-color: var(--primary-blue);     /* Maps old accent to new blue */
+    --primary-color: #546e7a;                /* Keep existing primary color */
+    
+    /* === SEMANTIC COLORS - DARK MODE === */
+    --text-primary: #F8FAFC;          /* Primary text - light */
+    --text-secondary: #CBD5E1;        /* Secondary text */
+    --text-muted: #64748B;            /* Muted text */
+    --text-heading: #FFFFFF;          /* Headings */
+    
+    /* Background colors */
+    --background-primary: #0F172A;    /* Main background */
+    --background-secondary: #1E293B;  /* Cards, panels */
+    --background-tertiary: #334155;   /* Elevated elements */
+    --background-hover: #475569;      /* Hover states */
+    --background-subtle: #64748B;     /* Subtle backgrounds */
+    
+    /* Legacy background mapping */
+    --background-color: var(--background-primary);
+    --background-alt: var(--background-secondary);
+    --container-bg: var(--background-secondary);
+    --surface-bg: var(--background-tertiary);
+    
+    /* Borders */
+    --border-color: #334155;          /* Default borders */
+    --border-light: #475569;          /* Lighter borders */
+    --border-focus: var(--primary-blue); /* Focus borders */
+    
+    /* === STATUS COLORS === */
+    --success-color: #10B981;         /* Success/positive */
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --success-border: rgba(16, 185, 129, 0.3);
+    --success-text: #34D399;
+    
+    --warning-color: #F59E0B;         /* Warning/caution */
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    --warning-border: rgba(245, 158, 11, 0.3);
+    --warning-text: #FBBF24;
+    
+    --error-color: #EF4444;           /* Error/danger */
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --error-border: rgba(239, 68, 68, 0.3);
+    --error-text: #F87171;
+    
+    --info-color: var(--primary-blue); /* Info/neutral */
+    --info-bg: rgba(79, 195, 247, 0.1);
+    --info-border: rgba(79, 195, 247, 0.3);
+    --info-text: var(--primary-blue);
+    
+    /* === CALENDAR ROW COLORS - DARK THEME === */
+    --weekend-color: #64748B;         /* Weekends */
+    --prep-color: #059669;            /* Prep days */
+    --shoot-color: #0EA5E9;           /* Shoot days */
+    --hiatus-color: #DC2626;          /* Hiatus */
+    --holiday-color: #D97706;         /* Holidays */
+    --working-weekend-color: #16A34A; /* Working weekends */
+    
+    /* === SPACING SYSTEM === */
+    --spacing-xs: 0.25rem;    /* 4px */
+    --spacing-sm: 0.5rem;     /* 8px */
+    --spacing-md: 1rem;       /* 16px */
+    --spacing-lg: 1.5rem;     /* 24px */
+    --spacing-xl: 2rem;       /* 32px */
+    --spacing-2xl: 3rem;      /* 48px */
+    --spacing-3xl: 4rem;      /* 64px */
+    
+    /* === BORDER RADIUS === */
+    --border-radius: 8px;
+    --border-radius-sm: 4px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-2xl: 20px;
+    --border-radius-full: 50px;
+    
+    /* === SHADOWS === */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.25);
+    
+    /* Branded shadows */
+    --shadow-blue-sm: 0 4px 15px rgba(79, 195, 247, 0.2);
+    --shadow-blue-md: 0 8px 25px rgba(79, 195, 247, 0.3);
+    --shadow-blue-lg: 0 15px 35px rgba(79, 195, 247, 0.4);
+    
+    /* === TYPOGRAPHY === */
+    --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-heading: var(--font-family-base);
+    --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+    
+    /* Font sizes */
+    --font-size-xs: 0.75rem;     /* 12px */
+    --font-size-sm: 0.875rem;    /* 14px */
+    --font-size-base: 1rem;      /* 16px */
+    --font-size-lg: 1.125rem;    /* 18px */
+    --font-size-xl: 1.25rem;     /* 20px */
+    --font-size-2xl: 1.5rem;     /* 24px */
+    --font-size-3xl: 1.875rem;   /* 30px */
+    --font-size-4xl: 2.25rem;    /* 36px */
+    
+    /* Line heights */
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+    
+    /* Font weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    
+    /* === TRANSITIONS === */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* === GRADIENTS === */
+    --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--primary-pink));
+    --gradient-accent: linear-gradient(135deg, var(--primary-blue), var(--primary-pink), var(--primary-yellow));
+    --gradient-background: linear-gradient(135deg, var(--background-primary) 0%, var(--background-secondary) 100%);
+    
+    /* === BREAKPOINTS === */
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+    
+    /* === FORM ELEMENTS === */
+    --input-bg: var(--background-secondary);
+    --input-border: var(--border-color);
+    --input-focus: var(--primary-blue);
+    --input-text: var(--text-primary);
+    --input-placeholder: var(--text-muted);
+    
+    /* === Z-INDEX LAYERS === */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
+}
+
+/* === LIGHT THEME OVERRIDES === */
+body.light-theme {
+    /* === SEMANTIC COLORS - LIGHT MODE === */
+    --text-primary: #1E293B;          /* Dark text on light bg */
+    --text-secondary: #475569;        /* Secondary text */
+    --text-muted: #64748B;            /* Muted text */
+    --text-heading: #0F172A;          /* Headings */
+    
+    /* Background colors */
+    --background-primary: #FFFFFF;    /* Main background */
+    --background-secondary: #F8FAFC;  /* Cards, panels */
+    --background-tertiary: #F1F5F9;   /* Elevated elements */
+    --background-hover: #E2E8F0;      /* Hover states */
+    --background-subtle: #CBD5E1;     /* Subtle backgrounds */
+    
+    /* Borders */
+    --border-color: #E2E8F0;          /* Default borders */
+    --border-light: #F1F5F9;          /* Lighter borders */
+    
+    /* Form elements */
+    --input-bg: #FFFFFF;
+    --input-border: #D1D5DB;
+    --input-text: var(--text-primary);
+    
+    /* === CALENDAR ROW COLORS - LIGHT THEME === */
+    --weekend-color: #F1F5F9;         /* Light weekends */
+    --prep-color: #DCFCE7;            /* Light prep days */
+    --shoot-color: #DBEAFE;           /* Light shoot days */
+    --hiatus-color: #FEE2E2;          /* Light hiatus */
+    --holiday-color: #FEF3C7;         /* Light holidays */
+    --working-weekend-color: #F0FDF4; /* Light working weekends */
+    
+    /* Adjust shadows for light theme */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* === THEME.CSS COMPATIBILITY MAPPINGS === */
+/* These provide backwards compatibility with theme.css variable names */
+:root {
+    /* Theme.css color mappings */
+    --card-dark: var(--background-secondary);
+    --border-subtle: var(--border-color);
+    --text-gray: var(--text-muted);
+    --text-light: var(--text-primary);
+    --background-dark: var(--background-primary);
+    
+    /* Theme.css spacing mappings */
+    --space-xs: var(--spacing-xs);
+    --space-sm: var(--spacing-sm);
+    --space-md: var(--spacing-md);
+    --space-lg: var(--spacing-lg);
+    --space-xl: var(--spacing-xl);
+    --space-2xl: var(--spacing-2xl);
+    
+    /* Theme.css border radius mappings */
+    --radius-sm: var(--border-radius-sm);
+    --radius-md: var(--border-radius);
+    --radius-lg: var(--border-radius-lg);
+    --radius-xl: var(--border-radius-xl);
+    --radius-full: var(--border-radius-full);
+    
+    /* Theme.css status color mappings */
+    --success-green: var(--success-color);
+    --warning-orange: var(--warning-color);
+    --error-red: var(--error-color);
+}
+
+/* === LEGACY VARIABLE MAPPINGS === */
+/* These provide backwards compatibility with the original style.css system */
+:root {
+    /* Legacy color names that map to new system */
+    --header-text-color: var(--text-heading);
+    --title-text-color: var(--primary-pink);    /* Keep the red title color */
+    --page-title-color: var(--text-heading);
+    
+    /* Legacy text colors */
+    --text-color: var(--text-primary);
+    --text-dark: var(--text-primary);
+    
+    /* Legacy background colors */
+    --background-color: var(--background-primary);
+    --background-alt: var(--background-secondary);
+    --container-bg: var(--background-secondary);
+    --surface-bg: var(--background-tertiary);
+}

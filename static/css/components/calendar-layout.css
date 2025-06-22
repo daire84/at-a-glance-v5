@@ -29,9 +29,10 @@
   
   .project-title {
     font-size: 1.3rem;
-    color: var(--primary-color);
+    color: var(--text-primary);
     margin-bottom: 0.8rem;
     text-align: center;
+    font-weight: var(--font-weight-semibold);
   }
   
   .project-meta {
@@ -50,14 +51,17 @@
   
   .meta-label {
     font-size: 0.8rem;
-    color: var(--accent-dark);
+    color: var(--text-secondary);
     margin-bottom: 0.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: var(--font-weight-medium);
   }
   
   .meta-value {
     font-weight: 500;
     font-size: 0.9rem;
-    color: var(--text-color);
+    color: var(--text-primary);
   }
   
   .version-badge {
@@ -91,12 +95,12 @@
   
   .script-label {
     font-weight: 500;
-    color: var(--accent-light); /* Brighter blue for better visibility */
+    color: var(--primary-blue); /* Use STRIPS blue for better visibility */
     font-size: 0.85rem;
   }
   
   .script-value {
-    color: var(--text-color);
+    color: var(--text-primary);
     font-size: 0.85rem;
   }
   
@@ -123,3 +127,33 @@
     display: flex;
     gap: 0.5rem;
   }
+
+/* Light mode overrides */
+body.light-theme .project-info-header {
+    border-bottom-color: var(--border-color);
+}
+
+body.light-theme .project-title {
+    color: var(--text-primary);
+}
+
+body.light-theme .meta-label {
+    color: var(--text-secondary);
+}
+
+body.light-theme .meta-value {
+    color: var(--text-primary);
+}
+
+body.light-theme .script-info {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .script-label {
+    color: var(--primary-blue);
+}
+
+body.light-theme .script-value {
+    color: var(--text-primary);
+}

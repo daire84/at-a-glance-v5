@@ -1,60 +1,113 @@
 {% extends "base.html" %}
 
-{% block title %}Admin - Schedule, At a Glance!{% endblock %}
-
-{% block styles %}
-<link rel="stylesheet" href="/static/css/admin/dashboard.css">
-{% endblock %}
+{% block title %}Admin Dashboard - STRIPS{% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>Admin Dashboard</h2>
-    <div class="admin-actions">
-        <a href="/admin/project/new" class="button">Create New Project</a>
+<!-- Admin Dashboard Header -->
+<div class="admin-dashboard-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">⚙️</span>
+                Admin Dashboard
+            </h1>
+            <p class="admin-page-description">
+                Manage projects, locations, departments, and production settings
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            <a href="{{ url_for('admin.admin_project', project_id='new') }}" class="btn btn-primary">
+                <span class="nav-icon">➕</span>
+                Create New Project
+            </a>
+        </div>
     </div>
 </div>
 
-<!-- Admin Navigation Tabs -->
-<div class="admin-tabs">
-    {# Points to the 'admin_dashboard' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_dashboard') }}" class="active">Projects</a>
-    {# Points to the 'admin_locations' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
-    {# Points to the 'admin_departments' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
-    {# Points to the 'admin_dates' function in the 'admin' blueprint (without project_id for the main link) #}
-    <a href="{{ url_for('admin.admin_dates') }}">Special Dates</a>
-    {# Points to the 'help' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_help') }}">Help</a>
-
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab active">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
 </div>
 
-<div class="project-list admin-projects">
-    <h3>Manage Projects</h3>
+<!-- Projects Section -->
+<div class="admin-content">
+    <div class="section-header">
+        <div class="section-title">
+            <span class="nav-icon">📋</span>
+            Project Management
+        </div>
+        {% if projects %}
+            <span class="section-count">{{ projects|length }} project{{ 's' if projects|length != 1 else '' }}</span>
+        {% endif %}
+    </div>
+
     {% if projects %}
-        <div class="project-grid">
+        <div class="admin-projects-grid">
             {% for project in projects %}
-                <div class="project-card">
-                    <div class="project-card-header">
-                        <h4>{{ project.title or 'Untitled Project' }}</h4>
+                <div class="admin-project-card card hover-lift">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ project.title or 'Untitled Project' }}</h3>
                         <span class="version-tag">{{ project.version or 'v1.0' }}</span>
                     </div>
-                    <div class="project-card-body">
-                        <p><strong>Director:</strong> {{ project.director or 'N/A' }}</p>
-                        <p><strong>First AD:</strong> {{ project.firstAD or 'N/A' }}</p>
-                        {% if project.shootStartDate %}
-                        <p><strong>Shoot Start:</strong> {{ project.shootStartDate }}</p>
-                        {% endif %}
-                        <p class="updated-at">Last updated: {{ project.updated.split('T')[0] if project.updated else 'N/A' }}</p>
+                    
+                    <div class="card-body">
+                        <div class="project-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Director</span>
+                                <span class="detail-value">{{ project.director or 'N/A' }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">First AD</span>
+                                <span class="detail-value">{{ project.firstAD or 'N/A' }}</span>
+                            </div>
+                            {% if project.shootStartDate %}
+                            <div class="detail-item">
+                                <span class="detail-label">Shoot Start</span>
+                                <span class="detail-value">{{ project.shootStartDate }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="detail-item">
+                                <span class="detail-label">Last Updated</span>
+                                <span class="detail-value">{{ project.updated.split('T')[0] if project.updated else 'N/A' }}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="project-card-footer">
-                        <div class="button-group">
-                            {# Points to 'admin_project' function, passing the specific project.id #}
-                            <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="button small">Edit Details</a>
-                            {# Points to 'admin_calendar' function, passing the specific project.id #}
-                            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button small">Edit Calendar</a>
-                            {# Points to the 'viewer' function in the 'main' blueprint, passing project.id #}
-                            <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="button small secondary">View</a>
+                    
+                    <div class="card-footer">
+                        <div class="admin-button-group">
+                            <a href="{{ url_for('admin.admin_project', project_id=project.id) }}" class="btn btn-secondary btn-small">
+                                <span class="nav-icon">✏️</span>
+                                Edit Details
+                            </a>
+                            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary btn-small">
+                                <span class="nav-icon">📅</span>
+                                Edit Calendar
+                            </a>
+                            <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="btn btn-secondary btn-small">
+                                <span class="nav-icon">👁️</span>
+                                View
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -62,8 +115,15 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <p>No projects available yet.</p>
-            <p>Use the "Create New Project" button to get started.</p>
+            <div class="empty-state-icon">📁</div>
+            <h3 class="empty-state-title">No Projects Yet</h3>
+            <p class="empty-state-description">
+                Create your first film production project to get started with STRIPS.
+            </p>
+            <a href="{{ url_for('admin.admin_project', project_id='new') }}" class="btn btn-primary">
+                <span class="nav-icon">➕</span>
+                Create First Project
+            </a>
         </div>
     {% endif %}
 </div>

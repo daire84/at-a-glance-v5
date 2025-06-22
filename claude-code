@@ -1,0 +1,15 @@
+#!/bin/bash
+# Claude Code launcher for Unraid - FIXED VERSION
+
+DEV_CONTAINER="claude-code-dev"
+
+# Ensure container is running
+if ! docker ps | grep -q ${DEV_CONTAINER}; then
+    echo "🚀 Starting development container..."
+    docker start ${DEV_CONTAINER}
+    sleep 2
+fi
+
+# Launch Claude Code with working method
+echo "🎯 Launching Claude Code..."
+docker exec -it ${DEV_CONTAINER} node --no-warnings --enable-source-maps /usr/local/lib/node_modules/@anthropic-ai/claude-code/cli.js "$@"

@@ -121,26 +121,40 @@
   flex-direction: column; /* Stack content vertically */
 }
 
-/* Header section of the area card */
+/* Header section of the area card - simplified to just contain the name */
 .area-card-header {
-  display: flex; /* Arrange items */
-  align-items: center; /* Align vertically */
-  justify-content: space-between; /* Push name and actions apart */
-  margin-bottom: 0.4rem; /* Space below header */
+  margin-bottom: 0.6rem; /* Space below header */
 }
 
-/* Location area name */
+/* Location area name - main content, full width */
 .area-name {
   font-weight: 500; /* Medium weight */
-  font-size: 1rem; /* Font size */
+  font-size: 1.1rem; /* Slightly larger font size for prominence */
   color: var(--text-color); /* Standard text color */
+  margin-bottom: 0.8rem; /* Space below name */
+  line-height: 1.3; /* Better line spacing */
 }
 
-/* Container for action buttons within the area card */
+/* Container for action buttons - moved below color bar */
 .area-actions {
   display: flex; /* Arrange buttons */
-  gap: 0.3rem; /* Space between buttons */
-  flex-shrink: 0; /* Prevent shrinking */
+  gap: 0.4rem; /* Space between buttons */
+  justify-content: flex-start; /* Align left */
+  margin-top: 0.8rem; /* Space above buttons (after color) */
+  padding-top: 0.6rem; /* Padding above buttons */
+  border-top: 1px solid var(--border-color); /* Subtle separator */
+}
+
+/* Make admin action buttons smaller and more contained - match department page */
+.area-actions .btn,
+.location-actions .btn,
+.location-table .btn {
+  padding: 0.3rem 0.6rem !important; /* Department page sizing */
+  font-size: 0.8rem !important; /* Department page sizing */
+  border-radius: 4px !important; /* Department page sizing */
+  min-width: auto !important; /* Remove minimum width constraints */
+  white-space: nowrap !important; /* Prevent text wrapping */
+  line-height: 1.2; /* Better text spacing */
 }
 
 /* Color bar indicating the area's color */
@@ -156,8 +170,8 @@
 .area-location-count {
   font-size: 0.8rem; /* Smaller font */
   color: var(--text-light); /* Lighter text */
-  margin-top: auto; /* Push to bottom */
-  padding-top: 0.5rem; /* Space above if content is short */
+  margin-top: 0.4rem; /* Space above count, below color bar */
+  font-style: italic; /* Make it more subtle */
 }
 
 /* === LOCATION FORM CONTAINER === */
@@ -184,5 +198,247 @@
 
 /* Note: Modal styles (.modal, .modal-content, etc.) removed. */
 /* Rely on common styles from modals.css */
+
+/* === LOCATION SEARCH STYLES === */
+/* Smart location search interface */
+.form-group {
+  position: relative;
+}
+
+/* Create a search container to control positioning */
+.search-container {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Location search input */
+#location-search {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+#location-search:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Search results dropdown - positioned immediately below input */
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+}
+
+.search-results.show {
+  display: block;
+}
+
+/* Individual search result */
+.search-result {
+  padding: 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid #e5e5e5;
+  transition: background-color 0.2s ease;
+  background: white;
+}
+
+.search-result:hover {
+  background-color: #f8f9ff;
+}
+
+.search-result:last-child {
+  border-bottom: none;
+}
+
+.search-result-title {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.search-result-address {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Popular locations section */
+.popular-locations {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+}
+
+.popular-locations h4 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Popular locations grid */
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+/* Popular location item */
+.popular-location {
+  padding: 0.6rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.popular-location:hover {
+  background-color: #f8f9ff;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.popular-location-name {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.popular-location-country {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Selected address field styling */
+#location-address {
+  background-color: #f8f9fa;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Loading state */
+.search-loading {
+  padding: 1rem;
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* No results state */
+.search-no-results {
+  padding: 1rem;
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .popular-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-results {
+    position: fixed;
+    top: auto;
+    left: 1rem;
+    right: 1rem;
+    max-height: 50vh;
+  }
+}
+
+/* Light mode overrides */
+body.light-theme .area-card {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .location-form {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .content-container {
+    color: var(--text-primary);
+}
+
+body.light-theme .location-list h3,
+body.light-theme .location-area-section h3 {
+    color: var(--text-heading);
+}
+
+body.light-theme .location-list p,
+body.light-theme .location-area-section p {
+    color: var(--text-primary);
+}
+
+body.light-theme .area-name {
+    color: var(--text-primary);
+}
+
+body.light-theme .area-location-count {
+    color: var(--text-secondary);
+}
+
+body.light-theme .area-actions {
+    border-top-color: var(--border-color);
+}
+
+body.light-theme .location-table th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+body.light-theme .location-table td {
+    border-bottom-color: var(--border-color);
+}
+
+body.light-theme .search-results {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .search-result {
+    background: var(--background-secondary);
+}
+
+body.light-theme .search-result:hover {
+    background: var(--background-hover);
+}
+
+body.light-theme .popular-locations {
+    background-color: var(--background-tertiary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .popular-location {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .popular-location:hover {
+    background: var(--background-hover);
+    border-color: var(--primary-blue);
+}
 
 /* --- End Location Management Styles --- */

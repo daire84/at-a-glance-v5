@@ -103,6 +103,13 @@
   margin-top: auto; /* Push actions to bottom */
 }
 
+/* Make admin action buttons smaller and more contained */
+.department-actions .btn {
+  padding: 0.4rem 0.8rem; /* Smaller padding */
+  font-size: 0.85rem; /* Smaller font */
+  border-radius: 4px; /* Smaller border radius */
+}
+
 /* === DEPARTMENT TAG PREVIEW === */
 /* Small preview of how the department tag will look */
 .department-tag-preview {
@@ -137,5 +144,33 @@
 
 /* Note: Modal styles (.modal, .modal-content, etc.) removed. */
 /* Rely on common styles from modals.css */
+
+/* Light mode overrides */
+body.light-theme .department-card {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .add-department-form {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .department-name {
+    color: var(--text-primary);
+}
+
+body.light-theme .department-description {
+    color: var(--text-secondary);
+}
+
+body.light-theme .tag-preview-label {
+    color: var(--text-primary);
+}
+
+body.light-theme .department-code {
+    background-color: var(--background-tertiary);
+    color: var(--text-primary);
+}
 
 /* --- End Department Management Styles --- */

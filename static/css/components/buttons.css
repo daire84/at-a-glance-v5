@@ -1,0 +1,177 @@
+/* STRIPS Button System */
+
+/* Base Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+    user-select: none;
+    font-family: var(--font-family-base);
+}
+
+/* Primary Button - STRIPS Gradient */
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-blue-sm);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-blue-md);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-blue-sm);
+}
+
+/* Secondary Button - Outlined */
+.btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+    background: rgba(79, 195, 247, 0.05);
+}
+
+/* Danger Button */
+.btn-danger {
+    background: var(--error-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Success Button */
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+/* Warning Button */
+.btn-warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+}
+
+/* Info Button */
+.btn-info {
+    background: var(--info-color);
+    color: white;
+}
+
+.btn-info:hover {
+    background: #0ea5e9;
+    transform: translateY(-1px);
+}
+
+/* Button Sizes */
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: var(--font-size-sm);
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: var(--font-size-lg);
+}
+
+.btn-xl {
+    padding: 1.25rem 2.5rem;
+    font-size: var(--font-size-xl);
+}
+
+/* Button States */
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn:disabled:hover,
+.btn.disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Button with Icon */
+.btn .nav-icon {
+    font-size: 1.1em;
+}
+
+/* Link Button - appears as link but has button padding */
+.btn-link {
+    background: transparent;
+    color: var(--primary-blue);
+    border: none;
+    padding: 0.25rem 0.5rem;
+    text-decoration: underline;
+}
+
+.btn-link:hover {
+    color: var(--primary-pink);
+    text-decoration: none;
+}
+
+/* Ghost Button - subtle background */
+.btn-ghost {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    border: 1px solid transparent;
+}
+
+.btn-ghost:hover {
+    background: var(--background-tertiary);
+    border-color: var(--border-color);
+}
+
+/* Light mode overrides */
+body.light-theme .btn-secondary {
+    background: white;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .btn-secondary:hover {
+    background: #f0f7ff;
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+body.light-theme .btn-ghost {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+}
+
+body.light-theme .btn-ghost:hover {
+    background: var(--background-tertiary);
+}

@@ -20,10 +20,99 @@
 
 /* === MAIN CONTAINER LAYOUT === */
 .help-container {
-  display: flex;
-  gap: 2rem;
+  display: block;
   margin-top: 1.5rem;
   color: var(--text-color);
+  width: 100%;
+  max-width: 100%;
+}
+
+/* === HEADER SECTION === */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* === HELP NAVIGATION CARDS === */
+.help-nav {
+  margin-bottom: 3rem;
+}
+
+.help-nav-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.help-nav-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.help-nav-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-blue);
+}
+
+.help-nav-card h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.help-nav-card p {
+  margin: 0 0 1rem 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.nav-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal);
+}
+
+.nav-card-link:hover {
+  color: var(--primary-blue-dark);
+  transform: translateX(4px);
+}
+
+/* === HELP LAYOUT === */
+.help-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
 }
 
 /* === TABLE OF CONTENTS SIDEBAR === */
@@ -41,6 +130,13 @@
   border-radius: 8px;
   padding: 1rem;
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
+}
+
+.toc-container:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
 }
 
 .toc-container h3 {
@@ -89,8 +185,8 @@
 
 /* === MAIN CONTENT AREA === */
 .help-content {
-  flex: 1;
-  max-width: 850px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .help-section {
@@ -153,6 +249,13 @@
   border-radius: 8px;
   overflow: hidden;
   background-color: var(--background-alt);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.help-image-container:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .help-image {
@@ -176,6 +279,14 @@
   border-radius: 8px;
   background-color: rgba(var(--accent-color-rgb, 41, 182, 246), 0.1);
   border-left: 4px solid var(--accent-color);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.tip-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background-color: rgba(var(--accent-color-rgb, 41, 182, 246), 0.15);
 }
 
 .tip-box h4 {
@@ -193,13 +304,23 @@
 /* === FAQ ITEMS === */
 .faq-item {
   margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding: 1.2rem;
   border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-alt);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.faq-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  background-color: var(--background-secondary);
 }
 
 .faq-item:last-child {
   border-bottom: none;
-  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .faq-item h4 {
@@ -241,16 +362,11 @@
 /* === RESPONSIVE ADJUSTMENTS === */
 @media (max-width: 992px) {
   .help-container {
-    flex-direction: column;
+    display: block;
   }
   
   .help-sidebar {
-    flex: none;
-    position: relative;
-    top: 0;
-    width: 100%;
-    max-height: none;
-    margin-bottom: 1.5rem;
+    display: none; /* Hide sidebar if it exists */
   }
 }
 
@@ -267,4 +383,414 @@
   .section-content h4 {
     font-size: 1rem;
   }
+}
+
+/* Light mode overrides */
+body.light-theme .help-container {
+    color: var(--text-primary);
+}
+
+body.light-theme .toc-container {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .toc-container h3 {
+    color: var(--text-heading);
+}
+
+body.light-theme .toc-link {
+    color: var(--text-primary);
+}
+
+body.light-theme .toc-link:hover {
+    background-color: rgba(79, 195, 247, 0.1);
+    color: var(--primary-blue);
+}
+
+body.light-theme .toc-link.active {
+    background-color: rgba(79, 195, 247, 0.15);
+    color: var(--primary-blue);
+}
+
+body.light-theme .help-section {
+    border-bottom-color: var(--border-color);
+}
+
+body.light-theme .help-section h2 {
+    color: var(--text-heading);
+    border-bottom-color: rgba(79, 195, 247, 0.3);
+}
+
+body.light-theme .subsection h3 {
+    color: var(--primary-blue);
+}
+
+body.light-theme .subsection h4,
+body.light-theme .section-content h4 {
+    color: var(--text-primary);
+}
+
+body.light-theme .help-image-container {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .image-caption {
+    color: var(--text-secondary);
+    border-top-color: var(--border-color);
+}
+
+body.light-theme .tip-box {
+    background-color: rgba(79, 195, 247, 0.1);
+    border-left-color: var(--primary-blue);
+}
+
+body.light-theme .tip-box h4 {
+    color: var(--primary-blue);
+}
+
+body.light-theme .faq-item {
+    border-bottom-color: var(--border-color);
+    background-color: var(--background-secondary);
+}
+
+body.light-theme .faq-item:hover {
+    background-color: var(--background-tertiary);
+}
+
+body.light-theme .faq-item h4 {
+    color: var(--text-primary);
+}
+
+/* === MAIN HELP PAGE SPECIFIC STYLES === */
+/* Help navigation cards */
+.help-nav {
+    margin: 2rem 0;
+}
+
+.help-nav-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.help-nav-card {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+}
+
+.help-nav-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-blue);
+}
+
+.help-nav-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.help-nav-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Help section styling */
+.help-section {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.help-section:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.help-section-title {
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-blue);
+    padding-bottom: 0.5rem;
+}
+
+.help-section-content {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Feature list styling */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.feature-list li {
+    background: rgba(79, 195, 247, 0.1);
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    border-radius: 6px;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    transition: all var(--transition-normal);
+}
+
+.feature-list li:hover {
+    background: rgba(79, 195, 247, 0.15);
+    transform: translateX(4px);
+}
+
+.feature-list li strong {
+    color: var(--primary-blue);
+}
+
+/* Access levels styling */
+.access-levels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.access-level {
+    background: rgba(255, 107, 157, 0.05);
+    border: 1px solid rgba(255, 107, 157, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all var(--transition-normal);
+}
+
+.access-level:hover {
+    background: rgba(255, 107, 157, 0.1);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.access-level h4 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: var(--primary-pink);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.access-level ul {
+    list-style: none;
+    padding: 0;
+}
+
+.access-level li {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    margin-bottom: 0.4rem;
+    border-left: 3px solid var(--primary-pink);
+}
+
+/* Getting started steps */
+.getting-started-steps {
+    margin-top: 1rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: rgba(255, 213, 79, 0.05);
+    border: 1px solid rgba(255, 213, 79, 0.2);
+    border-radius: 8px;
+    padding: 1.2rem;
+    transition: all var(--transition-normal);
+}
+
+.step:hover {
+    background: rgba(255, 213, 79, 0.1);
+    transform: translateX(4px);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-yellow);
+    color: #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.step-content h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.step-content p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+/* Contact info styling */
+.contact-info {
+    background: var(--background-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.contact-item {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    background: rgba(79, 195, 247, 0.05);
+    border-radius: 6px;
+    border-left: 4px solid var(--primary-blue);
+}
+
+.contact-item:last-child {
+    margin-bottom: 0;
+}
+
+.contact-item strong {
+    color: var(--primary-blue);
+}
+
+/* Light mode overrides for main help page */
+body.light-theme .help-nav-card {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .help-nav-card h3 {
+    color: var(--primary-blue);
+}
+
+body.light-theme .help-nav-card p {
+    color: var(--text-secondary);
+}
+
+body.light-theme .help-section {
+    background: var(--background-secondary);
+    border-color: var(--border-color);
+}
+
+body.light-theme .help-section-title,
+body.light-theme .help-section-content,
+body.light-theme .step-content h4 {
+    color: var(--text-primary);
+}
+
+body.light-theme .step-content p {
+    color: var(--text-secondary);
+}
+
+body.light-theme .contact-info {
+    background: var(--background-tertiary);
+    border-color: var(--border-color);
+}
+
+/* Responsive design fixes */
+@media (max-width: 1200px) {
+    .help-nav-cards {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    
+    .access-levels {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .help-nav-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .access-levels {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .help-nav-card {
+        padding: 1rem;
+    }
+    
+    .help-section {
+        padding: 1.5rem;
+    }
+    
+    .access-level {
+        padding: 1rem;
+    }
+    
+    .step {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+    
+    .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+}
+
+/* Container width constraints */
+.help-container,
+.help-content,
+.help-nav,
+.help-section {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Ensure proper full-width layout */
+.help-container {
+    margin: 1.5rem auto 0;
+    padding: 0;
+}
+
+.help-nav {
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.help-content {
+    width: 100%;
+    margin: 0;
+}
+
+.help-section {
+    width: 100%;
+    margin-bottom: 2rem;
 }

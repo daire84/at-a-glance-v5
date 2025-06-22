@@ -1,46 +1,82 @@
 {% extends "base.html" %}
 
-{% block title %}Special Dates Management - Schedule, At a Glance!{% endblock %}
+{% block title %}Special Dates Management - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/dates.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>Special Dates Management</h2>
-    <div class="admin-actions">
-        {% if project_id %}
-            {# Points to 'admin_calendar' function in 'admin' blueprint, passing project_id #}
-            <a href="{{ url_for('admin.admin_calendar', project_id=project_id) }}" class="button secondary">Back to Calendar</a>
-        {% endif %}
+<!-- Admin Special Dates Header -->
+<div class="admin-dates-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">📅</span>
+                Special Dates Management
+            </h1>
+            <p class="admin-page-description">
+                Configure working weekends, holidays, hiatus periods, and special production dates
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            {% if project_id %}
+                <a href="{{ url_for('admin.admin_calendar', project_id=project_id) }}" class="btn btn-primary">
+                    <span class="nav-icon">📅</span>
+                    Back to Calendar
+                </a>
+            {% endif %}
+        </div>
     </div>
 </div>
 
-<!-- Admin Navigation Tabs -->
-<div class="admin-tabs">
-    {# Points to 'admin_dashboard' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_dashboard') }}">Projects</a>
-    {# Points to 'admin_locations' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
-    {# Points to 'admin_departments' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_departments') }}">Departments</a>
-    {# Points to 'admin_dates' function in 'admin' blueprint (without project_id for the main tab link) #}
-    <a href="{{ url_for('admin.admin_dates') }}" class="active">Special Dates</a>
-    {# Points to the 'help' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_help') }}">Help</a>
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab active">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
 </div>
 
-<div class="content-container">
-    <div class="project-selector form-group">
-        <p>Manage Special dates as per your current project requirements.</p>
-        <label for="project-select">Select Project</label>
-        <select id="project-select" name="project">
-            <option value="">-- Select Project --</option>
-            {% for project in projects %}
-            <option value="{{ project.id }}" {% if project_id == project.id %}selected{% endif %}>{{ project.title }}</option>
-            {% endfor %}
-        </select>
+<!-- Special Dates Content -->
+<div class="admin-content">
+    <div class="admin-section">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="nav-icon">💼</span>
+                Project Selection
+            </div>
+            <p class="section-description">Manage special dates as per your current project requirements.</p>
+        </div>
+        <div class="project-selector-wrapper">
+            <div class="form-group">
+                <label for="project-select">Select Project</label>
+                <select id="project-select" name="project" class="form-control">
+                    <option value="">-- Select Project --</option>
+                    {% for project in projects %}
+                    <option value="{{ project.id }}" {% if project_id == project.id %}selected{% endif %}>{{ project.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
     </div>
     
     {% if project_id %}
@@ -54,7 +90,10 @@
                 <div class="section-content">
                     <p>Select weekend dates (Saturday/Sunday) that will count as shooting days.</p>
                     
-                    <button id="add-weekend-btn" class="button">Add Working Weekend</button>
+                    <button id="add-weekend-btn" class="btn btn-primary">
+                        <span class="nav-icon">➕</span>
+                        Add Working Weekend
+                    </button>
                     
                     <div class="date-list" id="weekend-list">
                         <!-- Weekend dates will be added here dynamically -->
@@ -74,7 +113,10 @@
                 <div class="section-content">
                     <p>Add bank holidays and specify whether they will be working days.</p>
                     
-                    <button id="add-holiday-btn" class="button">Add Bank Holiday</button>
+                    <button id="add-holiday-btn" class="btn btn-primary">
+                        <span class="nav-icon">➕</span>
+                        Add Bank Holiday
+                    </button>
                     
                     <div class="date-list" id="holiday-list">
                         <!-- Bank holiday dates will be added here dynamically -->
@@ -96,7 +138,10 @@
                 <div class="section-content">
                     <p>Define hiatus periods when production will be paused. Calendar days will be skipped during these periods.</p>
                     
-                    <button id="add-hiatus-btn" class="button">Add Hiatus Period</button>
+                    <button id="add-hiatus-btn" class="btn btn-primary">
+                        <span class="nav-icon">➕</span>
+                        Add Hiatus Period
+                    </button>
                     
                     <div class="date-list" id="hiatus-list">
                         <!-- Hiatus periods will be added here dynamically -->
@@ -116,7 +161,10 @@
                 <div class="section-content">
                     <p>Add travel days, production meetings, or other non-shooting days that should be highlighted.</p>
                     
-                    <button id="add-special-btn" class="button">Add Special Date</button>
+                    <button id="add-special-btn" class="btn btn-primary">
+                        <span class="nav-icon">➕</span>
+                        Add Special Date
+                    </button>
                     
                     <div class="date-list" id="special-list">
                         <!-- Special dates will be added here dynamically -->
@@ -131,11 +179,18 @@
     </div>
     
     <div class="action-row">
-        <button id="regenerate-calendar-btn" class="button">Regenerate Calendar</button>
+        <button id="regenerate-calendar-btn" class="btn btn-primary">
+            <span class="nav-icon">🔄</span>
+            Regenerate Calendar
+        </button>
     </div>
     {% else %}
     <div class="empty-state">
-        <p>Please select a project to manage special dates.</p>
+        <div class="empty-state-icon">📅</div>
+        <h3 class="empty-state-title">No Project Selected</h3>
+        <p class="empty-state-description">
+            Please select a project to manage special dates.
+        </p>
     </div>
     {% endif %}
 </div>
@@ -169,8 +224,14 @@
           </form>
       </div>
       <div class="modal-footer">
-          <button class="button secondary" data-close-modal="weekend-modal">Cancel</button>
-          <button class="button" id="save-weekend-btn">Save Weekend</button>
+          <button class="btn btn-secondary" data-close-modal="weekend-modal">
+              <span class="nav-icon">❌</span>
+              Cancel
+          </button>
+          <button class="btn btn-primary" id="save-weekend-btn">
+              <span class="nav-icon">💾</span>
+              Save Weekend
+          </button>
       </div>
   </div>
 </div>
@@ -208,8 +269,14 @@
           </form>
       </div>
       <div class="modal-footer">
-          <button class="button secondary" data-close-modal="holiday-modal">Cancel</button>
-          <button class="button" id="save-holiday-btn">Save Holiday</button>
+          <button class="btn btn-secondary" data-close-modal="holiday-modal">
+              <span class="nav-icon">❌</span>
+              Cancel
+          </button>
+          <button class="btn btn-primary" id="save-holiday-btn">
+              <span class="nav-icon">💾</span>
+              Save Holiday
+          </button>
       </div>
   </div>
 </div>
@@ -252,8 +319,14 @@
           </form>
       </div>
       <div class="modal-footer">
-          <button class="button secondary" data-close-modal="hiatus-modal">Cancel</button>
-          <button class="button" id="save-hiatus-btn">Save Hiatus</button>
+          <button class="btn btn-secondary" data-close-modal="hiatus-modal">
+              <span class="nav-icon">❌</span>
+              Cancel
+          </button>
+          <button class="btn btn-primary" id="save-hiatus-btn">
+              <span class="nav-icon">💾</span>
+              Save Hiatus
+          </button>
       </div>
   </div>
 </div>
@@ -301,8 +374,14 @@
           </form>
       </div>
       <div class="modal-footer">
-          <button class="button secondary" data-close-modal="special-modal">Cancel</button>
-          <button class="button" id="save-special-btn">Save Special Date</button>
+          <button class="btn btn-secondary" data-close-modal="special-modal">
+              <span class="nav-icon">❌</span>
+              Cancel
+          </button>
+          <button class="btn btn-primary" id="save-special-btn">
+              <span class="nav-icon">💾</span>
+              Save Special Date
+          </button>
       </div>
   </div>
 </div>

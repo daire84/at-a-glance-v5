@@ -98,6 +98,12 @@
   .calendar-row.filtered-hidden {
     display: none;
   }
+
+  /* === LIGHT MODE OVERRIDES === */
+  body.light-theme .calendar-container {
+    background-color: var(--background-secondary);
+    border-color: var(--border-color);
+  }
   
   .calendar-row.search-hidden {
     display: none !important;

@@ -21,13 +21,34 @@
 /* Enhanced @media print section with location area color fixes */
 
 @media print {
-    /* Global color adjustment for printing */
+    /* Global color adjustment for printing - SELECTIVE light mode forcing */
     html, body {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
-      color-adjust: exact !important; /* Modern browsers */
-      color: #323233 !important; /* Dark text */
+      color-adjust: exact !important;
+      color: #323233 !important;
       background-color: white !important;
+    }
+    
+    /* Force ONLY main containers to light mode - preserve colored elements */
+    .calendar-container,
+    .calendar-viewer-header,
+    .viewer-header-content,
+    .viewer-header-left,
+    .calendar-table-wrapper {
+        background-color: white !important;
+        color: #323233 !important;
+        border-color: #ddd !important;
+    }
+    
+    /* Force text elements to dark color but preserve backgrounds */
+    .viewer-project-title,
+    .project-info-header h1, 
+    .project-info-header h2, 
+    .project-info-header h3,
+    .text-primary:not(.department-tag):not(.area-tag):not(.script-value),
+    .text-secondary:not(.department-tag):not(.area-tag):not(.script-value) {
+        color: #323233 !important;
     }
     
     /* Reset all colors to light theme for printing */
@@ -439,9 +460,153 @@
     .calendar-mobile-controls,
     .zoom-controls,
     .theme-toggle-btn,
-    .scroll-hint {
+    .scroll-hint,
+    .version-selector-wrapper,
+    .version-selector,
+    .calendar-viewer-header,
+    .viewer-header-content,
+    .viewer-header-left,
+    .viewer-header-right,
+    .viewer-header-center,
+    .compact-filters,
+    .compact-filters-wrapper,
+    .compact-filters-header,
+    .compact-filters-grid,
+    .compact-filter-group,
+    .compact-search-section,
+    .compact-filter-toggles,
+    .filter-info-container,
+    .location-filter-section,
+    .location-filter-title,
+    .location-filter-help,
+    .filter-help-text,
+    .search-filter,
+    .department-filter,
+    .location-filter,
+    .date-filter,
+    .filter-buttons,
+    .filter-toggle,
+    .toggle-buttons,
+    .filter-controls,
+    .edit-calendar,
+    .btn:not(.print-visible) {
         display: none !important;
     }
+    
+    /* Force main header to light mode and remove blur effects */
+    .app-header,
+    .app-header *,
+    .header-content,
+    .header-content *,
+    .logo-section,
+    .logo-section *,
+    .logo-icon,
+    .app-title,
+    .app-title a,
+    .app-subtitle,
+    .main-nav,
+    .nav-list,
+    .nav-item,
+    .nav-link {
+        background-color: white !important;
+        background: white !important;
+        color: #323233 !important;
+        border-color: #ddd !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Clean up any remaining viewer header styling (now hidden) */
+    
+    /* Remove ALL blur effects and filters that could cause print issues */
+    *,
+    *::before,
+    *::after {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        -webkit-filter: none !important;
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+    }
+    
+    /* Override ONLY essential dark mode variables - preserve color functionality */
+    :root,
+    body.dark-theme {
+        --background-primary: white !important;
+        --background-secondary: white !important;
+        --border-color: #ddd !important;
+    }
+    
+    /* Light mode for main containers only - preserve colored elements */
+    .calendar-container,
+    .calendar-table {
+        background-color: white !important;
+    }
+    
+    /* PRESERVE all colored elements - CRITICAL for functionality */
+    .department-tag,
+    .area-tag, 
+    .script-value,
+    .script-item,
+    .counter-item,
+    .counter-label,
+    .counter-value,
+    .area-count,
+    .calendar-row.has-area-color,
+    .calendar-row.weekend,
+    .calendar-row.prep,
+    .calendar-row.shoot,
+    .calendar-row.hiatus,
+    .calendar-row.holiday,
+    .calendar-row.working-weekend,
+    [style*="background-color"],
+    [style*="color"] {
+        /* Do not override background colors - preserve existing functionality */
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Ensure script colors are preserved */
+    .script-label,
+    .script-value,
+    .script-item * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Improve print layout spacing */
+    .app-header {
+        border-bottom: 1pt solid #ddd !important;
+        margin-bottom: 0.3cm !important;
+        padding: 0.2cm 0 !important;
+    }
+    
+    .calendar-viewer-header {
+        border-bottom: 1pt solid #ddd !important;
+        margin-bottom: 0.3cm !important;
+        padding: 0.2cm 0 !important;
+    }
+    
+    /* Beautiful gradient title for print header */
+    .app-title a {
+        text-decoration: none !important;
+        background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 25%, #03A9F4 50%, #0288D1 75%, #0277BD 100%) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        color: transparent !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
     
     /* When printing table view - hide calendar view */
     body.print-table-view .calendar-view {
@@ -463,9 +628,9 @@
     
     /* ... your existing rules ... */
     
-    /* Force page break before calendar table in table view */
+    /* Smart page break for table view - only if needed */
     body.print-table-view .calendar-table-wrapper {
-        page-break-before: always !important;
+        page-break-before: auto !important;
         page-break-inside: auto !important;
     }
     
@@ -478,9 +643,23 @@
         page-break-inside: avoid !important;
     }
     
-    /* Force the last counter section to break to new page before table */
-    body.print-table-view .location-counters {
-        page-break-after: always !important;
+    /* Smart page break organization - avoid blank pages */
+    /* Keep sections together on first page */
+    .project-info-header,
+    .department-counters,
+    .location-areas,
+    .location-counters {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+    }
+    
+    /* Only break before table if needed (not forced) */
+    .calendar-table-wrapper {
+        page-break-before: auto !important;
+    }
+    
+    .calendar-table {
+        page-break-before: auto !important;
     }
     
     /* Page layout settings */

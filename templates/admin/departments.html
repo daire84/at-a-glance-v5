@@ -1,46 +1,85 @@
 {% extends "base.html" %}
 
-{% block title %}Department Management - Schedule, At a Glance!{% endblock %}
+{% block title %}Department Management - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/departments.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>Department Management</h2>
-    <div class="admin-actions">
-        <button id="add-department-btn" class="button">Add Department</button>
-        {# Points to 'admin_dashboard' function in 'admin' blueprint #}
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="button secondary">Back to Dashboard</a>
+<!-- Admin Departments Header -->
+<div class="admin-departments-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">👥</span>
+                Department Management
+            </h1>
+            <p class="admin-page-description">
+                Manage production departments and their color-coded calendar tags
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            <button id="add-department-btn" class="btn btn-primary">
+                <span class="nav-icon">➕</span>
+                Add Department
+            </button>
+        </div>
     </div>
 </div>
 
-<!-- Admin Navigation Tabs -->
-<div class="admin-tabs">
-    {# Points to 'admin_dashboard' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_dashboard') }}">Projects</a>
-    {# Points to 'admin_locations' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_locations') }}">Locations</a>
-    {# Points to 'admin_departments' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_departments') }}" class="active">Departments</a>
-    {# Points to 'admin_dates' function in 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_dates') }}">Special Dates</a>
-    {# Points to the 'help' function in the 'admin' blueprint #}
-    <a href="{{ url_for('admin.admin_help') }}">Help</a>
+<!-- Admin Navigation -->
+<div class="admin-navigation">
+    <nav class="admin-nav-tabs">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="admin-nav-tab">
+            <span class="nav-icon">📋</span>
+            Projects
+        </a>
+        <a href="{{ url_for('admin.admin_locations') }}" class="admin-nav-tab">
+            <span class="nav-icon">📍</span>
+            Locations
+        </a>
+        <a href="{{ url_for('admin.admin_departments') }}" class="admin-nav-tab active">
+            <span class="nav-icon">👥</span>
+            Departments
+        </a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="admin-nav-tab">
+            <span class="nav-icon">📅</span>
+            Special Dates
+        </a>
+        <a href="{{ url_for('admin.admin_help') }}" class="admin-nav-tab">
+            <span class="nav-icon">❔</span>
+            Help
+        </a>
+    </nav>
 </div>
 
-<div class="content-container">
-    <h3>Departments</h3>
-    <p>Manage departments and their tag appearance on the calendar. Department tags allow you to track how many days each department is needed.</p>
+<!-- Departments Content -->
+<div class="admin-content">
+    <div class="admin-section">
+        <div class="section-header">
+            <div class="section-title">
+                <span class="nav-icon">👥</span>
+                Departments
+            </div>
+            <p class="section-description">Manage departments and their tag appearance on the calendar. Department tags allow you to track how many days each department is needed.</p>
+        </div>
     
     <div class="department-grid" id="department-grid">
         <!-- Department cards will be added here dynamically -->
     </div>
     
-    <div id="no-departments" class="empty-state">
-        <p>No departments have been added yet.</p>
-        <p>Click "Add Department" to create your first department.</p>
+        <div id="no-departments" class="empty-state">
+            <div class="empty-state-icon">👥</div>
+            <h3 class="empty-state-title">No Departments Yet</h3>
+            <p class="empty-state-description">
+                Add production departments to track their involvement on your calendar.
+            </p>
+            <button class="btn btn-primary" onclick="document.getElementById('add-department-btn').click()">
+                <span class="nav-icon">➕</span>
+                Add First Department
+            </button>
+        </div>
     </div>
 </div>
 
@@ -85,8 +124,14 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="button secondary" data-close-modal="department-modal">Cancel</button>
-            <button class="button" id="save-department-btn">Save Department</button>
+            <button class="btn btn-secondary" data-close-modal="department-modal">
+                <span class="nav-icon">❌</span>
+                Cancel
+            </button>
+            <button class="btn btn-primary" id="save-department-btn">
+                <span class="nav-icon">💾</span>
+                Save Department
+            </button>
         </div>
     </div>
 </div>
@@ -202,8 +247,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="department-description">${department.description || 'No description provided.'}</div>
                 </div>
                 <div class="department-actions">
-                    <button class="button small edit-department" data-id="${department.id}">Edit</button>
-                    <button class="button small danger delete-department" data-id="${department.id}">Delete</button>
+                    <button class="btn btn-secondary btn-small edit-department" data-id="${department.id}">
+                        <span class="nav-icon">✏️</span>
+                        Edit
+                    </button>
+                    <button class="btn btn-danger btn-small delete-department" data-id="${department.id}">
+                        <span class="nav-icon">🗑️</span>
+                        Delete
+                    </button>
                 </div>
             `;
             

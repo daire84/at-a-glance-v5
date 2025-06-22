@@ -630,7 +630,7 @@ function loadFilterPreferences() {
             'filter-weekends': 'hideWeekends', 'filter-prep': 'hidePrep',
             'filter-holidays': 'hideHolidays', 'filter-hiatus': 'hideHiatus',
             'filter-shoot': 'hideShoot', 'filter-col-sequence': 'hideColSequence',
-            'filter-col-second-unit': 'hideColSecondUnit'
+            'filter-col-second-unit': 'hideColSecondUnit', 'filter-col-sun-times': 'hideColSunTimes'
         };
 
         for (const [elementId, prefKey] of Object.entries(mappings)) {
@@ -657,7 +657,7 @@ function saveFilterPreferences() {
         'filter-weekends': 'hideWeekends', 'filter-prep': 'hidePrep',
         'filter-holidays': 'hideHolidays', 'filter-hiatus': 'hideHiatus',
         'filter-shoot': 'hideShoot', 'filter-col-sequence': 'hideColSequence',
-        'filter-col-second-unit': 'hideColSecondUnit'
+        'filter-col-second-unit': 'hideColSecondUnit', 'filter-col-sun-times': 'hideColSunTimes'
     };
 
     for (const [elementId, prefKey] of Object.entries(mappings)) {
@@ -696,7 +696,7 @@ function applyAllFilters() {
 
     // Apply column filters
     const colMappings = {
-        'filter-col-sequence': 'sequence', 'filter-col-second-unit': 'second-unit'
+        'filter-col-sequence': 'sequence', 'filter-col-second-unit': 'second-unit', 'filter-col-sun-times': 'sun-times'
     };
     for (const [elementId, colName] of Object.entries(colMappings)) {
         const toggle = document.getElementById(elementId);
@@ -796,7 +796,7 @@ function initializeFilters() {
         'filter-hiatus': 'hiatus', 'filter-shoot': 'shoot'
     };
     const colMappings = {
-        'filter-col-sequence': 'sequence', 'filter-col-second-unit': 'second-unit'
+        'filter-col-sequence': 'sequence', 'filter-col-second-unit': 'second-unit', 'filter-col-sun-times': 'sun-times'
     };
 
     // Load saved preferences BEFORE applying initial filters

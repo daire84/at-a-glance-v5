@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Day - {{ day.date }} - Schedule, At a Glance!{% endblock %}
+{% block title %}Edit Day - {{ day.date }} - STRIPS{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
@@ -9,18 +9,38 @@
 {% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h2>
-        {% if day.isPrep %}
-            Edit Prep Day
-        {% else %}
-            Edit Shoot Day {{ day.shootDay if day.shootDay }}
-        {% endif %}
-         <span style="font-weight: normal; font-size: 0.9em;">({{ day.date }})</span>
-    </h2>
-    <div class="admin-actions">
-        <button id="exit-editor" class="button secondary">Exit Editor</button>
-        <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="button secondary">Back to Calendar</a>
+<!-- Admin Day Editor Header -->
+<div class="admin-day-header">
+    <div class="admin-header-content">
+        <div class="admin-header-left">
+            <h1 class="admin-page-title">
+                <span class="nav-icon">
+                    {% if day.isPrep %}
+                        🔧
+                    {% else %}
+                        🎦
+                    {% endif %}
+                </span>
+                {% if day.isPrep %}
+                    Edit Prep Day
+                {% else %}
+                    Edit Shoot Day {{ day.shootDay if day.shootDay }}
+                {% endif %}
+            </h1>
+            <p class="admin-page-description">
+                {{ day.dayOfWeek }}, {{ day.date }} - {{ project.title or 'Untitled Project' }}
+            </p>
+        </div>
+        <div class="admin-header-actions">
+            <button id="exit-editor" class="btn btn-secondary">
+                <span class="nav-icon">❌</span>
+                Exit Editor
+            </button>
+            <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary">
+                <span class="nav-icon">🔙</span>
+                Back to Calendar
+            </a>
+        </div>
     </div>
 </div>
 
@@ -56,7 +76,9 @@
     <span class="status-text">Changes saved</span>
 </div>
 
-<div class="form-container">
+<!-- Day Editor Content -->
+<div class="admin-content">
+<div class="admin-day-editor">
     <div class="day-header">
         <h3>{{ day.dayOfWeek }}, {{ day.date }}</h3>
     </div>
@@ -166,26 +188,29 @@
         <!-- Enhanced Form Actions -->
         <div class="form-actions enhanced-actions">
             <div class="action-group primary-actions">
-                <button type="button" id="save-stay" class="button">Save Changes</button>
-                <button type="button" id="save-exit" class="button secondary">Save & Exit</button>
+                <button type="button" id="save-stay" class="btn btn-primary">
+                    <span class="nav-icon">💾</span>
+                    Save Changes
+                </button>
+                <button type="button" id="save-exit" class="btn btn-secondary">
+                    <span class="nav-icon">💾</span>
+                    Save & Exit
+                </button>
             </div>
             
             <div class="action-group navigation-actions">
-                <button type="button" id="prev-day-bottom" class="button nav-button-bottom">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15,18 9,12 15,6"></polyline>
-                    </svg>
+                <button type="button" id="prev-day-bottom" class="btn btn-secondary nav-button-bottom">
+                    <span class="nav-icon">←</span>
                     Previous
                 </button>
-                <button type="button" id="next-day-bottom" class="button nav-button-bottom">
+                <button type="button" id="next-day-bottom" class="btn btn-secondary nav-button-bottom">
                     Next
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9,18 15,12 9,6"></polyline>
-                    </svg>
+                    <span class="nav-icon">→</span>
                 </button>
             </div>
         </div>
     </form>
+</div>
 </div>
 
 <!-- Hidden data for JavaScript -->

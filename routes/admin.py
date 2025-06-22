@@ -247,9 +247,13 @@ def admin_day(project_id, date):
                     updated_day['isShootDay'] = True
                     calendar_data['days'] = recalculate_shoot_days(calendar_data['days'])
 
-            # Recalculate counts before saving
+            # Recalculate counts and sun times before saving
             calendar_data = calculate_department_counts(calendar_data)
             calendar_data = calculate_location_counts(calendar_data)
+            
+            # Calculate sun times for days with locations
+            from utils.calendar_generator import calculate_sun_times_for_calendar
+            calendar_data = calculate_sun_times_for_calendar(calendar_data)
 
             # Save the calendar
             if project.get('isVersioned'):
@@ -332,5 +336,5 @@ def admin_dates(project_id=None):
 @admin_required
 def admin_help():
     """Help and documentation page"""
-    # Renders 'admin/help.html'
-    return render_template('admin/help.html')
+    # Renders unified help page instead of admin-specific one
+    return render_template('help.html')

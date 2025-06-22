@@ -10,56 +10,96 @@
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='images/site.webmanifest') }}">
 
-    <title>{% block title %}Your Schedule, At a Glance!{% endblock %}</title> {# Kept your default title #}
+    <title>{% block title %}STRIPS - Film Production Scheduler{% endblock %}</title>
 
+    <!-- Core Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/cards.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/animations.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/modals.css') }}">
-    <!-- Add these to <head> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-core.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components/calendar-layout.css') }}">
     {% block styles %}{% endblock %}
 </head>
 {# Add class for theme handling - Ensure theme-toggle.js sets this class #}
 <body class="{{ session.get('theme', 'dark') }}-theme">
-    <header class="main-header">
+    <header class="app-header">
         <div class="container">
-             {# Link site title back to appropriate dashboard using url_for #}
-             <h1><a href="{{ url_for('admin.admin_dashboard') if session.get('user_role') == 'admin' else url_for('main.index') }}" style="color: inherit; text-decoration: none;">Your Schedule, At a Glance!</a></h1>
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <img src="{{ url_for('static', filename='images/favicon-96x96.png') }}" alt="STRIPS Logo" class="logo-image">
+                    </div>
+                    <h1 class="app-title">
+                        <a href="{{ url_for('admin.admin_dashboard') if session.get('user_role') == 'admin' else url_for('main.dashboard') if session.get('user_role') else '/' }}" style="color: inherit; text-decoration: none;">
+                            STRIPS
+                        </a>
+                    </h1>
+                    <span class="app-subtitle">Film Production Scheduler</span>
+                </div>
 
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
 
-            <nav class="main-nav" id="main-nav">
-                <ul class="nav-list"> {# Use nav-list class from style.css #}
-                    {# Link to 'index' function in 'main' blueprint (Viewer Dashboard/Project List) #}
-                    <li class="nav-item"><a href="{{ url_for('main.index') }}" class="nav-link">Dashboard</a></li>
+                <nav class="main-nav" id="main-nav">
+                    <ul class="nav-list">
+                        {% if session.get('user_role') %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('main.dashboard') }}" class="nav-link">
+                                    <span class="nav-icon">📋</span>
+                                    Dashboard
+                                </a>
+                            </li>
+                        {% endif %}
 
-                    {% if session.get('user_role') == 'admin' %}
-                        {# Link to 'admin_dashboard' function in 'admin' blueprint #}
-                        <li class="nav-item"><a href="{{ url_for('admin.admin_dashboard') }}" class="nav-link">Admin</a></li>
-                    {% endif %}
+                        {% if session.get('user_role') == 'admin' %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('admin.admin_dashboard') }}" class="nav-link">
+                                    <span class="nav-icon">⚙️</span>
+                                    Admin
+                                </a>
+                            </li>
+                        {% endif %}
 
-                    {% if session.get('user_role') %}
-                        {# Link to 'logout' function in 'auth' blueprint #}
-                        <li class="nav-item"><a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a></li>
-                    {% else %}
-                         {# Link to 'login' function in 'auth' blueprint (Viewer Login) #}
-                        <li class="nav-item"><a href="{{ url_for('auth.login') }}" class="nav-link">Login</a></li>
-                    {% endif %}
+                        <li class="nav-item">
+                            <a href="/help" class="nav-link">
+                                <span class="nav-icon">❔</span>
+                                Help
+                            </a>
+                        </li>
 
-                    {# Theme Toggle Button Placement #}
-                    <li class="nav-item">
-                        <button id="theme-toggle" class="theme-toggle-btn">
-                            <span class="theme-icon">☀️</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+                        {% if session.get('user_role') %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                                    <span class="nav-icon">🚪</span>
+                                    Logout
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{{ url_for('auth.login') }}" class="nav-link">
+                                    <span class="nav-icon">🔐</span>
+                                    Login
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        <li class="nav-item">
+                            <button id="theme-toggle" class="theme-toggle-btn">
+                                <span class="theme-icon">☀️</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 

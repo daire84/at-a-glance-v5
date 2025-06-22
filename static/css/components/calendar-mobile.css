@@ -94,7 +94,9 @@
     .calendar-table .featured-extras-col,
     .calendar-table .featured-extras-cell,
     .calendar-table .second-unit-col,
-    .calendar-table .second-unit-cell {
+    .calendar-table .second-unit-cell,
+    .calendar-table .sun-times-col,
+    .calendar-table .sun-times-cell {
       display: none; /* Hide less critical columns */
     }
     

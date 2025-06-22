@@ -10,11 +10,16 @@ from utils.calendar_generator import calculate_department_counts, calculate_loca
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
+def welcome():
+    """Welcome page - no authentication required"""
+    return render_template('welcome.html')
+
+@main_bp.route('/dashboard')
 @viewer_required
-def index():
-    """Home page - Project selection"""
+def dashboard():
+    """Project dashboard - renamed from index"""
     projects = get_projects()
-    return render_template('index.html', projects=projects)
+    return render_template('dashboard.html', projects=projects)
 
 @main_bp.route('/viewer/<project_id>')
 # @viewer_required # Apply decorator if viewer needs to be logged in
@@ -23,7 +28,7 @@ def viewer(project_id):
     project = get_project(project_id)
     if not project:
         flash('Project not found', 'error')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.dashboard'))
 
     version_id = request.args.get('version')
     
@@ -96,9 +101,13 @@ def viewer(project_id):
     calendar_data['departments'] = departments
     calendar_data['locationAreas'] = areas # Add/overwrite with the fresh list
 
-    # Calculate counts
+    # Calculate counts and sun times
     calendar_data = calculate_department_counts(calendar_data)
     calendar_data = calculate_location_counts(calendar_data)
+    
+    # Calculate sun times for days with locations
+    from utils.calendar_generator import calculate_sun_times_for_calendar
+    calendar_data = calculate_sun_times_for_calendar(calendar_data)
 
     # Get all versions for the dropdown (only published ones)
     all_versions = []
@@ -114,6 +123,11 @@ def viewer(project_id):
         versions=all_versions,
         current_version_id=version_id
     )
+
+@main_bp.route('/help')
+def help():
+    """Help and about page"""
+    return render_template('help.html')
 
 @main_bp.route('/health')
 # @viewer_required # Apply if needed

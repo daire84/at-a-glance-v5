@@ -1,0 +1,306 @@
+<!-- 
+File: templates/components/_compact_filters.html
+Compact horizontal filter layout combining filters, search, and stats
+-->
+
+<div class="compact-filters-wrapper">
+    <div class="compact-filters-header">
+        <h4 class="compact-filters-title">
+            <span class="nav-icon">🔍</span>
+            Filters & Search
+        </h4>
+        <div class="compact-filter-actions">
+            <button id="reset-filters" class="compact-filter-reset">Reset All</button>
+        </div>
+    </div>
+
+    <div class="compact-filters-grid">
+        <!-- Search Section -->
+        <div class="compact-filter-group compact-search-section">
+            <h5>Search</h5>
+            <div class="compact-search-container">
+                <input type="text" id="calendar-search" class="compact-search-input" placeholder="Search notes, locations, scenes...">
+                <button id="clear-search" class="compact-search-clear" aria-label="Clear search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div id="search-status" class="compact-search-status" style="display: none;">
+                Showing <span id="search-results-count">0</span> results for "<span id="search-term"></span>"
+            </div>
+        </div>
+
+        <!-- Day Types Filters -->
+        <div class="compact-filter-group">
+            <h5>Day Types</h5>
+            <div class="compact-filter-toggles">
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-weekends" checked>
+                    <span class="toggle-label">Weekends</span>
+                </label>
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-prep" checked>
+                    <span class="toggle-label">Prep Days</span>
+                </label>
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-holidays" checked>
+                    <span class="toggle-label">Holidays</span>
+                </label>
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-hiatus" checked>
+                    <span class="toggle-label">Hiatus</span>
+                </label>
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-shoot" checked>
+                    <span class="toggle-label">Shoot Days</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Column Visibility Filters -->
+        <div class="compact-filter-group">
+            <h5>Show Columns</h5>
+            <div class="compact-filter-toggles">
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-col-sequence" checked>
+                    <span class="toggle-label">Sequence</span>
+                </label>
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-col-second-unit" checked>
+                    <span class="toggle-label">Second Unit</span>
+                </label>
+                <label class="compact-filter-toggle">
+                    <input type="checkbox" id="filter-col-sun-times" checked>
+                    <span class="toggle-label">Sun Times</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Filter Stats -->
+        <div class="compact-filter-group">
+            <h5>Statistics</h5>
+            <div class="compact-filter-stats">
+                <div class="compact-filter-stat">
+                    <div class="compact-filter-stat-label">Days</div>
+                    <div class="compact-filter-stat-value">
+                        <span id="filter-stats-visible">--</span> / <span id="filter-stats-total">--</span>
+                    </div>
+                </div>
+                <div class="compact-filter-stat">
+                    <div class="compact-filter-stat-label">Shoot Days</div>
+                    <div class="compact-filter-stat-value" id="filter-stats-shoot-days">--</div>
+                </div>
+                <div class="compact-filter-stat">
+                    <div class="compact-filter-stat-label">Second Unit</div>
+                    <div class="compact-filter-stat-value" id="filter-stats-second-unit">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter availability info -->
+    <div class="filter-info-container" id="filter-info" style="margin-top: var(--spacing-sm); display: none;">
+        <div class="filter-info-content">
+            <div class="filter-info-icon">ℹ️</div>
+            <div class="filter-info-text">
+                <strong>Filter Availability:</strong>
+                <span class="filter-info-details">
+                    <span class="table-view-info">All filters available in Table View</span>
+                    <span class="calendar-view-info" style="display: none;">Limited filters available in Calendar View - some filters are disabled</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Ensure compact filters work by manually binding events if needed
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Compact filters initializing...');
+    
+    // Manually implement filter functionality to ensure it works
+    setTimeout(function() {
+        console.log('Setting up compact filter functionality...');
+        
+        // Define the filter mappings (same as calendar.js)
+        const rowMappings = {
+            'filter-weekends': 'weekend',
+            'filter-prep': 'prep', 
+            'filter-holidays': 'holiday',
+            'filter-hiatus': 'hiatus',
+            'filter-shoot': 'shoot'
+        };
+        
+        const colMappings = {
+            'filter-col-sequence': 'sequence',
+            'filter-col-second-unit': 'second-unit',
+            'filter-col-sun-times': 'sun-times'
+        };
+        
+        // Implement row filtering function
+        function toggleRowType(rowType, isVisible) {
+            console.log('Toggling row type:', rowType, isVisible);
+            const rows = document.querySelectorAll('.calendar-row.' + rowType);
+            rows.forEach(row => {
+                if (isVisible) {
+                    row.classList.remove('filtered-hidden');
+                } else {
+                    row.classList.add('filtered-hidden');
+                }
+            });
+            updateFilterStats();
+        }
+        
+        // Implement column filtering function
+        function toggleColumnVisibility(colName, isVisible) {
+            console.log('Toggling column:', colName, isVisible);
+            const style = isVisible ? '' : 'none';
+            
+            // Hide/show header
+            const header = document.querySelector('.calendar-table th.' + colName + '-col');
+            if (header) {
+                header.style.display = style;
+            }
+            
+            // Hide/show cells
+            const cells = document.querySelectorAll('.calendar-table td.' + colName + '-cell');
+            cells.forEach(cell => {
+                cell.style.display = style;
+            });
+        }
+        
+        // Update filter statistics
+        function updateFilterStats() {
+            const allRows = document.querySelectorAll('.calendar-row');
+            const visibleRows = document.querySelectorAll('.calendar-row:not(.filtered-hidden)');
+            const shootDays = document.querySelectorAll('.calendar-row.shoot:not(.filtered-hidden)');
+            const secondUnitDays = document.querySelectorAll('.calendar-row:not(.filtered-hidden) .second-unit-cell:not(:empty)');
+            
+            const totalEl = document.getElementById('filter-stats-total');
+            const visibleEl = document.getElementById('filter-stats-visible');
+            const shootEl = document.getElementById('filter-stats-shoot-days');
+            const secondUnitEl = document.getElementById('filter-stats-second-unit');
+            
+            if (totalEl) totalEl.textContent = allRows.length;
+            if (visibleEl) visibleEl.textContent = visibleRows.length;
+            if (shootEl) shootEl.textContent = shootDays.length;
+            if (secondUnitEl) secondUnitEl.textContent = secondUnitDays.length;
+        }
+        
+        // Bind row filter events
+        Object.keys(rowMappings).forEach(function(id) {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    toggleRowType(rowMappings[id], this.checked);
+                });
+                console.log('Bound filter:', id);
+            }
+        });
+        
+        // Bind column filter events
+        Object.keys(colMappings).forEach(function(id) {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    toggleColumnVisibility(colMappings[id], this.checked);
+                });
+                console.log('Bound column filter:', id);
+            }
+        });
+        
+        // Bind reset filters button
+        const resetBtn = document.getElementById('reset-filters');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                console.log('Resetting all filters...');
+                
+                // Reset all checkboxes to checked
+                Object.keys(rowMappings).concat(Object.keys(colMappings)).forEach(function(id) {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        checkbox.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        }
+        
+        // Bind search functionality
+        const searchInput = document.getElementById('calendar-search');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const searchStatus = document.getElementById('search-status');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                const searchTermEl = document.getElementById('search-term');
+                const searchCountEl = document.getElementById('search-results-count');
+                
+                // Show/hide clear button based on whether there's text
+                if (clearSearchBtn) {
+                    if (this.value.trim()) {
+                        clearSearchBtn.classList.add('visible');
+                    } else {
+                        clearSearchBtn.classList.remove('visible');
+                    }
+                }
+                
+                if (searchTerm) {
+                    let matchCount = 0;
+                    document.querySelectorAll('.calendar-row').forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            row.classList.remove('search-hidden');
+                            matchCount++;
+                        } else {
+                            row.classList.add('search-hidden');
+                        }
+                    });
+                    
+                    if (searchTermEl) searchTermEl.textContent = this.value;
+                    if (searchCountEl) searchCountEl.textContent = matchCount;
+                    if (searchStatus) searchStatus.style.display = 'block';
+                } else {
+                    document.querySelectorAll('.calendar-row').forEach(row => {
+                        row.classList.remove('search-hidden');
+                    });
+                    if (searchStatus) searchStatus.style.display = 'none';
+                }
+                
+                updateFilterStats();
+            });
+        }
+        
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function() {
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                    clearSearchBtn.classList.remove('visible');
+                }
+            });
+        }
+        
+        // Initial stats update
+        updateFilterStats();
+        
+    }, 500);
+    
+    // Ensure department coloring is applied
+    setTimeout(function() {
+        if (window.applyDepartmentTagColors) {
+            console.log('Applying department tag colors...');
+            window.applyDepartmentTagColors();
+        }
+        
+        if (window.applyLocationAreaColors) {
+            console.log('Applying location area colors...');
+            const locationAreas = window.getLocationAreas ? window.getLocationAreas() : [];
+            window.applyLocationAreaColors(locationAreas);
+        }
+    }, 750);
+});
+</script>

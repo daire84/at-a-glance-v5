@@ -1,0 +1,205 @@
+/* STRIPS Header & Navigation System */
+
+.app-header {
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-sm) 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-blue-sm);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.logo-image {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    transition: all var(--transition-normal);
+}
+
+.logo-icon:hover .logo-image {
+    transform: scale(1.05);
+}
+
+.app-title {
+    font-size: 1.8rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.app-title a {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+.app-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: var(--font-weight-normal);
+    margin-left: var(--spacing-xs);
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-normal);
+    font-weight: var(--font-weight-medium);
+}
+
+.nav-link:hover {
+    color: var(--primary-blue);
+    background: rgba(79, 195, 247, 0.1);
+}
+
+.nav-link.active {
+    color: var(--primary-blue);
+    background: rgba(79, 195, 247, 0.15);
+}
+
+.nav-icon {
+    font-size: 1.1em;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .main-nav {
+        display: none;
+    }
+    
+    .main-nav.active {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--background-secondary);
+        border-bottom: 1px solid var(--border-color);
+        padding: var(--spacing-md);
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        width: 100%;
+    }
+    
+    .nav-link {
+        padding: var(--spacing-sm) var(--spacing-md);
+        justify-content: flex-start;
+    }
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-normal);
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    color: var(--primary-blue);
+    background: rgba(79, 195, 247, 0.1);
+}
+
+/* Light mode overrides */
+body.light-theme .app-header {
+    background: var(--background-secondary);
+    border-bottom-color: var(--border-color);
+}
+
+body.light-theme .app-title {
+    color: var(--text-primary);
+}
+
+body.light-theme .app-subtitle {
+    color: var(--text-muted);
+}
+
+body.light-theme .nav-link {
+    color: var(--text-secondary);
+}
+
+body.light-theme .nav-link:hover {
+    color: var(--primary-blue);
+    background: rgba(79, 195, 247, 0.1);
+}
+
+body.light-theme .theme-toggle {
+    color: var(--text-secondary);
+}
+
+body.light-theme .theme-toggle:hover {
+    color: var(--primary-blue);
+}
