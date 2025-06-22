@@ -31,3 +31,7 @@ Thumbs.db
 # Backup files
 *-backup-*/
 *.backup
+*.bak
+*.old
+*.orig
+static/images/old/
