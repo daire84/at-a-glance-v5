@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2025-04-21",
+    "name": "Easter",
+    "isWorking": false,
+    "isShootDay": false,
+    "id": "7d6f1473-5cde-47dd-a5e5-07f436fba732"
+  },
+  {
+    "date": "2025-05-05",
+    "name": "May",
+    "isWorking": true,
+    "isShootDay": true,
+    "id": "f926c74c-d1f3-4ceb-997b-ded55b4c89c9"
+  }
+]

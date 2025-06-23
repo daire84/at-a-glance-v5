@@ -38,7 +38,7 @@
                             STRIPS
                         </a>
                     </h1>
-                    <span class="app-subtitle">Film Production Scheduler</span>
+                    <span class="app-subtitle">Your Schedule, At a Glance!</span>
                 </div>
 
                 <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
@@ -85,6 +85,12 @@
                             </li>
                         {% else %}
                             <li class="nav-item">
+                                <a href="{{ url_for('public.access_code_entry') }}" class="nav-link">
+                                    <span class="nav-icon">🔑</span>
+                                    Access Code
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ url_for('auth.login') }}" class="nav-link">
                                     <span class="nav-icon">🔐</span>
                                     Login
@@ -128,7 +134,7 @@
     <footer>
         <div class="container">
              {# Kept your footer text #}
-            <p>Your Schedule, At a Glance! v1</p>
+            <p>STRIPS - Your Schedule, At a Glance! v2</p>
         </div>
     </footer>
 

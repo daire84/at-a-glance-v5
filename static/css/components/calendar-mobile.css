@@ -48,7 +48,7 @@
     .meta-label {
         font-size: 0.85em;
         margin-bottom: 4px;
-        color: var(--accent-dark);
+        color: var(--primary-blue);
     }
     
     .meta-value {

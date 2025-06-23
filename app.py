@@ -36,11 +36,13 @@ from routes.main import main_bp
 from routes.auth import auth_bp
 from routes.admin import admin_bp
 from routes.api import api_bp
+from routes.public import public_bp
 
 app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp) # url_prefix='/admin' is set in routes/admin.py
 app.register_blueprint(api_bp)   # url_prefix='/api' is set in routes/api.py
+app.register_blueprint(public_bp) # Public access routes
 
 
 # --- Global Routes (Static files, Error Handlers) ---

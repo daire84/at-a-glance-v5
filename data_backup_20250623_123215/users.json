@@ -1,0 +1,11 @@
+{
+  "06f25d7b-1e14-454c-89e5-d742020c10a8": {
+    "id": "06f25d7b-1e14-454c-89e5-d742020c10a8",
+    "username": "funkstew",
+    "email": "admin@funkstew.com",
+    "password_hash": "pbkdf2:sha256:600000$ITiE0YxX2xVuLYCT$e0b9f0e4bc4e6657b10ec00e5983c3e0f7152bf8522f6da312578858a582e441",
+    "role": "admin",
+    "created": "2025-06-23T01:23:05.988083Z",
+    "active": true
+  }
+}

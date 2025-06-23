@@ -149,20 +149,44 @@
 
             <!-- User Access Levels Section -->
             <section id="user-roles" class="help-section">
-                <h2>User Access Levels</h2>
+                <h2>User Access & Authentication System</h2>
                 <div class="section-content">
+                    <p>STRIPS offers three different ways to access production schedules, each designed for different user types and security needs:</p>
+                    
                     <div class="access-levels">
                         <div class="access-level">
-                            <h4><span class="nav-icon">👁️</span> Viewer Access</h4>
-                            <p>Perfect for crew members who need to view schedules and stay informed about upcoming shoots.</p>
+                            <h4><span class="nav-icon">🔑</span> Access Code Entry</h4>
+                            <p>Quick and secure access for crew members using project access codes.</p>
                             <ul>
+                                <li>Enter an 8-character access code (e.g., "HAMLET24")</li>
+                                <li>No account creation required - perfect for large crews</li>
+                                <li>View published calendars instantly</li>
+                                <li>Access expires when admin revokes the code</li>
+                                <li>Ideal for day players, extras, and visiting crew</li>
+                            </ul>
+                            
+                            <div class="help-image-container">
+                                <img src="{{ url_for('static', filename='images/help/access_code_entry.jpg') }}" alt="Access Code Entry Screen" class="help-image">
+                                <p class="image-caption">Crew members can quickly access schedules with project codes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="access-level">
+                            <h4><span class="nav-icon">👁️</span> Registered User Access</h4>
+                            <p>Personal accounts for regular crew members who need ongoing access.</p>
+                            <ul>
+                                <li>Create personal accounts with username and password</li>
+                                <li>Access multiple projects when granted permission</li>
+                                <li>Persistent login sessions for convenience</li>
                                 <li>View project calendars with full scheduling details</li>
-                                <li>Access location details and area information</li>
-                                <li>See department information and requirements</li>
-                                <li>Check shoot schedules and sunrise/sunset times</li>
                                 <li>Filter and search through calendar data</li>
                                 <li>Print professional calendar layouts</li>
                             </ul>
+                            
+                            <div class="help-image-container">
+                                <img src="{{ url_for('static', filename='images/help/user_login.jpg') }}" alt="User Login Screen" class="help-image">
+                                <p class="image-caption">Regular crew members can create accounts for ongoing access</p>
+                            </div>
                         </div>
                         
                         <div class="access-level">
@@ -171,12 +195,41 @@
                             <ul>
                                 <li>Create and edit projects with comprehensive details</li>
                                 <li>Manage shoot schedules with drag-and-drop functionality</li>
+                                <li>Generate access codes and manage public sharing</li>
                                 <li>Add and modify locations with smart geocoding</li>
                                 <li>Configure departments and location areas</li>
                                 <li>Handle special dates, holidays, and hiatus periods</li>
                                 <li>Create and manage schedule versions</li>
                                 <li>Export and share schedules with professional printing</li>
                             </ul>
+                            
+                            <div class="help-image-container">
+                                <img src="{{ url_for('static', filename='images/help/admin_dashboard.jpg') }}" alt="Admin Dashboard" class="help-image">
+                                <p class="image-caption">Admin dashboard with full project management capabilities</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h3>How Access Codes Work</h3>
+                        <p>The access code system provides a secure way to share calendars with large crews without requiring individual account setup:</p>
+                        
+                        <ol>
+                            <li><strong>Admin publishes a calendar</strong> - When ready to share, admins use the "Publish" button in the version manager</li>
+                            <li><strong>System generates codes</strong> - An 8-character human-friendly code is created (e.g., "HAMLET24")</li>
+                            <li><strong>Crew enters code</strong> - Team members visit the welcome page and use "Enter with Project Code"</li>
+                            <li><strong>Instant access</strong> - No signup required - crew can immediately view the current published schedule</li>
+                            <li><strong>Admin controls</strong> - Access can be revoked at any time, and usage statistics are tracked</li>
+                        </ol>
+                        
+                        <div class="help-image-container">
+                            <img src="{{ url_for('static', filename='images/help/access_management.jpg') }}" alt="Access Code Management" class="help-image">
+                            <p class="image-caption">Admins can generate, monitor, and revoke access codes</p>
+                        </div>
+                        
+                        <div class="tip-box">
+                            <h4>Security Note:</h4>
+                            <p>Access codes provide view-only access to published calendar versions. They cannot be used to edit schedules or access admin functions. Codes can be revoked instantly if needed.</p>
                         </div>
                     </div>
                 </div>

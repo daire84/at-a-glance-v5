@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar Published - {{ project.title }}{% endblock %}
+
+{% block styles %}
+<style>
+    .publish-success-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
+    
+    .success-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border-radius: 12px;
+    }
+    
+    .success-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .success-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .success-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+    
+    .sharing-options {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .sharing-options h3 {
+        color: #333;
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+    }
+    
+    .share-method {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .share-method:last-child {
+        margin-bottom: 0;
+    }
+    
+    .share-method h4 {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .access-code-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .access-code {
+        background: #343a40;
+        color: #ffffff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+    }
+    
+    .share-link-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .share-link-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.9rem;
+        background: #fff;
+        color: #495057;
+    }
+    
+    .copy-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.2s;
+    }
+    
+    .copy-btn:hover {
+        background: #0056b3;
+    }
+    
+    .copy-btn.copied {
+        background: #28a745;
+    }
+    
+    .email-template {
+        margin-top: 1.5rem;
+    }
+    
+    .email-template h4 {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .email-content {
+        width: 100%;
+        height: 200px;
+        padding: 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.9rem;
+        resize: vertical;
+        background: #f8f9fa;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+    
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0056b3;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #545b62;
+        color: white;
+    }
+    
+    .btn-outline {
+        background: transparent;
+        color: #007bff;
+        border: 1px solid #007bff;
+    }
+    
+    .btn-outline:hover {
+        background: #007bff;
+        color: white;
+    }
+    
+    .stats-section {
+        background: #e9ecef;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .stats-section strong {
+        color: #495057;
+    }
+    
+    .qr-code-section {
+        text-align: center;
+        padding: 1rem;
+        border: 2px dashed #dee2e6;
+        border-radius: 6px;
+        margin-top: 1rem;
+        color: #6c757d;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .publish-success-container {
+            margin: 1rem;
+            padding: 1rem;
+        }
+        
+        .access-code-display,
+        .share-link-display {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="publish-success-container">
+    <!-- Success Header -->
+    <div class="success-header">
+        <div class="success-icon">🎉</div>
+        <h1 class="success-title">Calendar Published Successfully!</h1>
+        <p class="success-subtitle">Your production schedule is now available for crew access</p>
+    </div>
+    
+    <!-- Sharing Options -->
+    <div class="sharing-options">
+        <h3>📤 Share with Your Crew</h3>
+        
+        <!-- Access Code Method -->
+        <div class="share-method">
+            <h4>🔑 Access Code</h4>
+            <div class="access-code-display">
+                <div class="access-code">{{ access_info.access_code }}</div>
+                <button class="copy-btn" onclick="copyToClipboard('{{ access_info.access_code }}', this)">
+                    Copy Code
+                </button>
+            </div>
+            <p>Crew members can enter this code at: <strong>{{ request.host_url }}access</strong></p>
+        </div>
+        
+        <!-- Direct Link Method -->
+        <div class="share-method">
+            <h4>🔗 Direct Link</h4>
+            <div class="share-link-display">
+                <input 
+                    type="text" 
+                    class="share-link-input" 
+                    value="{{ request.host_url }}calendar/{{ access_info.access_token }}" 
+                    readonly
+                    id="share-link"
+                >
+                <button class="copy-btn" onclick="copyToClipboard('{{ request.host_url }}calendar/{{ access_info.access_token }}', this)">
+                    Copy Link
+                </button>
+            </div>
+            <p>Crew members click this link to view the calendar directly</p>
+        </div>
+        
+        <!-- Email Template -->
+        <div class="email-template">
+            <h4>📧 Email Template</h4>
+            <textarea class="email-content" readonly>Subject: {{ project.title }} Schedule Update{% if version_number %} - Version {{ version_number }}{% endif %}
+
+Hi Team,
+
+The updated production schedule for {{ project.title }} is now available:
+
+🔗 Direct Link: {{ request.host_url }}calendar/{{ access_info.access_token }}
+
+🔑 Access Code: {{ access_info.access_code }}
+   (Enter at: {{ request.host_url }}access)
+
+{% if version_number %}Version: {{ version_number }}{% endif %}
+Published: {{ access_info.created_at.split('T')[0] if 'T' in access_info.created_at else access_info.created_at }}
+
+Please bookmark the link for easy access to future updates.
+
+Questions? Contact the production office.
+
+Best regards,
+Production Team</textarea>
+        </div>
+        
+        <!-- QR Code (Future Feature) -->
+        <div class="qr-code-section">
+            <p>📱 QR Code generation coming soon!</p>
+            <small>This will allow crew to scan and access the calendar on mobile devices</small>
+        </div>
+        
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <strong>Access Details:</strong><br>
+            Created: {{ access_info.created_at.split('T')[0] if 'T' in access_info.created_at else access_info.created_at }}<br>
+            Views: {{ access_info.view_count or 0 }}<br>
+            {% if access_info.last_accessed %}
+            Last Accessed: {{ access_info.last_accessed.split('T')[0] if 'T' in access_info.last_accessed else access_info.last_accessed }}
+            {% else %}
+            Last Accessed: Never
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary">
+            ← Back to Calendar Editor
+        </a>
+        <a href="{{ url_for('admin.manage_project_access', project_id=project.id) }}" class="btn btn-outline">
+            Manage Access Settings
+        </a>
+        <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="btn btn-secondary" target="_blank">
+            Preview Calendar
+        </a>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Change button appearance
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        
+        // Reset after 2 seconds
+        setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }).catch(function(err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+// Auto-select link text when clicked
+document.getElementById('share-link').addEventListener('click', function() {
+    this.select();
+});
+</script>
+{% endblock %}

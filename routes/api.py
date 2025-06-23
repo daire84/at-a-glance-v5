@@ -909,14 +909,43 @@ def api_create_project_version(project_id):
 @api_bp.route('/projects/<project_id>/versions/<version_id>/publish', methods=['POST'])
 @admin_required
 def api_publish_project_version(project_id, version_id):
-    """Publish a specific version"""
+    """Publish a specific version and generate access codes"""
     try:
-        success = publish_project_version(project_id, version_id)
+        from utils.access_manager import ProjectAccessManager
+        
+        user_id = session.get('user_id')
+        
+        # First publish the version using existing system
+        success = publish_project_version(project_id, version_id, user_id)
         
         if not success:
             return jsonify({'error': 'Failed to publish version'}), 500
+        
+        # Get project and calendar data for public access
+        project = get_project(project_id, user_id)
+        if not project:
+            return jsonify({'error': 'Project not found'}), 404
             
-        return jsonify({'success': True, 'published': True})
+        # Get the published calendar data
+        calendar_data = get_project_calendar(project_id, user_id)
+        if not calendar_data:
+            return jsonify({'error': 'No calendar data found'}), 404
+        
+        # Generate public access codes
+        access_manager = ProjectAccessManager()
+        access_info = access_manager.publish_calendar_with_access(
+            user_id, project_id, calendar_data, project
+        )
+        
+        return jsonify({
+            'success': True, 
+            'published': True,
+            'access_info': {
+                'access_code': access_info['access_code'],
+                'access_token': access_info['access_token'],
+                'share_url': f"/calendar/{access_info['access_token']}"
+            }
+        })
         
     except Exception as e:
         logger.error(f"Error publishing version {version_id} for project {project_id}: {str(e)}")

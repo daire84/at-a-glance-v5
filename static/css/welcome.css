@@ -295,9 +295,9 @@
 /* === STATS SECTION === */
 .welcome-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-md);
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     animation: slideUp 0.6s ease 0.6s both;
 }
@@ -393,7 +393,7 @@
     }
     
     .welcome-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: var(--space-sm);
     }
     
@@ -420,6 +420,11 @@
     .nav-card-button {
         padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
+    }
+    
+    .welcome-stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
     }
 }
 

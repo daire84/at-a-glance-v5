@@ -39,6 +39,10 @@
                 <span class="nav-icon">📅</span>
                 Special Dates
             </a>
+            <a href="{{ url_for('admin.manage_project_access', project_id=project.id) }}" class="btn btn-secondary btn-small">
+                <span class="nav-icon">🔒</span>
+                Manage Access
+            </a>
             <a href="{{ url_for('main.viewer', project_id=project.id) }}" class="btn btn-primary">
                 <span class="nav-icon">👁️</span>
                 View Calendar
@@ -353,6 +357,8 @@
                 }
             });
         }
+        
     });
 </script>
+
 {% endblock %}

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Dublin North",
+    "color": "#a1cdfc",
+    "id": "north"
+  },
+  {
+    "name": "Dublin South",
+    "color": "#e3b0b0",
+    "id": "south"
+  },
+  {
+    "name": "Wicklow",
+    "color": "#ffcb3d",
+    "id": "wicklow"
+  },
+  {
+    "name": "A Stage",
+    "color": "#bb98fb",
+    "id": "ardmore"
+  },
+  {
+    "name": "Spain",
+    "color": "#c660e2",
+    "id": "4459abff-cd87-4fdc-a238-1ff355b2e970"
+  },
+  {
+    "name": "D Stage",
+    "color": "#7cf764",
+    "id": "aa1f6728-63e5-445c-b4f7-59a3111c4042"
+  },
+  {
+    "name": "C Stage",
+    "color": "#d9175b",
+    "id": "d228a557-0301-45fe-89ba-bc0cd781d404"
+  },
+  {
+    "name": "B Stage",
+    "color": "#eff31b",
+    "id": "034142b7-5b63-4fc3-9406-fc04dc2f6efd"
+  }
+]

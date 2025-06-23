@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}User Registration - STRIPS{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="login-page login-page-admin">
+    <div class="login-container">
+        <!-- STRIPS Registration Header -->
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="login-logo-icon admin-logo">
+                    <img src="{{ url_for('static', filename='images/web-app-manifest-192x192.png') }}" alt="STRIPS Logo" class="login-logo-image">
+                </div>
+                <h1 class="login-title">STRIPS</h1>
+            </div>
+            <h2 class="login-subtitle admin-subtitle">Create Account</h2>
+            <p class="login-description">
+                Create your production management account to get started with STRIPS.
+            </p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="login-form-wrapper">
+            {% if error %}
+                <div class="alert alert-error">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-message">{{ error }}</span>
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('auth.register') }}" class="login-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-input login-input"
+                        placeholder="Choose a username"
+                        value="{{ username or '' }}"
+                        required
+                        autocomplete="username"
+                        minlength="3"
+                    >
+                    <div class="form-hint">
+                        At least 3 characters, will be used for login
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input login-input"
+                        placeholder="Enter your email address"
+                        value="{{ email or '' }}"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="form-hint">
+                        Can also be used for login
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input login-input"
+                        placeholder="Create a strong password"
+                        required
+                        autocomplete="new-password"
+                        minlength="8"
+                    >
+                    <div class="form-hint">
+                        At least 8 characters long
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="confirm_password" 
+                        name="confirm_password" 
+                        class="form-input login-input"
+                        placeholder="Confirm your password"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <div class="form-hint">
+                        Must match the password above
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large login-button admin-login-button">
+                    <span class="nav-icon">✨</span>
+                    Create Account
+                </button>
+            </form>
+        </div>
+
+        <!-- Alternative Actions -->
+        <div class="login-alternatives">
+            <div class="alternative-divider">
+                <span class="divider-text">Already have an account?</span>
+            </div>
+            
+            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-large">
+                <span class="nav-icon">🔐</span>
+                Sign In
+            </a>
+            
+            <div class="login-help">
+                <a href="{{ url_for('main.help') }}" class="help-link">
+                    <span class="nav-icon">❔</span>
+                    Learn about STRIPS features
+                </a>
+            </div>
+        </div>
+
+        <!-- Back to Welcome -->
+        <div class="login-footer">
+            <a href="{{ url_for('main.welcome') }}" class="back-link">
+                <span class="nav-icon">←</span>
+                Back to Welcome
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Add password confirmation validation
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('password');
+    const confirmField = document.getElementById('confirm_password');
+    
+    function validatePasswordMatch() {
+        if (confirmField.value && passwordField.value !== confirmField.value) {
+            confirmField.setCustomValidity('Passwords do not match');
+        } else {
+            confirmField.setCustomValidity('');
+        }
+    }
+    
+    passwordField.addEventListener('input', validatePasswordMatch);
+    confirmField.addEventListener('input', validatePasswordMatch);
+});
+</script>
+{% endblock %}

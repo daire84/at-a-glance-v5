@@ -13,7 +13,8 @@ from .calendar_generator import generate_calendar_days, calculate_department_cou
 UTILS_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(UTILS_DIR) # Project root (/app)
 DATA_DIR = os.path.join(BASE_DIR, 'data')
-PROJECTS_DIR = os.path.join(DATA_DIR, 'projects')
+PROJECTS_DIR = os.path.join(DATA_DIR, 'projects')  # Legacy directory
+USERS_DIR = os.path.join(DATA_DIR, 'users')  # New user-based directory
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 VERSIONS_FILE = 'versions.json'
 WORKSPACE_FILE = 'workspace.json'
@@ -24,47 +25,77 @@ logger = logging.getLogger(__name__)
 
 # --- Helper Functions ---
 
-def get_projects():
-    """Get all projects"""
+def get_user_projects_dir(user_id):
+    """Get the projects directory path for a specific user"""
+    return os.path.join(USERS_DIR, user_id, 'projects')
+
+def get_projects(user_id=None):
+    """Get all projects for a user (or legacy projects if no user_id)"""
     projects = []
     try:
-        if os.path.exists(PROJECTS_DIR):
-            for project_id in os.listdir(PROJECTS_DIR):
-                project_dir = os.path.join(PROJECTS_DIR, project_id)
-                if os.path.isdir(project_dir):
-                    main_file = os.path.join(project_dir, 'main.json')
-                    if os.path.exists(main_file):
-                        try:
-                            with open(main_file, 'r', encoding='utf-8') as f:
-                                project = json.load(f)
-                                projects.append(project)
-                        except json.JSONDecodeError:
-                            logger.error(f"Error decoding JSON for project {project_id}")
-                        except Exception as inner_e:
-                             logger.error(f"Error reading main.json for project {project_id}: {str(inner_e)}")
+        if user_id:
+            # Get user-specific projects
+            user_projects_dir = get_user_projects_dir(user_id)
+            if os.path.exists(user_projects_dir):
+                for project_id in os.listdir(user_projects_dir):
+                    project_dir = os.path.join(user_projects_dir, project_id)
+                    if os.path.isdir(project_dir):
+                        main_file = os.path.join(project_dir, 'main.json')
+                        if os.path.exists(main_file):
+                            try:
+                                with open(main_file, 'r', encoding='utf-8') as f:
+                                    project = json.load(f)
+                                    projects.append(project)
+                            except json.JSONDecodeError:
+                                logger.error(f"Error decoding JSON for user {user_id} project {project_id}")
+                            except Exception as inner_e:
+                                logger.error(f"Error reading main.json for user {user_id} project {project_id}: {str(inner_e)}")
+        else:
+            # Legacy mode - get projects from old directory
+            if os.path.exists(PROJECTS_DIR):
+                for project_id in os.listdir(PROJECTS_DIR):
+                    project_dir = os.path.join(PROJECTS_DIR, project_id)
+                    if os.path.isdir(project_dir):
+                        main_file = os.path.join(project_dir, 'main.json')
+                        if os.path.exists(main_file):
+                            try:
+                                with open(main_file, 'r', encoding='utf-8') as f:
+                                    project = json.load(f)
+                                    projects.append(project)
+                            except json.JSONDecodeError:
+                                logger.error(f"Error decoding JSON for project {project_id}")
+                            except Exception as inner_e:
+                                logger.error(f"Error reading main.json for project {project_id}: {str(inner_e)}")
 
         return sorted(projects, key=lambda x: x.get('updated', ''), reverse=True)
     except Exception as e:
         logger.error(f"Error listing projects directory: {str(e)}")
         return []
 
-def get_project(project_id):
+def get_project(project_id, user_id=None):
     """Get a specific project"""
     if not project_id or project_id == 'new': # Handle 'new' case explicitly
         return None
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if user_id:
+            # Get user-specific project
+            user_projects_dir = get_user_projects_dir(user_id)
+            project_dir = os.path.join(user_projects_dir, project_id)
+        else:
+            # Legacy mode
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         main_file = os.path.join(project_dir, 'main.json')
         if os.path.exists(main_file):
             with open(main_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
-        logger.warning(f"Project main.json not found for ID: {project_id}")
+        logger.warning(f"Project main.json not found for ID: {project_id} (user: {user_id})")
         return None
     except Exception as e:
-        logger.error(f"Error getting project {project_id}: {str(e)}")
+        logger.error(f"Error getting project {project_id} for user {user_id}: {str(e)}")
         return None
 
-def save_project(project):
+def save_project(project, user_id=None):
     """Save a project"""
     try:
         project_id = project.get('id')
@@ -75,8 +106,14 @@ def save_project(project):
         # Always set isVersioned to true for all projects
         project['isVersioned'] = True
 
-        # Rest of the function remains the same...
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if user_id:
+            # Save to user-specific directory
+            user_projects_dir = get_user_projects_dir(user_id)
+            project_dir = os.path.join(user_projects_dir, project_id)
+        else:
+            # Legacy mode
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         os.makedirs(project_dir, exist_ok=True)
 
         now = datetime.utcnow().isoformat() + 'Z'
@@ -88,24 +125,29 @@ def save_project(project):
         with open(main_file, 'w', encoding='utf-8') as f:
             json.dump(project, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Project {project_id} saved successfully")
+        logger.info(f"Project {project_id} saved successfully for user {user_id}")
         return project
     except Exception as e:
-        logger.error(f"Error saving project {project.get('id', 'N/A')}: {str(e)}")
+        logger.error(f"Error saving project {project.get('id', 'N/A')} for user {user_id}: {str(e)}")
         raise # Re-raise the exception so route can handle it
 
 # Update the existing get_project_calendar function to use workspace
-def get_project_calendar(project_id):
+def get_project_calendar(project_id, user_id=None):
     """
     Get calendar data for a project (from workspace)
     """
-    workspace = get_project_workspace(project_id)
+    workspace = get_project_workspace(project_id, user_id)
     if workspace:
         return workspace.get('calendarData', {"days": []})
     else:
         # Fallback to existing behavior for non-versioned projects
         try:
-            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            if user_id:
+                user_projects_dir = get_user_projects_dir(user_id)
+                project_dir = os.path.join(user_projects_dir, project_id)
+            else:
+                project_dir = os.path.join(PROJECTS_DIR, project_id)
+                
             calendar_file = os.path.join(project_dir, 'calendar.json')
 
             if os.path.exists(calendar_file):
@@ -113,54 +155,59 @@ def get_project_calendar(project_id):
                     return json.load(f)
             return {"days": []}
         except Exception as e:
-            logger.error(f"Error getting calendar for project {project_id}: {str(e)}")
+            logger.error(f"Error getting calendar for project {project_id} user {user_id}: {str(e)}")
             return {"days": []}
 
 # Update the save_project_calendar function to save to workspace
-def save_project_calendar(project_id, calendar_data):
+def save_project_calendar(project_id, calendar_data, user_id=None):
     """Save calendar data for a project (to workspace)"""
     if not project_id:
         raise ValueError("Project ID is required to save calendar")
     try:
         # Check if project is versioned
-        project = get_project(project_id)
+        project = get_project(project_id, user_id)
         if project and project.get('isVersioned'):
             # Save to workspace
-            workspace = get_project_workspace(project_id)
+            workspace = get_project_workspace(project_id, user_id)
             if workspace:
                 workspace['calendarData'] = calendar_data
-                save_project_workspace(project_id, workspace)
-                logger.info(f"Calendar data for project {project_id} saved to workspace")
+                save_project_workspace(project_id, workspace, user_id)
+                logger.info(f"Calendar data for project {project_id} saved to workspace for user {user_id}")
                 return calendar_data
         else:
             # Fallback to existing behavior for non-versioned projects
-            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            if user_id:
+                user_projects_dir = get_user_projects_dir(user_id)
+                project_dir = os.path.join(user_projects_dir, project_id)
+            else:
+                project_dir = os.path.join(PROJECTS_DIR, project_id)
+                
             os.makedirs(project_dir, exist_ok=True)
             calendar_file = os.path.join(project_dir, 'calendar.json')
 
             with open(calendar_file, 'w', encoding='utf-8') as f:
                 json.dump(calendar_data, f, indent=2, ensure_ascii=False)
 
-            logger.info(f"Calendar data for project {project_id} saved successfully")
+            logger.info(f"Calendar data for project {project_id} saved successfully for user {user_id}")
             return calendar_data
     except Exception as e:
-        logger.error(f"Error saving calendar data for project {project_id}: {str(e)}")
+        logger.error(f"Error saving calendar data for project {project_id} user {user_id}: {str(e)}")
         raise
 
-def generate_calendar(project):
+def generate_calendar(project, user_id=None):
     """Generate calendar days based on project dates, preserving existing data"""
     if not project or not project.get('id'):
         logger.error("Cannot generate calendar, invalid project data provided.")
         return {"days": [], "error": "Invalid project data"}
     try:
         project_id = project['id']
-        existing_calendar = get_project_calendar(project_id)
+        existing_calendar = get_project_calendar(project_id, user_id)
         # generate_calendar_days is imported from .calendar_generator
         calendar_data = generate_calendar_days(project, existing_calendar)
         # Todo: Enhance generate_calendar_days to robustly merge/update area info
-        return save_project_calendar(project_id, calendar_data)
+        return save_project_calendar(project_id, calendar_data, user_id)
     except Exception as e:
-        logger.error(f"Error generating calendar for project {project.get('id', 'N/A')}: {str(e)}")
+        logger.error(f"Error generating calendar for project {project.get('id', 'N/A')} user {user_id}: {str(e)}")
         return {"days": [], "error": f"Failed to generate calendar: {str(e)}"}
 
 
@@ -409,12 +456,17 @@ def get_project_versions(project_id):
         return []
 
 
-def get_project_workspace(project_id):
+def get_project_workspace(project_id, user_id=None):
     """
     Get the current workspace for a project
     """
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if user_id:
+            user_projects_dir = get_user_projects_dir(user_id)
+            project_dir = os.path.join(user_projects_dir, project_id)
+        else:
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         workspace_file = os.path.join(project_dir, 'workspace.json')
         
         if not os.path.exists(workspace_file):
@@ -447,16 +499,21 @@ def get_project_workspace(project_id):
             return json.load(f)
             
     except Exception as e:
-        logger.error(f"Error getting workspace for project {project_id}: {str(e)}")
+        logger.error(f"Error getting workspace for project {project_id} user {user_id}: {str(e)}")
         return None
 
 
-def save_project_workspace(project_id, workspace_data):
+def save_project_workspace(project_id, workspace_data, user_id=None):
     """
     Save the workspace for a project
     """
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if user_id:
+            user_projects_dir = get_user_projects_dir(user_id)
+            project_dir = os.path.join(user_projects_dir, project_id)
+        else:
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         workspace_file = os.path.join(project_dir, 'workspace.json')
         
         # Update last modified timestamp
@@ -466,20 +523,25 @@ def save_project_workspace(project_id, workspace_data):
         with open(workspace_file, 'w') as f:
             json.dump(workspace_data, f, indent=2)
             
-        logger.info(f"Saved workspace for project {project_id}")
+        logger.info(f"Saved workspace for project {project_id} user {user_id}")
         return True
         
     except Exception as e:
-        logger.error(f"Error saving workspace for project {project_id}: {str(e)}")
+        logger.error(f"Error saving workspace for project {project_id} user {user_id}: {str(e)}")
         return False
 
 
-def create_project_version(project_id, version_number, notes=None):
+def create_project_version(project_id, version_number, notes=None, user_id=None):
     """
     Create a new version from the current workspace
     """
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        # Determine project directory (user-scoped or legacy)
+        if user_id:
+            project_dir = os.path.join(get_user_projects_dir(user_id), project_id)
+        else:
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         versions_file = os.path.join(project_dir, 'versions.json')
         workspace_file = os.path.join(project_dir, 'workspace.json')
         
@@ -526,7 +588,7 @@ def create_project_version(project_id, version_number, notes=None):
         # Update workspace to reference this version
         workspace_data['baseVersionId'] = version_id
         workspace_data['isDraft'] = False
-        save_project_workspace(project_id, workspace_data)
+        save_project_workspace(project_id, workspace_data, user_id)
         
         logger.info(f"Created version {version_number} for project {project_id}")
         return new_version
@@ -535,12 +597,17 @@ def create_project_version(project_id, version_number, notes=None):
         logger.error(f"Error creating version for project {project_id}: {str(e)}")
         return None
 
-def publish_project_version(project_id, version_id):
+def publish_project_version(project_id, version_id, user_id=None):
     """
     Publish a specific version of a project
     """
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        # Determine project directory (user-scoped or legacy)
+        if user_id:
+            project_dir = os.path.join(get_user_projects_dir(user_id), project_id)
+        else:
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         versions_file = os.path.join(project_dir, 'versions.json')
         
         if not os.path.exists(versions_file):

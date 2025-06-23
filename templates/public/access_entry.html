@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Access Production Calendar - STRIPS{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<style>
+    /* Access Code specific styles */
+    .access-code-input {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+    
+    .access-code-input::placeholder {
+        text-transform: none;
+        letter-spacing: normal;
+        font-family: inherit;
+        font-weight: normal;
+    }
+    
+    .code-format-hint {
+        font-size: 0.85rem;
+        color: var(--text-gray);
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+    
+    /* Loading animation */
+    .loading {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .loading::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        animation: loading 1.5s infinite;
+    }
+    
+    @keyframes loading {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+    
+    /* Help section styling */
+    .access-help {
+        background: rgba(79, 195, 247, 0.05);
+        border: 1px solid rgba(79, 195, 247, 0.1);
+        border-radius: var(--radius-md);
+        padding: var(--space-lg);
+        margin-top: var(--space-xl);
+    }
+    
+    .access-help-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-light);
+        margin-bottom: var(--space-md);
+    }
+    
+    .access-help-content {
+        font-size: 0.9rem;
+        color: var(--text-gray);
+        line-height: 1.5;
+        text-align: left;
+    }
+    
+    .access-help-content ul {
+        margin: var(--space-md) 0;
+        padding-left: 1.5rem;
+    }
+    
+    .access-help-content li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <!-- STRIPS Login Header -->
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="login-logo-icon">
+                    <img src="{{ url_for('static', filename='images/web-app-manifest-192x192.png') }}" alt="STRIPS Logo" class="login-logo-image">
+                </div>
+                <h1 class="login-title">STRIPS</h1>
+            </div>
+            <h2 class="login-subtitle">Access Production Calendar</h2>
+            <p class="login-description">
+                Enter your access code to view the latest shooting schedule and production details.
+            </p>
+        </div>
+
+        <!-- Access Form -->
+        <div class="login-form-wrapper">
+            <form method="POST" class="login-form" id="access-form">
+                <div class="form-group">
+                    <label for="access_code" class="form-label">Access Code</label>
+                    <input 
+                        type="text" 
+                        id="access_code" 
+                        name="access_code" 
+                        class="form-input login-input access-code-input"
+                        placeholder="HAMLET24"
+                        maxlength="8"
+                        autocomplete="off"
+                        autocapitalize="characters"
+                        spellcheck="false"
+                        required
+                    >
+                    <div class="code-format-hint">
+                        Enter the 8-character code (letters and numbers)
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large login-button" id="submit-btn">
+                    <span class="nav-icon">🎬</span>
+                    Access Calendar
+                </button>
+            </form>
+        </div>
+
+        <!-- Alternative Access -->
+        <div class="login-alternatives">
+            <div class="alternative-divider">
+                <span class="divider-text">Have an account?</span>
+            </div>
+            
+            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-large">
+                <span class="nav-icon">🔐</span>
+                User Login
+            </a>
+        </div>
+
+        <!-- Help Section -->
+        <div class="access-help">
+            <h3 class="access-help-title">Need Help?</h3>
+            <div class="access-help-content">
+                <p><strong>How to get your access code:</strong></p>
+                <ul>
+                    <li>Access codes are provided by the production office</li>
+                    <li>Check your email for schedule updates with codes</li>
+                    <li>Codes are typically 8 characters (like "HAMLET24")</li>
+                    <li>Codes are case-insensitive</li>
+                </ul>
+                
+                <p><strong>Having trouble?</strong></p>
+                <ul>
+                    <li>Make sure you're entering the code exactly as provided</li>
+                    <li>Try refreshing the page and entering the code again</li>
+                    <li>Contact the production office if your code isn't working</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Back to Welcome -->
+        <div class="login-footer">
+            <a href="{{ url_for('main.welcome') }}" class="back-link">
+                <span class="nav-icon">←</span>
+                Back to Welcome
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('access-form');
+        const input = document.getElementById('access_code');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        // Auto-uppercase and format input
+        input.addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase();
+            // Remove any non-alphanumeric characters
+            value = value.replace(/[^A-Z0-9]/g, '');
+            // Limit to 8 characters
+            value = value.substring(0, 8);
+            e.target.value = value;
+            
+            // Enable/disable submit button
+            submitBtn.disabled = value.length !== 8;
+        });
+        
+        // Handle form submission
+        form.addEventListener('submit', function() {
+            submitBtn.classList.add('loading');
+            const icon = submitBtn.querySelector('.nav-icon');
+            const text = submitBtn.lastChild;
+            if (icon) icon.textContent = '⏳';
+            text.textContent = ' Accessing Calendar...';
+            submitBtn.disabled = true;
+        });
+        
+        // Auto-focus the input
+        input.focus();
+        
+        // Handle Enter key
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && input.value.length === 8) {
+                form.submit();
+            }
+        });
+    });
+</script>
+{% endblock %}

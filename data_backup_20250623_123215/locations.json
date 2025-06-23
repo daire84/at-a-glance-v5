@@ -1,0 +1,92 @@
+[
+  {
+    "id": "studio-a",
+    "name": "A Stage Ardmore",
+    "areaId": "ardmore",
+    "address": "Ardmore Studios, Ballywaltrim, Kilmacanoge ED, The Municipal District of Bray, County Wicklow, Leinster, \u00c9ire / Ireland",
+    "notes": "",
+    "latitude": 53.1961912,
+    "longitude": -6.1266173
+  },
+  {
+    "id": "studio-b",
+    "name": "B Stage Ardmore",
+    "areaId": "034142b7-5b63-4fc3-9406-fc04dc2f6efd",
+    "address": "Studio Complex, Sound Stage B",
+    "notes": "",
+    "latitude": 53.2034,
+    "longitude": -6.1031
+  },
+  {
+    "id": "ardmore-a",
+    "name": "C Stage Ardmore",
+    "areaId": "d228a557-0301-45fe-89ba-bc0cd781d404",
+    "address": "Ardmore Studios, Bray",
+    "notes": "Large sound stage",
+    "latitude": 53.2034,
+    "longitude": -6.1031
+  },
+  {
+    "id": "ardmore-d",
+    "name": "D Stage Ardmore",
+    "areaId": "aa1f6728-63e5-445c-b4f7-59a3111c4042",
+    "address": "Ardmore Studios, Bray",
+    "notes": "Medium sound stage",
+    "latitude": 53.2034,
+    "longitude": -6.1031
+  },
+  {
+    "id": "mansion",
+    "name": "St Pats",
+    "areaId": "north",
+    "address": "",
+    "notes": "",
+    "latitude": 53.2034,
+    "longitude": -6.2567
+  },
+  {
+    "id": "phoenix-park",
+    "name": "Glenmaroon",
+    "areaId": "north",
+    "address": "St. Louise\u2019s, Glenmaroon, Knockmaroon Hill, Castleknock-Knockmaroon DED 1986, Fingal, County Dublin, Leinster, D20 AH96, \u00c9ire / Ireland",
+    "notes": "",
+    "latitude": 53.356718,
+    "longitude": -6.356524
+  },
+  {
+    "id": "93c2d018-4023-40e7-a2fd-0096848186b5",
+    "name": "Almer\u00eda",
+    "areaId": "4459abff-cd87-4fdc-a238-1ff355b2e970",
+    "address": "Almer\u00eda, Andaluc\u00eda, Espa\u00f1a",
+    "notes": "",
+    "latitude": 36.8414197,
+    "longitude": -2.4628135
+  },
+  {
+    "id": "4883666b-383a-4d16-8ae9-1a43f9761a20",
+    "name": "Trinity College Dublin",
+    "areaId": "south",
+    "address": "Trinity College Dublin, Ireland",
+    "notes": "",
+    "latitude": 53.3444,
+    "longitude": -6.2567
+  },
+  {
+    "id": "c7749b2a-aeee-4f80-b27c-46ece444c8a1",
+    "name": "Powerscourt",
+    "areaId": "wicklow",
+    "address": "Powerscourt, Upper Dargle Road, Ballywaltrim, Kilmacanoge ED, The Municipal District of Bray, County Wicklow, Leinster, A98 TY45, \u00c9ire / Ireland",
+    "notes": "",
+    "latitude": 53.2007892,
+    "longitude": -6.1276056
+  },
+  {
+    "id": "b0d2f068-9984-4966-a249-972a675a3c9f",
+    "name": "Foster Place",
+    "areaId": "south",
+    "address": "Foster Place, Royal Exchange A Ward 1986, Dublin, County Dublin, Leinster, D02 A375, \u00c9ire / Ireland",
+    "notes": "",
+    "latitude": 53.3448052,
+    "longitude": -6.2611361
+  }
+]

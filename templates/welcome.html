@@ -42,14 +42,14 @@
                 </div>
                 <h3 class="nav-card-title">Viewer Access</h3>
                 <p class="nav-card-description">
-                    View schedules and project information. Perfect for crew members who need to see upcoming shoots and locations.
+                    View schedules with your access code. Perfect for crew members who need to see upcoming shoots and locations.
                 </p>
                 <div class="nav-card-features">
                     <span class="nav-feature">📋 View Schedules</span>
                     <span class="nav-feature">📍 Location Details</span>
                     <span class="nav-feature">👥 Department Info</span>
                 </div>
-                <a href="{{ url_for('auth.login') }}" class="nav-card-button btn-viewer">
+                <a href="{{ url_for('public.access_code_entry') }}" class="nav-card-button btn-viewer">
                     Enter with Project Code
                 </a>
             </div>

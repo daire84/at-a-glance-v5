@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Access - {{ project.title }}{% endblock %}
+
+{% block styles %}
+<style>
+    .access-management-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
+    
+    .access-header {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .access-header h1 {
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+    
+    .access-header p {
+        color: #6c757d;
+        margin: 0;
+    }
+    
+    .current-access {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .access-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #28a745;
+    }
+    
+    .status-inactive {
+        background: #dc3545;
+    }
+    
+    .access-details {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .detail-item {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 1rem;
+    }
+    
+    .detail-item-primary {
+        background: #fff;
+        border: 2px solid #e9ecef;
+        padding: 1.5rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .detail-item-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .detail-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+    
+    .detail-value {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #333;
+        word-break: break-all;
+    }
+    
+    .detail-value.code {
+        font-family: 'Courier New', monospace;
+        background: #343a40;
+        color: white;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        text-align: center;
+        letter-spacing: 0.1em;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .detail-value.link-value {
+        font-family: monospace;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        padding: 0.75rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        word-break: break-all;
+        margin-bottom: 1rem;
+    }
+    
+    .copy-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.2s ease;
+        align-self: flex-end;
+        min-width: 90px;
+        height: 32px;
+    }
+    
+    .copy-btn:hover {
+        background: #0056b3;
+        transform: translateY(-1px);
+    }
+    
+    .copy-btn.copied {
+        background: #28a745;
+    }
+    
+    
+    .access-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0056b3;
+        color: white;
+    }
+    
+    .btn-success {
+        background: #28a745;
+        color: white;
+    }
+    
+    .btn-success:hover {
+        background: #1e7e34;
+        color: white;
+    }
+    
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-danger:hover {
+        background: #bd2130;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #545b62;
+        color: white;
+    }
+    
+    .no-access-state {
+        background: white;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 3rem 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .no-access-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .no-access-title {
+        color: #333;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    
+    .no-access-description {
+        color: #6c757d;
+        margin-bottom: 2rem;
+        line-height: 1.5;
+    }
+    
+    .usage-stats {
+        background: #e3f2fd;
+        border: 1px solid #bbdefb;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .usage-stats h4 {
+        color: #1976d2;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1976d2;
+        display: block;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+        color: #666;
+    }
+    
+    .confirm-dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    
+    .confirm-content {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        max-width: 400px;
+        text-align: center;
+    }
+    
+    .confirm-content h3 {
+        color: #dc3545;
+        margin-bottom: 1rem;
+    }
+    
+    .confirm-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .access-management-container {
+            margin: 1rem;
+            padding: 1rem;
+        }
+        
+        .detail-item-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .copy-btn {
+            align-self: stretch;
+            min-width: auto;
+            height: auto;
+        }
+        
+        .access-actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="access-management-container">
+    <!-- Header -->
+    <div class="access-header">
+        <h1>🔒 Public Access Management</h1>
+        <p>Manage public calendar sharing for {{ project.title }}</p>
+    </div>
+    
+    {% if access_info %}
+    <!-- Current Access Information -->
+    <div class="current-access">
+        <div class="access-status">
+            <div class="status-indicator"></div>
+            <strong>Public Access Active</strong>
+        </div>
+        
+        <div class="access-details">
+            <div class="detail-item detail-item-primary">
+                <div class="detail-label">🔑 Access Code</div>
+                <div class="detail-value code">{{ access_info.access_code }}</div>
+                <button class="copy-btn" onclick="copyAccessCode()">📋 Copy Code</button>
+            </div>
+            
+            <div class="detail-item detail-item-primary">
+                <div class="detail-label">🔗 Direct Link</div>
+                <div class="detail-value link-value">{{ request.host_url }}calendar/{{ access_info.access_token }}</div>
+                <button class="copy-btn" onclick="copyShareLink()">📋 Copy Link</button>
+            </div>
+            
+            <div class="detail-item-row">
+                <div class="detail-item">
+                    <div class="detail-label">📅 Created</div>
+                    <div class="detail-value">{{ access_info.created_at.split('T')[0] if 'T' in access_info.created_at else access_info.created_at }}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">👁️ Total Views</div>
+                    <div class="detail-value">{{ access_info.view_count or 0 }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usage Statistics -->
+        <div class="usage-stats">
+            <h4>📊 Usage Statistics</h4>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">{{ access_info.view_count or 0 }}</span>
+                    <span class="stat-label">Total Views</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">
+                        {% if access_info.last_accessed %}
+                            {{ access_info.last_accessed.split('T')[0] if 'T' in access_info.last_accessed else access_info.last_accessed }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </span>
+                    <span class="stat-label">Last Accessed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">
+                        {% set days_since = (access_info.created_at.split('T')[0] if 'T' in access_info.created_at else access_info.created_at) %}
+                        Active
+                    </span>
+                    <span class="stat-label">Status</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="access-actions">
+            <a href="{{ url_for('main.viewer', project_id=project.id) }}" 
+               class="btn btn-secondary" target="_blank">
+                <span>👁️</span>
+                Preview Calendar
+            </a>
+            <button class="btn btn-danger" onclick="showRevokeDialog()">
+                <span>🚫</span>
+                Revoke Access
+            </button>
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- No Access State -->
+    <div class="no-access-state">
+        <div class="no-access-icon">🔒</div>
+        <h3 class="no-access-title">No Public Access Configured</h3>
+        <p class="no-access-description">
+            This project is not currently published for public access. 
+            Publish your calendar to generate access codes and shareable links for your crew.
+        </p>
+        <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-primary">
+            <span>📅</span>
+            Go to Calendar Editor
+        </a>
+    </div>
+    {% endif %}
+    
+    <!-- Back to Calendar -->
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{{ url_for('admin.admin_calendar', project_id=project.id) }}" class="btn btn-secondary">
+            <span>←</span>
+            Back to Calendar Editor
+        </a>
+    </div>
+</div>
+
+<!-- Confirmation Dialog -->
+<div class="confirm-dialog" id="revoke-dialog">
+    <div class="confirm-content">
+        <h3>⚠️ Revoke Public Access</h3>
+        <p>Are you sure you want to revoke public access?</p>
+        <p><strong>This will:</strong></p>
+        <ul style="text-align: left; margin: 1rem 0;">
+            <li>Disable the access code</li>
+            <li>Disable the direct link</li>
+            <li>Prevent crew from viewing the calendar</li>
+        </ul>
+        <p style="color: #dc3545; font-weight: 500;">This action cannot be undone.</p>
+        
+        <div class="confirm-actions">
+            <button class="btn btn-secondary" onclick="hideRevokeDialog()">Cancel</button>
+            <form method="POST" action="{{ url_for('admin.revoke_project_access', project_id=project.id) }}" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Revoke Access</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyAccessCode() {
+    const code = '{{ access_info.access_code if access_info else "" }}';
+    const button = event.target;
+    copyToClipboard(code, button, '✅ Copied!');
+}
+
+function copyShareLink() {
+    const link = '{{ request.host_url }}calendar/{{ access_info.access_token if access_info else "" }}';
+    const button = event.target;
+    copyToClipboard(link, button, '✅ Copied!');
+}
+
+function copyToClipboard(text, button, successMessage) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Show temporary success message
+        const originalText = button.textContent;
+        button.textContent = successMessage || 'Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }).catch(function(err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        const originalText = button.textContent;
+        button.textContent = successMessage || 'Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+function showRevokeDialog() {
+    document.getElementById('revoke-dialog').style.display = 'flex';
+}
+
+function hideRevokeDialog() {
+    document.getElementById('revoke-dialog').style.display = 'none';
+}
+
+// Close dialog when clicking outside
+document.getElementById('revoke-dialog').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideRevokeDialog();
+    }
+});
+</script>
+{% endblock %}

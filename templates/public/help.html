@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Production Calendar</title>
+    
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .help-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .help-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .help-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .help-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .help-content {
+            padding: 2rem;
+        }
+        
+        .help-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .help-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .help-section h2 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .help-section h3 {
+            color: #495057;
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        .help-section p {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .help-section ul,
+        .help-section ol {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .help-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #721c24;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #155724;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+            color: white;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            
+            .help-content {
+                padding: 1.5rem;
+            }
+            
+            .help-header {
+                padding: 1.5rem;
+            }
+            
+            .help-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="help-container">
+        <!-- Header -->
+        <div class="help-header">
+            <h1>📚 Calendar Help</h1>
+            <p>Everything you need to know about accessing production schedules</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="help-content">
+            <!-- Getting Started -->
+            <div class="help-section">
+                <h2>🚀 Getting Started</h2>
+                <p>Welcome to the production calendar system! This tool allows crew members to easily access the latest shooting schedules without needing to create accounts.</p>
+                
+                <h3>Two Ways to Access:</h3>
+                <ol>
+                    <li><strong>Access Code:</strong> Enter an 8-character code like <span class="highlight">HAMLET24</span></li>
+                    <li><strong>Direct Link:</strong> Click a link shared by the production office</li>
+                </ol>
+            </div>
+            
+            <!-- Access Codes -->
+            <div class="help-section">
+                <h2>🔑 Using Access Codes</h2>
+                
+                <h3>How to Get an Access Code:</h3>
+                <ul>
+                    <li>Access codes are provided by the production office</li>
+                    <li>Check your email for schedule updates</li>
+                    <li>Look for messages from the 1st AD or production coordinator</li>
+                    <li>Ask a department head if you haven't received one</li>
+                </ul>
+                
+                <h3>Entering Your Code:</h3>
+                <ol>
+                    <li>Visit the access page</li>
+                    <li>Enter your 8-character code (like <span class="highlight">HAMLET24</span>)</li>
+                    <li>Codes are not case-sensitive</li>
+                    <li>Click "Access Calendar" to view the schedule</li>
+                </ol>
+                
+                <div class="success">
+                    <strong>Tip:</strong> Bookmark the calendar page after accessing it for quick future access!
+                </div>
+            </div>
+            
+            <!-- Direct Links -->
+            <div class="help-section">
+                <h2>🔗 Using Direct Links</h2>
+                <p>Production may share direct links via email or text message. These links take you straight to the calendar without entering a code.</p>
+                
+                <h3>Link Format:</h3>
+                <div class="code-example">
+                    https://yourapp.com/calendar/abc123def456
+                </div>
+                
+                <ul>
+                    <li>Links work immediately - no code entry needed</li>
+                    <li>Bookmark the link for easy access</li>
+                    <li>Share with other crew members if authorized</li>
+                </ul>
+            </div>
+            
+            <!-- Using the Calendar -->
+            <div class="help-section">
+                <h2>📅 Using the Calendar</h2>
+                
+                <h3>Navigation Features:</h3>
+                <ul>
+                    <li><strong>Today Button:</strong> Jump to today's date</li>
+                    <li><strong>Print Button:</strong> Print the schedule</li>
+                    <li><strong>Filters:</strong> Show/hide specific information</li>
+                </ul>
+                
+                <h3>Calendar Information:</h3>
+                <ul>
+                    <li><strong>Shoot Days:</strong> Days with principal photography</li>
+                    <li><strong>Prep Days:</strong> Setup and preparation days</li>
+                    <li><strong>Wrap Days:</strong> Breakdown and wrap activities</li>
+                    <li><strong>Call Times:</strong> When to arrive on set</li>
+                    <li><strong>Locations:</strong> Where filming takes place</li>
+                    <li><strong>Departments:</strong> Which departments are needed</li>
+                </ul>
+                
+                <div class="warning">
+                    <strong>Note:</strong> This is a read-only calendar. You cannot make changes to the schedule.
+                </div>
+            </div>
+            
+            <!-- Troubleshooting -->
+            <div class="help-section">
+                <h2>🔧 Troubleshooting</h2>
+                
+                <h3>Access Code Issues:</h3>
+                <ul>
+                    <li><strong>"Invalid access code":</strong> Check spelling and try again</li>
+                    <li><strong>Code not working:</strong> Contact the production office for a new code</li>
+                    <li><strong>Expired code:</strong> Codes may expire - request a current one</li>
+                </ul>
+                
+                <h3>Link Issues:</h3>
+                <ul>
+                    <li><strong>Broken link:</strong> The schedule may have been updated with a new link</li>
+                    <li><strong>Page not found:</strong> Contact production for the current link</li>
+                </ul>
+                
+                <h3>General Issues:</h3>
+                <ul>
+                    <li><strong>Mobile display:</strong> The calendar is optimized for mobile viewing</li>
+                    <li><strong>Printing:</strong> Use landscape orientation for best results</li>
+                    <li><strong>Updates:</strong> Refresh the page to see the latest schedule changes</li>
+                </ul>
+                
+                <div class="success">
+                    <strong>Still having trouble?</strong> Contact the production office - they're there to help!
+                </div>
+            </div>
+            
+            <!-- Contact -->
+            <div class="help-section">
+                <h2>📞 Getting Help</h2>
+                <p>If you're having trouble accessing the calendar or have questions about the schedule:</p>
+                
+                <ul>
+                    <li><strong>Production Office:</strong> Your first point of contact</li>
+                    <li><strong>1st Assistant Director:</strong> For schedule-related questions</li>
+                    <li><strong>Production Coordinator:</strong> For access issues</li>
+                    <li><strong>Department Heads:</strong> For department-specific information</li>
+                </ul>
+                
+                <p>When contacting for help, please mention:</p>
+                <ul>
+                    <li>The production name</li>
+                    <li>Your department</li>
+                    <li>The specific issue you're experiencing</li>
+                    <li>Whether you have an access code or link</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="/access" class="btn btn-primary">
+                <span>🔑</span>
+                Enter Access Code
+            </a>
+            <button onclick="history.back()" class="btn btn-secondary">
+                <span>←</span>
+                Go Back
+            </button>
+        </div>
+    </div>
+</body>
+</html>

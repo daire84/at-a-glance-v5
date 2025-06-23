@@ -27,7 +27,14 @@
       "Bash(./dev-shell python:*)",
       "Bash(mkdir:*)",
       "Bash(true)",
-      "Bash(ln:*)"
+      "Bash(ln:*)",
+      "Bash(whereis:*)",
+      "Bash(docker-compose exec:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker:*)",
+      "Bash(# Create backup first\ncp -r /workspace/data /workspace/data_backup_$(date +%Y%m%d_%H%M%S)\necho \"✅ Backup created\"\n\n# Copy projects to your user directory\nUSER_ID=\"06f25d7b-1e14-454c-89e5-d742020c10a8\"\nUSER_PROJECTS_DIR=\"/workspace/data/users/$USER_ID/projects\"\n\n# Create projects directory for your user if it doesn't exist\nmkdir -p \"$USER_PROJECTS_DIR\"\n\n# Copy each project\nfor project_dir in /workspace/data/projects/*/; do\n    if [ -d \"$project_dir\" ]; then\n        project_id=$(basename \"$project_dir\")\n        echo \"📁 Migrating project: $project_id\"\n        cp -r \"$project_dir\" \"$USER_PROJECTS_DIR/\"\n    fi\ndone\n\necho \"✅ Migration completed!\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n📁 Project 1 contents:\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n📁 Project 2 contents:\")"
     ],
     "deny": []
   }

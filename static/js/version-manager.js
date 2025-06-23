@@ -377,7 +377,7 @@ class VersionManager {
      * Publish a version
      */
     async publishVersion(versionId) {
-        if (!confirm('Are you sure you want to publish this version? This will make it visible to viewers.')) {
+        if (!confirm('Are you sure you want to publish this version? This will make it visible to viewers and generate access codes for crew.')) {
             return;
         }
 
@@ -393,15 +393,103 @@ class VersionManager {
                 throw new Error('Failed to publish version');
             }
 
+            const result = await response.json();
+
             // Reload versions
             await this.loadVersions();
 
-            this.showSuccess('Version published successfully');
+            // Show success with access codes
+            if (result.access_info) {
+                this.showPublishSuccess(result.access_info);
+            } else {
+                this.showSuccess('Version published successfully');
+            }
 
         } catch (error) {
             console.error('Error publishing version:', error);
             this.showError(error.message || 'Failed to publish version');
         }
+    }
+
+    /**
+     * Show publish success modal with access codes
+     */
+    showPublishSuccess(accessInfo) {
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h3>🎉 Version Published Successfully!</h3>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p class="success-message">Your calendar is now live and accessible to crew members!</p>
+                    
+                    <div class="access-sharing">
+                        <h4>📤 Share with Your Crew</h4>
+                        
+                        <div class="share-method">
+                            <label>🔑 Access Code</label>
+                            <div class="code-display">
+                                <span class="access-code">${accessInfo.access_code}</span>
+                                <button class="btn btn-small" onclick="VersionManager.copyToClipboard('${accessInfo.access_code}', this)">Copy</button>
+                            </div>
+                            <small>Crew enters this code at: ${window.location.origin}/access</small>
+                        </div>
+                        
+                        <div class="share-method">
+                            <label>🔗 Direct Link</label>
+                            <div class="link-display">
+                                <input readonly value="${window.location.origin}${accessInfo.share_url}" onclick="this.select()">
+                                <button class="btn btn-small" onclick="VersionManager.copyToClipboard('${window.location.origin}${accessInfo.share_url}', this)">Copy</button>
+                            </div>
+                            <small>Direct access for crew members</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Close</button>
+                    <a href="/admin/project/${this.projectId}/access" class="btn btn-primary">Manage Access</a>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Focus the modal
+        modal.querySelector('.modal-dialog').focus();
+    }
+
+    /**
+     * Copy text to clipboard (global utility function)
+     */
+    static copyToClipboard(text, button) {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.classList.add('success');
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('success');
+            }, 2000);
+        }).catch(() => {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        });
     }
 
     /**

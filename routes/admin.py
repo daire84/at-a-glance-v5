@@ -2,24 +2,30 @@
 import os
 import json
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, flash # Ensure this line is correct
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 
-from utils.decorators import admin_required # Absolute import
-# --- Corrected helpers import ---
-from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, logger, recalculate_shoot_days, save_project_workspace, get_project_workspace
-
-from utils.helpers import update_day_from_form # Absolute import
-# --- Corrected calendar_generator import ---
-from utils.calendar_generator import calculate_department_counts, calculate_location_counts # Absolute import
+from utils.decorators import admin_required
+from utils.helpers import (
+    get_projects, get_project, save_project, get_project_calendar, 
+    save_project_calendar, generate_calendar, DATA_DIR, logger, 
+    recalculate_shoot_days, save_project_workspace, get_project_workspace,
+    update_day_from_form
+)
+from utils.calendar_generator import calculate_department_counts, calculate_location_counts
+from utils.access_manager import ProjectAccessManager
 
 # Define Blueprint: Set url_prefix and template_folder
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin', template_folder='../templates/admin')
+
+# Initialize access manager
+access_manager = ProjectAccessManager()
 
 @admin_bp.route('/')
 @admin_required
 def admin_dashboard():
     """Admin dashboard"""
-    projects = get_projects()
+    user_id = session.get('user_id')
+    projects = get_projects(user_id)
     # Renders 'admin/dashboard.html' because of template_folder
     return render_template('dashboard.html', projects=projects)
 
@@ -27,11 +33,13 @@ def admin_dashboard():
 @admin_required
 def admin_project(project_id):
     """Project details editor"""
+    user_id = session.get('user_id')
+    
     if request.method == 'POST':
         try:
             form_data = request.form.to_dict()
             if project_id != 'new':
-                project = get_project(project_id)
+                project = get_project(project_id, user_id)
                 if not project:
                     flash('Project not found', 'error')
                     return redirect(url_for('admin.admin_dashboard'))
@@ -48,7 +56,7 @@ def admin_project(project_id):
             for key, value in form_data.items():
                 project[key] = value
 
-            save_project(project) # Save the updated project data
+            save_project(project, user_id) # Save the updated project data
 
             dates_changed = (
                 project_id == 'new' or
@@ -75,7 +83,7 @@ def admin_project(project_id):
             # Fall through to render the form again
 
     # GET request or if POST had an error
-    project = get_project(project_id) if project_id != 'new' else {}
+    project = get_project(project_id, user_id) if project_id != 'new' else {}
     # Renders 'admin/project.html'
     return render_template('project.html', project=project)
 
@@ -84,8 +92,10 @@ def admin_project(project_id):
 @admin_required # Apply decorator
 def admin_calendar(project_id):
     """Calendar editor"""
+    user_id = session.get('user_id')
+    
     try:
-        project = get_project(project_id)
+        project = get_project(project_id, user_id)
         if not project:
             flash('Project not found', 'error')
             return redirect(url_for('admin.admin_dashboard'))
@@ -96,12 +106,12 @@ def admin_calendar(project_id):
             
             # Also save this change back to the file
             try:
-                save_project(project)
+                save_project(project, user_id)
                 logger.info(f"Added missing isVersioned property to project {project_id}")
             except Exception as e:
                 logger.error(f"Failed to save updated project with isVersioned: {str(e)}")
 
-        calendar_data = get_project_calendar(project_id)
+        calendar_data = get_project_calendar(project_id, user_id)
 
         # --- Load supporting data ---
         departments = []
@@ -338,3 +348,132 @@ def admin_help():
     """Help and documentation page"""
     # Renders unified help page instead of admin-specific one
     return render_template('help.html')
+
+# === PUBLIC SHARING ROUTES ===
+
+@admin_bp.route('/project/<project_id>/publish', methods=['POST'])
+@admin_required
+def publish_project(project_id):
+    """Publish project calendar with public access generation"""
+    user_id = session.get('user_id')
+    
+    try:
+        # Get project and calendar data
+        project = get_project(project_id, user_id)
+        if not project:
+            flash('Project not found', 'error')
+            return redirect(url_for('admin.admin_dashboard'))
+        
+        # Get calendar data - check if versioned
+        if project.get('isVersioned'):
+            workspace = get_project_workspace(project_id, user_id)
+            if not workspace or 'calendarData' not in workspace:
+                flash('No calendar data found in workspace', 'error')
+                return redirect(url_for('admin.admin_calendar', project_id=project_id))
+            calendar_data = workspace['calendarData']
+        else:
+            calendar_data = get_project_calendar(project_id, user_id)
+            if not calendar_data:
+                flash('No calendar data found', 'error')
+                return redirect(url_for('admin.admin_calendar', project_id=project_id))
+        
+        # Get version info from form
+        version_number = request.form.get('version_number', '1.0')
+        version_notes = request.form.get('notes', '')
+        
+        # Create and publish version if versioned project
+        if project.get('isVersioned'):
+            from utils.helpers import create_project_version, publish_project_version
+            
+            # Create new version from workspace
+            new_version = create_project_version(project_id, version_number, version_notes, user_id)
+            if new_version:
+                # Publish the newly created version
+                publish_success = publish_project_version(project_id, new_version['id'], user_id)
+                if not publish_success:
+                    flash('Version created but failed to publish', 'warning')
+            else:
+                flash('Failed to create version', 'error')
+                return redirect(url_for('admin.admin_calendar', project_id=project_id))
+        
+        # Publish calendar with public access
+        access_info = access_manager.publish_calendar_with_access(
+            user_id, project_id, calendar_data, project
+        )
+        
+        flash('Calendar published successfully!', 'success')
+        return render_template('admin/publish_success.html',
+                             project=project,
+                             access_info=access_info,
+                             version_number=version_number)
+    
+    except Exception as e:
+        logger.error(f"Error publishing project {project_id}: {str(e)}")
+        flash(f'Error publishing calendar: {str(e)}', 'error')
+        return redirect(url_for('admin.admin_calendar', project_id=project_id))
+
+@admin_bp.route('/project/<project_id>/access')
+@admin_required
+def manage_project_access(project_id):
+    """Manage public access settings for project"""
+    user_id = session.get('user_id')
+    
+    try:
+        project = get_project(project_id, user_id)
+        if not project:
+            flash('Project not found', 'error')
+            return redirect(url_for('admin.admin_dashboard'))
+        
+        # Get access information
+        access_info = access_manager.get_project_access_info(user_id, project_id)
+        
+        return render_template('admin/project_access.html',
+                             project=project,
+                             access_info=access_info)
+    
+    except Exception as e:
+        logger.error(f"Error managing access for project {project_id}: {str(e)}")
+        flash(f'Error loading access settings: {str(e)}', 'error')
+        return redirect(url_for('admin.admin_calendar', project_id=project_id))
+
+@admin_bp.route('/project/<project_id>/access/revoke', methods=['POST'])
+@admin_required
+def revoke_project_access(project_id):
+    """Revoke public access for project"""
+    user_id = session.get('user_id')
+    
+    try:
+        project = get_project(project_id, user_id)
+        if not project:
+            flash('Project not found', 'error')
+            return redirect(url_for('admin.admin_dashboard'))
+        
+        # Revoke access
+        success = access_manager.revoke_access(user_id, project_id)
+        
+        if success:
+            flash('Public access revoked successfully', 'success')
+        else:
+            flash('No public access found to revoke', 'warning')
+        
+        return redirect(url_for('admin.manage_project_access', project_id=project_id))
+    
+    except Exception as e:
+        logger.error(f"Error revoking access for project {project_id}: {str(e)}")
+        flash(f'Error revoking access: {str(e)}', 'error')
+        return redirect(url_for('admin.manage_project_access', project_id=project_id))
+
+@admin_bp.route('/access/stats')
+@admin_required
+def access_statistics():
+    """View access statistics for user's projects"""
+    user_id = session.get('user_id')
+    
+    try:
+        stats = access_manager.get_access_statistics(user_id)
+        return render_template('admin/access_stats.html', stats=stats)
+    
+    except Exception as e:
+        logger.error(f"Error loading access statistics: {str(e)}")
+        flash(f'Error loading statistics: {str(e)}', 'error')
+        return redirect(url_for('admin.admin_dashboard'))

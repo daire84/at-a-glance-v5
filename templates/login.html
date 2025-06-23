@@ -17,9 +17,9 @@
                 </div>
                 <h1 class="login-title">STRIPS</h1>
             </div>
-            <h2 class="login-subtitle">Viewer Access</h2>
+            <h2 class="login-subtitle">User Login</h2>
             <p class="login-description">
-                Enter your project access code to view production schedules and information.
+                Sign in to access your production management dashboard and projects.
             </p>
         </div>
 
@@ -34,24 +34,34 @@
 
             <form method="POST" action="{{ url_for('auth.login', next=request.args.get('next')) }}" class="login-form">
                 <div class="form-group">
-                    <label for="password" class="form-label">Project Access Code</label>
+                    <label for="username" class="form-label">Username or Email</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-input login-input"
+                        placeholder="Enter your username or email"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
                     <input 
                         type="password" 
                         id="password" 
                         name="password" 
                         class="form-input login-input"
-                        placeholder="Enter your project access code"
+                        placeholder="Enter your password"
                         required
                         autocomplete="current-password"
                     >
-                    <div class="form-hint">
-                        Get your access code from your production coordinator
-                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-large login-button">
                     <span class="nav-icon">🔓</span>
-                    Access Project Calendar
+                    Sign In
                 </button>
             </form>
         </div>
@@ -59,18 +69,18 @@
         <!-- Alternative Access -->
         <div class="login-alternatives">
             <div class="alternative-divider">
-                <span class="divider-text">Alternative Access</span>
+                <span class="divider-text">Need an account?</span>
             </div>
             
-            <a href="{{ url_for('auth.admin_login', next=request.args.get('next')) }}" class="btn btn-secondary btn-large">
-                <span class="nav-icon">⚙️</span>
-                Admin Login
+            <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-large">
+                <span class="nav-icon">✨</span>
+                Create Account
             </a>
             
             <div class="login-help">
                 <a href="{{ url_for('main.help') }}" class="help-link">
                     <span class="nav-icon">❔</span>
-                    Need help accessing your project?
+                    Learn about STRIPS features
                 </a>
             </div>
         </div>
