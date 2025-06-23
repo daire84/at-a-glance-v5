@@ -1,0 +1,14 @@
+{
+    "user_id": "sample-admin-user-id",
+    "display_name": "Admin User",
+    "email": "admin@example.com",
+    "role": "admin",
+    "preferences": {
+        "theme": "dark",
+        "timezone": "UTC",
+        "date_format": "YYYY-MM-DD",
+        "default_project_view": "calendar"
+    },
+    "created_at": "2025-01-01T00:00:00Z",
+    "last_updated": "2025-01-01T12:00:00Z"
+}

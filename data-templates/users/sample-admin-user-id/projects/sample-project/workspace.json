@@ -1,0 +1,20 @@
+{
+  "active_version": "version-1",
+  "last_modified": "2025-06-23T14:00:00Z",
+  "auto_save": true,
+  "view_settings": {
+    "default_view": "calendar",
+    "filters": {
+      "weekends": true,
+      "prep_days": true,
+      "holidays": true,
+      "hiatus": true,
+      "shoot_days": true
+    },
+    "columns": {
+      "sequence": true,
+      "second_unit": true,
+      "sun_times": true
+    }
+  }
+}

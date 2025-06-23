@@ -1,0 +1,25 @@
+{
+  "project_info": {
+    "title": "Lee Cronin's 'The Mummy'",
+    "director": "Lee Cronin",
+    "producer": "John Keville",
+    "version": "v15.3"
+  },
+  "published_at": "2025-06-10T14:30:00Z",
+  "calendar_data": {
+    "days": [],
+    "metadata": {
+      "total_days": 167,
+      "shoot_days": 64,
+      "prep_start": "2025-02-01",
+      "shoot_start": "2025-03-24",
+      "wrap_date": "2025-06-21"
+    }
+  },
+  "access_info": {
+    "access_code": "HAMLET24",
+    "access_token": "sample-token-abc123def456",
+    "view_count": 15,
+    "created_at": "2025-06-10T14:30:00Z"
+  }
+}

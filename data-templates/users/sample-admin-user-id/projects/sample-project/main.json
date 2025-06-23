@@ -1,0 +1,22 @@
+{
+  "id": "sample-project-id",
+  "title": "Lee Cronin's 'The Mummy'",
+  "director": "Lee Cronin",
+  "producer": "John Keville",
+  "lineProducer": "Niamh Gale",
+  "firstAD": "Daire Glynn",
+  "secondAD": "Nicola Long",
+  "productionCompany": "Wild Atlantic Productions",
+  "version": "v15.3",
+  "prepStartDate": "2025-02-01",
+  "shootStartDate": "2025-03-24",
+  "wrapDate": "2025-06-21",
+  "scriptTitle": "Shooting Script",
+  "scriptEpisode": "",
+  "scriptColor": "2nd Pink",
+  "scriptDated": "2025-05-19",
+  "isVersioned": true,
+  "created": "2025-01-01T10:00:00Z",
+  "updated": "2025-06-23T14:00:00Z",
+  "user_id": "sample-admin-user-id"
+}

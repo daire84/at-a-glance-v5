@@ -1,0 +1,22 @@
+[
+  {
+    "id": "version-1",
+    "name": "Version 15.3 (Latest)",
+    "notes": "Final shooting schedule with all locations confirmed",
+    "created_at": "2025-06-10T14:30:00Z",
+    "created_by": "sample-admin-user-id",
+    "is_published": true,
+    "calendar_data": {},
+    "project_data": {}
+  },
+  {
+    "id": "version-2", 
+    "name": "Version 15.2",
+    "notes": "Updated schedule after location scout",
+    "created_at": "2025-06-05T10:15:00Z",
+    "created_by": "sample-admin-user-id",
+    "is_published": false,
+    "calendar_data": {},
+    "project_data": {}
+  }
+]
