@@ -11,8 +11,45 @@ This directory contains detailed analyses and plans for potential future feature
   - **Impact**: Revolutionary for industry adoption
   - **Timeline**: 12-16 weeks
 
-### **Coming Soon**
-More enhancement ideas will be documented here as they are analyzed and planned.
+### **Workflow & Communication**
+- **[Call Sheet Integration](call-sheet-integration.md)** - Automated professional call sheet generation from schedule data
+  - **Status**: Concept Ready for Development
+  - **Priority**: High
+  - **Impact**: Direct workflow integration
+  - **Timeline**: 10-14 weeks
+
+- **[Smart Notifications System](smart-notifications-system.md)** - Multi-channel communication hub for production updates
+  - **Status**: High-Priority Enhancement
+  - **Priority**: Very High
+  - **Impact**: Solves daily operational pain points
+  - **Timeline**: 12-16 weeks
+
+### **Production Intelligence**
+- **[Weather Contingency System](weather-contingency-system.md)** - Smart weather-aware production planning and risk management
+  - **Status**: High-Value Enhancement Ready
+  - **Priority**: High
+  - **Impact**: Direct cost impact and daily operational value
+  - **Timeline**: 14-18 weeks
+
+- **[Production Analytics & Insights](production-analytics-insights.md)** - Data-driven filmmaking with predictive analytics and optimization
+  - **Status**: High-Value Strategic Enhancement
+  - **Priority**: High
+  - **Impact**: Provides significant competitive advantage
+  - **Timeline**: 18-24 weeks
+
+### **Resource Management**
+- **[Equipment & Resource Management](equipment-resource-management.md)** - Complete production asset tracking and optimization
+  - **Status**: High-Value Operational Enhancement
+  - **Priority**: High
+  - **Impact**: Direct impact on production efficiency and costs
+  - **Timeline**: 16-20 weeks
+
+### **User Experience & Access**
+- **[QR Code Quick Access](qr-code-quick-access.md)** - Instant mobile calendar access through QR code generation
+  - **Status**: High-Value, Low-Complexity Enhancement
+  - **Priority**: Medium-High
+  - **Impact**: Excellent ROI for development effort
+  - **Timeline**: 8-12 weeks
 
 ---
 
@@ -49,14 +86,24 @@ Each enhancement is evaluated on:
 ## 🎯 Current Enhancement Pipeline
 
 ### **Phase 1: Research & Analysis**
-- [ ] Movie Magic PDF Integration - ✅ **Complete**
-- [ ] _Future ideas to be added_
+- [x] Movie Magic PDF Integration - ✅ **Complete**
+- [x] Call Sheet Integration - ✅ **Complete**
+- [x] Smart Notifications System - ✅ **Complete**
+- [x] Weather Contingency System - ✅ **Complete**
+- [x] Production Analytics & Insights - ✅ **Complete**
+- [x] Equipment & Resource Management - ✅ **Complete**
+- [x] QR Code Quick Access - ✅ **Complete**
 
 ### **Phase 2: Proof of Concept**
-- [ ] _To be determined based on Phase 1 priorities_
+- [ ] QR Code Quick Access (recommended first POC - lowest complexity)
+- [ ] Call Sheet Integration (high business value, medium complexity)
+- [ ] Smart Notifications System (highest operational impact)
 
 ### **Phase 3: Development & Implementation**
-- [ ] _To be scheduled based on POC results_
+- [ ] To be prioritized based on POC results and business needs
+- [ ] Weather Contingency System (seasonal priority consideration)
+- [ ] Equipment Management (high ROI, complex integration)
+- [ ] Production Analytics (long-term strategic value)
 
 ---
 
@@ -118,6 +165,12 @@ How to measure feature success
 | Enhancement | Status | Priority | Effort | Timeline | Owner |
 |-------------|--------|----------|--------|----------|-------|
 | Movie Magic PDF Integration | Analysis Complete | High | Large | 12-16 weeks | TBD |
+| Call Sheet Integration | Concept Ready | High | Medium | 10-14 weeks | TBD |
+| Smart Notifications System | High-Priority Enhancement | Very High | Medium | 12-16 weeks | TBD |
+| Weather Contingency System | Enhancement Ready | High | Large | 14-18 weeks | TBD |
+| Production Analytics & Insights | Strategic Enhancement | High | Large | 18-24 weeks | TBD |
+| Equipment & Resource Management | Operational Enhancement | High | Large | 16-20 weeks | TBD |
+| QR Code Quick Access | Low-Complexity Enhancement | Medium-High | Small | 8-12 weeks | TBD |
 
 ---
 
