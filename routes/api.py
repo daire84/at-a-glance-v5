@@ -17,11 +17,15 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 def api_projects():
     """List or create projects"""
     if request.method == 'GET':
-        return jsonify(get_projects())
+        from flask import session
+        user_id = session.get('user_id')
+        return jsonify(get_projects(user_id))
     elif request.method == 'POST':
         try:
             project = request.get_json()
-            result = save_project(project)
+            from flask import session
+            user_id = session.get('user_id')
+            result = save_project(project, user_id)
             # Optionally generate calendar for new project here if desired
             # generate_calendar(result)
             return jsonify(result), 201
@@ -33,8 +37,10 @@ def api_projects():
 @admin_required
 def api_project(project_id):
     """Get, update or delete a project"""
+    from flask import session
+    user_id = session.get('user_id')
     if request.method == 'GET':
-        project = get_project(project_id)
+        project = get_project(project_id, user_id)
         if not project:
             return jsonify({'error': 'Project not found'}), 404
         return jsonify(project)
@@ -43,7 +49,7 @@ def api_project(project_id):
             project_data = request.get_json()
             # Ensure ID from URL is used, not potentially from payload
             project_data['id'] = project_id
-            result = save_project(project_data)
+            result = save_project(project_data, user_id)
             return jsonify(result)
         except Exception as e:
              logger.error(f"API Error updating project {project_id}: {e}")
@@ -68,31 +74,35 @@ def api_project_calendar(project_id):
     """Get or update project calendar"""
     if request.method == 'GET':
         # Check if project is versioned
-        project = get_project(project_id)
+        from flask import session
+        user_id = session.get('user_id')
+        project = get_project(project_id, user_id)
         if project and project.get('isVersioned'):
-            workspace = get_project_workspace(project_id)
+            workspace = get_project_workspace(project_id, user_id)
             if workspace:
                 return jsonify(workspace.get('calendarData', {"days": []}))
         
         # Fallback to existing behavior
-        calendar_data = get_project_calendar(project_id)
+        calendar_data = get_project_calendar(project_id, user_id)
         return jsonify(calendar_data)
     elif request.method == 'POST':
         try:
             calendar_data = request.get_json()
             
             # Check if project is versioned
-            project = get_project(project_id)
+            from flask import session
+            user_id = session.get('user_id')
+            project = get_project(project_id, user_id)
             if project and project.get('isVersioned'):
                 # Save to workspace
-                workspace = get_project_workspace(project_id)
+                workspace = get_project_workspace(project_id, user_id)
                 if workspace:
                     workspace['calendarData'] = calendar_data
-                    save_project_workspace(project_id, workspace)
+                    save_project_workspace(project_id, workspace, user_id)
                     return jsonify(calendar_data)
             
             # Fallback to existing behavior
-            result = save_project_calendar(project_id, calendar_data)
+            result = save_project_calendar(project_id, calendar_data, user_id)
             return jsonify(result)
         except Exception as e:
             logger.error(f"Error saving calendar for {project_id}: {e}")
@@ -102,11 +112,13 @@ def api_project_calendar(project_id):
 @admin_required
 def api_generate_calendar(project_id):
     """Generate calendar for project"""
-    project = get_project(project_id)
+    from flask import session
+    user_id = session.get('user_id')
+    project = get_project(project_id, user_id)
     if not project:
         return jsonify({'error': 'Project not found'}), 404
     try:
-        calendar_data = generate_calendar(project)
+        calendar_data = generate_calendar(project, user_id)
         return jsonify(calendar_data)
     except Exception as e:
         logger.error(f"API Error generating calendar for {project_id}: {e}")
@@ -117,7 +129,9 @@ def api_generate_calendar(project_id):
 def api_calendar_day(project_id, date):
     """Get or update a specific calendar day"""
     # This duplicates logic from admin_day PUT. Consider refactoring later.
-    calendar_data = get_project_calendar(project_id)
+    from flask import session
+    user_id = session.get('user_id')
+    calendar_data = get_project_calendar(project_id, user_id)
     day_index = next((i for i, d in enumerate(calendar_data.get('days', [])) if d.get('date') == date), None)
 
     if day_index is None:
@@ -130,7 +144,7 @@ def api_calendar_day(project_id, date):
             day_data = request.get_json()
             # Basic update - might need more complex logic like in admin_day
             calendar_data['days'][day_index].update(day_data)
-            save_project_calendar(project_id, calendar_data)
+            save_project_calendar(project_id, calendar_data, user_id)
             # Recalculate counts after API update? Might be needed.
             # calendar_data = calculate_department_counts(calendar_data)
             # calendar_data = calculate_location_counts(calendar_data)
@@ -146,6 +160,8 @@ def api_calendar_day(project_id, date):
 def api_move_calendar_day(project_id):
     """Move a shoot day"""
     try:
+        from flask import session
+        user_id = session.get('user_id')
         move_data = request.get_json()
         from_date = move_data.get('fromDate')
         to_date = move_data.get('toDate')
@@ -156,7 +172,7 @@ def api_move_calendar_day(project_id):
         if not from_date or not to_date:
             return jsonify({'error': 'Missing source or target date'}), 400
 
-        calendar_data = get_project_calendar(project_id)
+        calendar_data = get_project_calendar(project_id, user_id)
         if not calendar_data or 'days' not in calendar_data:
             return jsonify({'error': 'Calendar data not found or invalid'}), 404
 
@@ -211,7 +227,7 @@ def api_move_calendar_day(project_id):
 
         # Recalculate shoot day numbers after any move
         calendar_data['days'] = recalculate_shoot_days(days)
-        save_project_calendar(project_id, calendar_data)
+        save_project_calendar(project_id, calendar_data, user_id)
 
         return jsonify({
             'success': True,
@@ -957,7 +973,9 @@ def api_publish_project_version(project_id, version_id):
 def api_get_workspace(project_id):
     """Get current workspace"""
     try:
-        workspace = get_project_workspace(project_id)
+        from flask import session
+        user_id = session.get('user_id')
+        workspace = get_project_workspace(project_id, user_id)
         
         if not workspace:
             return jsonify({'error': 'No workspace found'}), 404
@@ -974,8 +992,10 @@ def api_get_workspace(project_id):
 def api_update_workspace(project_id):
     """Update workspace calendar data"""
     try:
+        from flask import session
+        user_id = session.get('user_id')
         data = request.get_json()
-        workspace = get_project_workspace(project_id)
+        workspace = get_project_workspace(project_id, user_id)
         
         if not workspace:
             return jsonify({'error': 'No workspace found'}), 404
@@ -983,7 +1003,7 @@ def api_update_workspace(project_id):
         # Update only the calendar data
         workspace['calendarData'] = data
         
-        success = save_project_workspace(project_id, workspace)
+        success = save_project_workspace(project_id, workspace, user_id)
         
         if not success:
             return jsonify({'error': 'Failed to save workspace'}), 500
@@ -1000,7 +1020,9 @@ def api_update_workspace(project_id):
 def api_migrate_project(project_id):
     """Migrate a project to versioned structure"""
     try:
-        success = migrate_project_to_versioned_structure(project_id)
+        from flask import session
+        user_id = session.get('user_id')
+        success = migrate_project_to_versioned_structure(project_id, user_id)
         
         if not success:
             return jsonify({'error': 'Failed to migrate project'}), 500

@@ -11,7 +11,7 @@
             Your Projects
         </div>
         {% if session.get('user_role') == 'admin' %}
-            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-primary">
+            <a href="{{ url_for('admin.admin_project', project_id='new') }}" class="btn btn-primary">
                 <span class="nav-icon">➕</span>
                 Create Project
             </a>

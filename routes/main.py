@@ -25,7 +25,8 @@ def dashboard():
 # @viewer_required # Apply decorator if viewer needs to be logged in
 def viewer(project_id):
     """Calendar viewer"""
-    project = get_project(project_id)
+    user_id = session.get('user_id')  # Extract user_id for proper project scoping
+    project = get_project(project_id, user_id)
     if not project:
         flash('Project not found', 'error')
         return redirect(url_for('main.dashboard'))
@@ -66,7 +67,7 @@ def viewer(project_id):
                 )
     else:
         # Fallback to existing behavior for non-versioned projects
-        calendar_data = get_project_calendar(project_id)
+        calendar_data = get_project_calendar(project_id, user_id)
 
     # --- Load supporting data ---
     departments = []

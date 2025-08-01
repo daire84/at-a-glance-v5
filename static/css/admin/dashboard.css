@@ -83,6 +83,199 @@
     color: var(--text-light); /* Lighter text color */
 }
 
+/* === ADMIN DASHBOARD HEADER STYLES === */
+
+.admin-dashboard-header {
+    background-color: var(--background-alt);
+    border-bottom: 1px solid var(--border-color);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.admin-header-left {
+    flex: 1;
+}
+
+.admin-page-title {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-page-description {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+.admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Admin Navigation */
+.admin-navigation {
+    margin-bottom: 2rem;
+}
+
+.admin-nav-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-alt);
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.admin-nav-tab {
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--text-light);
+    background-color: transparent;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.admin-nav-tab:hover {
+    background-color: var(--primary-color-light);
+    color: var(--text-primary);
+}
+
+.admin-nav-tab.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom-color: var(--accent-color);
+}
+
+/* Admin Content */
+.admin-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.section-count {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* === MISSING ADMIN DASHBOARD GRID STYLES === */
+
+/* Grid layout for admin projects */
+.admin-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Admin project card styling */
+.admin-project-card {
+    background-color: var(--background-alt, white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.admin-project-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+}
+
+/* Admin button group styling */
+.admin-button-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.admin-button-group .btn {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Card sections */
+.card-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.version-tag {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+.card-body {
+    margin-bottom: 1rem;
+}
+
+.project-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.detail-label {
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.detail-value {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.card-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
 /* Add any other styles specific to the admin dashboard page */
 
 /* --- End Admin Dashboard Styles --- */

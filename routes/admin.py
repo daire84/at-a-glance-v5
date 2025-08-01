@@ -179,12 +179,13 @@ def admin_day(project_id, date):
     from utils.helpers import update_day_from_form, save_project_workspace, get_project_workspace
     from utils.calendar_generator import update_calendar_with_location_areas
 
-    project = get_project(project_id)
+    user_id = session.get('user_id')  # Extract user_id for proper project scoping
+    project = get_project(project_id, user_id)
     if not project:
         flash('Project not found', 'error')
         return redirect(url_for('admin.admin_dashboard'))
 
-    calendar_data = get_project_calendar(project_id)
+    calendar_data = get_project_calendar(project_id, user_id)
     day_index = next((i for i, d in enumerate(calendar_data.get('days', [])) if d.get('date') == date), None)
 
     if day_index is None:
@@ -267,16 +268,16 @@ def admin_day(project_id, date):
 
             # Save the calendar
             if project.get('isVersioned'):
-                workspace = get_project_workspace(project_id)
+                workspace = get_project_workspace(project_id, user_id)
                 if workspace:
                     workspace['calendarData'] = calendar_data
-                    save_project_workspace(project_id, workspace)
+                    save_project_workspace(project_id, workspace, user_id)
                     logger.info(f"Saved calendar to workspace for versioned project {project_id}")
                 else:
                     logger.warning(f"Workspace not found for versioned project {project_id}, using regular save")
-                    save_project_calendar(project_id, calendar_data)
+                    save_project_calendar(project_id, calendar_data, user_id)
             else:
-                save_project_calendar(project_id, calendar_data)
+                save_project_calendar(project_id, calendar_data, user_id)
                 logger.info(f"Saved calendar for non-versioned project {project_id}")
 
             # For AJAX requests, return JSON response

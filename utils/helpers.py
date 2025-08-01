@@ -354,14 +354,21 @@ def save_global_data(filename, data):
         logger.error(f"Error saving global data file {filename}: {e}")
         raise # Re-raise exception
 
-def migrate_project_to_versioned_structure(project_id):
+def migrate_project_to_versioned_structure(project_id, user_id=None):
     """
     Migrate an existing project to the new versioned structure
     """
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if user_id:
+            # User-specific project directory
+            user_projects_dir = get_user_projects_dir(user_id)
+            project_dir = os.path.join(user_projects_dir, project_id)
+        else:
+            # Legacy project directory
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         if not os.path.exists(project_dir):
-            logger.error(f"Project directory not found: {project_id}")
+            logger.error(f"Project directory not found: {project_id} (user: {user_id})")
             return False
             
         # Load existing project data
@@ -380,6 +387,16 @@ def migrate_project_to_versioned_structure(project_id):
         if os.path.exists(calendar_file):
             with open(calendar_file, 'r') as f:
                 calendar_data = json.load(f)
+        else:
+            # For user-based projects, try to get current calendar data via proper API
+            try:
+                calendar_data = get_project_calendar(project_id, user_id)
+                if not calendar_data:
+                    calendar_data = {}
+                logger.info(f"Retrieved existing calendar data for migration: {project_id} (user: {user_id})")
+            except Exception as e:
+                logger.warning(f"Could not retrieve existing calendar data for migration: {project_id} (user: {user_id}): {e}")
+                calendar_data = {}
                 
         # Create version structure
         version_id = str(uuid.uuid4())
@@ -427,11 +444,11 @@ def migrate_project_to_versioned_structure(project_id):
         with open(main_file, 'w') as f:
             json.dump(project_data, f, indent=2)
             
-        logger.info(f"Successfully migrated project {project_id} to versioned structure")
+        logger.info(f"Successfully migrated project {project_id} to versioned structure (user: {user_id})")
         return True
         
     except Exception as e:
-        logger.error(f"Error migrating project {project_id}: {str(e)}")
+        logger.error(f"Error migrating project {project_id} (user: {user_id}): {str(e)}")
         return False
 
 
