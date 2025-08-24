@@ -452,12 +452,17 @@ def migrate_project_to_versioned_structure(project_id, user_id=None):
         return False
 
 
-def get_project_versions(project_id):
+def get_project_versions(project_id, user_id=None):
     """
     Get all versions for a project
     """
     try:
-        project_dir = os.path.join(PROJECTS_DIR, project_id)
+        if user_id:
+            user_projects_dir = get_user_projects_dir(user_id)
+            project_dir = os.path.join(user_projects_dir, project_id)
+        else:
+            project_dir = os.path.join(PROJECTS_DIR, project_id)
+            
         versions_file = os.path.join(project_dir, 'versions.json')
         
         if not os.path.exists(versions_file):
@@ -469,9 +474,8 @@ def get_project_versions(project_id):
         return data.get('versions', [])
         
     except Exception as e:
-        logger.error(f"Error getting versions for project {project_id}: {str(e)}")
+        logger.error(f"Error getting versions for project {project_id} user {user_id}: {str(e)}")
         return []
-
 
 def get_project_workspace(project_id, user_id=None):
     """

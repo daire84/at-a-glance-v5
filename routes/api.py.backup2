@@ -196,8 +196,10 @@ def api_move_calendar_day(project_id):
              return jsonify({'error': 'Cannot move to a non-working day (holiday, hiatus, or non-working weekend)'}), 400
         # --- End Validation ---
 
+
         original_shoot_day = from_day.get('shootDay') # Before modification
         target_shoot_day = to_day.get('shootDay') # Before modification
+
 
         if mode == 'swap':
             # Preserve date-specific info
@@ -225,11 +227,6 @@ def api_move_calendar_day(project_id):
 
         # Recalculate shoot day numbers after any move
         calendar_data['days'] = recalculate_shoot_days(days)
-        
-        # Recalculate sun times for all days (handles moved days with new dates)
-        from utils.calendar_generator import calculate_sun_times_for_calendar
-        calendar_data = calculate_sun_times_for_calendar(calendar_data)
-        
         save_project_calendar(project_id, calendar_data, user_id)
 
         return jsonify({
@@ -243,6 +240,7 @@ def api_move_calendar_day(project_id):
     except Exception as e:
         logger.error(f"API Error moving calendar day for {project_id}: {str(e)}")
         return jsonify({'error': f'Error moving calendar day: {str(e)}'}), 500
+
 
 # --- Helper Functions for Location Data ---
 def validate_coordinates(latitude, longitude):
@@ -1044,7 +1042,7 @@ def api_migrate_project(project_id):
 def api_calculate_sun_times():
     """Calculate sunrise/sunset times for a location and date"""
     try:
-        from utils.sun_utils import get_sun_times_for_location
+        from utils.sun_utils_simple import get_sun_times_for_location
         from datetime import datetime
         
         data = request.get_json()
