@@ -192,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log('Move successful:', data);
+            // Set hash to preserve scroll position using working anchor system
+            window.location.hash = `day-${targetDate}`;
             // Reload page to show updated calendar
             window.location.reload();
         })
@@ -200,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hideLoading();
             alert(error.message || 'An error occurred while moving the day');
         });
+
     }
     
     /**

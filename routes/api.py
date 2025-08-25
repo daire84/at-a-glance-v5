@@ -3,7 +3,7 @@ import os
 import json
 import uuid
 import shutil
-from flask import Blueprint, jsonify, request # <-- Ensure this line is correct
+from flask import Blueprint, jsonify, request, session # <-- Ensure this line is correct
 
 from utils.decorators import admin_required # Absolute import
 from utils.helpers import get_projects, get_project, save_project, get_project_calendar, save_project_calendar, generate_calendar, DATA_DIR, PROJECTS_DIR, logger, update_all_projects_department_counts, recalculate_shoot_days, get_project_versions, create_project_version, publish_project_version, get_project_workspace, save_project_workspace, migrate_project_to_versioned_structure # Absolute import
@@ -243,7 +243,7 @@ def api_move_calendar_day(project_id):
     except Exception as e:
         logger.error(f"API Error moving calendar day for {project_id}: {str(e)}")
         return jsonify({'error': f'Error moving calendar day: {str(e)}'}), 500
-
+    
 # --- Helper Functions for Location Data ---
 def validate_coordinates(latitude, longitude):
     """Validate coordinate values and consistency"""

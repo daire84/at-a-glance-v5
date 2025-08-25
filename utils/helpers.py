@@ -4,6 +4,7 @@ import json
 import uuid
 import logging
 import shutil
+from flask import session
 from datetime import datetime
 # Import necessary functions from calendar_generator directly
 # Adjust based on actual functions needed by these helpers

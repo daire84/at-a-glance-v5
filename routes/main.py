@@ -1,7 +1,7 @@
 # routes/main.py
 import os
 import json
-from flask import Blueprint, render_template, redirect, url_for, flash, send_from_directory, request
+from flask import Blueprint, render_template, redirect, url_for, flash, send_from_directory, request, session
 
 from utils.decorators import viewer_required
 from utils.helpers import get_project, get_project_calendar, DATA_DIR, logger, get_projects, get_project_versions
@@ -35,7 +35,7 @@ def viewer(project_id):
     
     # Check if project is versioned
     if project.get('isVersioned'):
-        versions = get_project_versions(project_id)
+        versions = get_project_versions(project_id, user_id)
         
         # Get specific version if requested
         if version_id:
