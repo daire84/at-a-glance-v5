@@ -339,8 +339,9 @@ def admin_departments():
 @admin_required
 def admin_dates(project_id=None):
     """Special dates management page"""
-    projects = get_projects()
-     # Renders 'admin/dates.html'
+    user_id = session.get('user_id')  # <-- ADD THIS LINE
+    projects = get_projects(user_id)  # <-- ADD user_id parameter
+    # Renders 'admin/dates.html'
     return render_template('dates.html', projects=projects, project_id=project_id)
 
 @admin_bp.route('/help')
