@@ -172,7 +172,12 @@ body.light-theme {
     --background-tertiary: #F1F5F9;   /* Elevated elements */
     --background-hover: #E2E8F0;      /* Hover states */
     --background-subtle: #CBD5E1;     /* Subtle backgrounds */
+    --background-alt: var(--background-secondary); /* FIX: ensure alt follows light bg */
     
+    /* Make all “light text” + “text-color” map to dark ink in light mode */
+    --text-light: var(--text-primary);
+    --text-color: var(--text-primary);
+
     /* Borders */
     --border-color: #E2E8F0;          /* Default borders */
     --border-light: #F1F5F9;          /* Lighter borders */

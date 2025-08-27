@@ -42,48 +42,32 @@ document.addEventListener('DOMContentLoaded', function() {
  * @param {string} theme - 'light' or 'dark'
  */
 function applyTheme(theme) {
-  if (theme === 'light') {
-    document.body.classList.remove('dark-theme');
-    document.body.classList.add('light-theme');
-  } else {
-    document.body.classList.add('dark-theme');
-    document.body.classList.remove('light-theme');
-  }
-
-  // Re-apply dynamic colours after theme change
-  setTimeout(function () {
-    // Location area colours
-    const areas =
-      (typeof window.getLocationAreas === 'function' && window.getLocationAreas()) ||
-      (typeof getLocationAreas === 'function' && getLocationAreas()) ||
-      {};
-
-    if (typeof window.applyLocationAreaColors === 'function') {
-      window.applyLocationAreaColors(areas);
-    } else if (typeof applyLocationAreaColors === 'function') {
-      applyLocationAreaColors(areas);
+    if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        // All document.documentElement.style.setProperty(...) lines removed for light theme
+    } else { // Dark Theme
+        document.body.classList.remove('light-theme');
+        // All document.documentElement.style.setProperty(...) lines removed for dark theme
+        // Also, the explicit .removeProperty() calls from the previous step are no longer needed
+        // as we are not setting them in JS for light mode anymore either.
     }
-
-    // Department tag pills inside days
-    if (typeof window.applyDepartmentTagColors === 'function') {
-      window.applyDepartmentTagColors();
-    } else if (typeof applyDepartmentTagColors === 'function') {
-      applyDepartmentTagColors();
-    }
-
-    // Counters (location + department)
-    if (typeof window.enhanceLocationCounters === 'function') {
-      window.enhanceLocationCounters();
-    } else if (typeof enhanceLocationCounters === 'function') {
-      enhanceLocationCounters();
-    }
-
-    if (typeof window.enhanceDepartmentCounters === 'function') {
-      window.enhanceDepartmentCounters();
-    } else if (typeof enhanceDepartmentCounters === 'function') {
-      enhanceDepartmentCounters();
-    }
-  }, 10);
+    
+    // Re-apply location area colors after theme change
+    // This might still be needed if locationAreaColors are dynamically generated
+    // and rely on CSS variables that might change with the theme class.
+    // If applyLocationAreaColors directly sets styles or depends on
+    // JS-calculated values based on theme, it should remain.
+    // If it purely relies on CSS variables now defined in style.css,
+    // this explicit call might become less critical, but often harmless.
+    setTimeout(function() {
+        if (typeof window.applyLocationAreaColors === 'function') {
+            const areas = window.getLocationAreas ? window.getLocationAreas() : {};
+            window.applyLocationAreaColors(areas);
+        } else if (typeof applyLocationAreaColors === 'function') {
+            const areas = typeof getLocationAreas === 'function' ? getLocationAreas() : {};
+            applyLocationAreaColors(areas);
+        }
+    }, 10);
 }
 
 /**

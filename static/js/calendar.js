@@ -73,40 +73,66 @@ function checkIfScrollable() {
     });
 }
 
-/**
- * Enhance location counters with proper color coding from location data
- */
 function enhanceLocationCounters() {
-    console.log("Enhancing location counters with proper colors");
-    
-    // Get all counter items in the location counter section
-    const locationCounters = document.querySelectorAll('.location-counters .counter-item');
-    const areaCounters = document.querySelectorAll('.location-areas .area-tag');
-    
-    // Update location counter colors
-    locationCounters.forEach(counter => {
-      const locationName = counter.querySelector('.counter-label').textContent.trim();
-      
-      // Check if counter already has a background color set
-      const currentColor = counter.style.backgroundColor;
-      if (!currentColor || currentColor === 'transparent' || currentColor === '') {
-        // Try to find the color from data attributes
-        const areaColor = counter.getAttribute('data-area-color');
-        if (areaColor) {
-          counter.style.backgroundColor = areaColor;
-          
-          // Ensure text contrast is appropriate for the background color
-          ensureTextContrast(counter);
-        }
-      }
-    });
-    
-    // Update area counter colors
-    areaCounters.forEach(counter => {
-      // Ensure text contrast is appropriate for the background color
+  console.log("Enhancing location counters with proper colors");
+
+  // Get all counter items in the location counter section
+  const locationCounters = document.querySelectorAll('.location-counters .counter-item');
+  const areaCounters     = document.querySelectorAll('.location-areas .area-tag');
+
+  // Update location counter colors (authoritative)
+  locationCounters.forEach(counter => {
+    const areaColorAttr = counter.getAttribute('data-area-color');
+    if (areaColorAttr) {
+      counter.style.setProperty('background-color', areaColorAttr, 'important'); // <<< key change
       ensureTextContrast(counter);
-    });
+      return;
+    }
+    // Fallback: if a CSS var exists, use it
+    const cssVar = getComputedStyle(counter).getPropertyValue('--row-area-color').trim();
+    if (cssVar) {
+      counter.style.setProperty('background-color', cssVar, 'important');
+      ensureTextContrast(counter);
+    }
+  });
+
+  // Update area counter colors (authoritative)
+  areaCounters.forEach(counter => {
+    const color =
+      counter.getAttribute('data-area-color') ||
+      counter.getAttribute('data-color') ||
+      counter.style.backgroundColor;
+
+    if (color) {
+      counter.style.setProperty('background-color', color, 'important'); // <<< key change
+      ensureTextContrast(counter);
+    }
+  });
 }
+
+function enhanceDepartmentCounters() {
+  // Repaint department counters authoritatively so theme CSS can't whiten them
+  const getDeptMap = () => {
+    try {
+      const el = document.getElementById('department-data');
+      return el ? JSON.parse(el.textContent.trim()) : {};
+    } catch { return {}; }
+  };
+  const deptMap = getDeptMap();
+
+  document.querySelectorAll('.department-counters .counter-item').forEach(c => {
+    const label = (c.querySelector('.counter-label')?.textContent || '').trim();
+    const code  = c.getAttribute('data-dept-code') || label || '';
+    const color =
+      c.getAttribute('data-color') ||
+      c.style.backgroundColor ||
+      deptMap[code] || deptMap[code.toUpperCase()] || null;
+
+    if (color) c.style.setProperty('background-color', color, 'important');
+    if (typeof ensureTextContrast === 'function') ensureTextContrast(c);
+  });
+}
+window.enhanceDepartmentCounters = enhanceDepartmentCounters;
 
 /**
  * Enhanced Go to Today functionality - scrolls calendar to today's date and shows current shoot day
@@ -571,25 +597,33 @@ function applyDepartmentTagColors() {
             departmentColors = fallbackColors;
         }
     } else {
-        console.warn("Department data element not found, using fallbacks.");
+        console.warn('Department data element not found, using fallbacks.');
         departmentColors = fallbackColors;
     }
 
-    const departmentTags = document.querySelectorAll('.department-tag');
+    const departmentTags = document.querySelectorAll('.department-tag, .calendar-department-tag');
+
     departmentTags.forEach(tag => {
-        const deptCode = tag.getAttribute('data-dept-code') || tag.textContent.trim();
-        if (departmentColors[deptCode]) {
-            tag.style.backgroundColor = departmentColors[deptCode];
-            ensureTextContrast(tag); // Ensure text is readable
-        } else {
-            // console.warn(`No color found for department code: ${deptCode}`);
-             // Apply a default neutral color?
-             tag.style.backgroundColor = '#cccccc';
-             ensureTextContrast(tag);
+        const raw  = tag.getAttribute('data-dept-code') || tag.textContent.trim();
+        const code = raw && (departmentColors[raw] ? raw : raw.toUpperCase());
+        const col  = departmentColors[code]
+            || tag.getAttribute('data-color')
+            || tag.style.backgroundColor
+            || '#cccccc';
+
+        // Make it win everywhere (fixes light-mode whitening)
+        tag.style.setProperty('background-color', col, 'important');
+        tag.style.setProperty('background',       col, 'important');
+        tag.style.setProperty('background-image', 'none', 'important');
+
+        if (typeof ensureTextContrast === 'function') {
+            ensureTextContrast(tag);
         }
     });
-    console.log("Finished applying department tag colors.");
+
+    console.log('Finished applying department tag colors.');
 }
+
 
 /**
  * Toggles visibility of calendar rows based on their type (e.g., 'weekend', 'shoot').
@@ -1324,6 +1358,7 @@ document.addEventListener('DOMContentLoaded', function() {
         applyLocationAreaColors(locationAreas);
         applyDepartmentTagColors();
         enhanceLocationCounters(); // Ensure contrast/colors for counters
+        enhanceDepartmentCounters();
     } catch (error) {
         console.error("Error during core visual setup:", error);
     }

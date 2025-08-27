@@ -996,7 +996,7 @@
     }
 }
 
-/* === LIGHT MODE OVERRIDES === */
+/* === COMPREHENSIVE LIGHT MODE OVERRIDES === */
 body.light-theme .view-toggle-container {
     background-color: var(--background-secondary);
     border-color: var(--border-color);
@@ -1021,19 +1021,44 @@ body.light-theme .view-toggle-btn.active {
     color: white;
 }
 
-body.light-theme .filter-notice-text {
-    color: var(--text-primary);
+/* Month and day headers - light mode */
+body.light-theme .calendar-month-header {
+    background-color: var(--primary-color) !important;
+    color: white !important;
 }
-/* DIRECT LIGHT MODE OVERRIDE - Bypass variable cascade issues */
+
+body.light-theme .calendar-day-header {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* Calendar day cells - light mode */
 body.light-theme .calendar-day {
-    background-color: #ffffff !important;
+    background-color: white !important;
+    color: var(--text-dark) !important;
+    border-color: var(--border-color) !important;
 }
 
 body.light-theme .calendar-day:hover {
-    background-color: #f8f9fa !important;
+    background-color: #f8f9fa;
+    border-color: var(--primary-blue);
 }
 
 body.light-theme .calendar-day.outside-month {
-    background-color: #f8f9fa !important;
-    color: #adb5bd !important;
+    background-color: #f8f9fa;
+    color: #adb5bd;
+}
+
+/* Day content text - light mode */
+body.light-theme .calendar-day-number,
+body.light-theme .calendar-day-content,
+body.light-theme .calendar-day-info,
+body.light-theme .calendar-day-description,
+body.light-theme .calendar-day-location,
+body.light-theme .calendar-day-notes {
+    color: var(--text-dark);
+}
+
+body.light-theme .filter-notice-text {
+    color: var(--text-primary);
 }
