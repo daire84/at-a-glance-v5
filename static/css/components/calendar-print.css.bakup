@@ -1,0 +1,683 @@
+/**
+ * =============================================================================
+ * Calendar Print Styles (calendar-print.css)
+ * =============================================================================
+ *
+ * Purpose: Optimized print layouts for production calendars
+ * Extracted from calendar.css lines ~1301-1600+
+ *
+ * Features:
+ * - Professional landscape layouts
+ * - Color preservation for location areas
+ * - Light theme conversion for readability
+ * - Optimized typography and spacing
+ * - Hidden interactive elements
+ */
+
+/* ============================================= */
+/* === PRINT STYLES ============================ */
+/* ============================================= */
+
+/* Enhanced @media print section with location area color fixes */
+
+@media print {
+    /* Global color adjustment for printing - SELECTIVE light mode forcing */
+    html, body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      color: #323233 !important;
+      background-color: white !important;
+    }
+    
+    /* Force ONLY main containers to light mode - preserve colored elements */
+    .calendar-container,
+    .calendar-viewer-header,
+    .viewer-header-content,
+    .viewer-header-left,
+    .calendar-table-wrapper {
+        background-color: white !important;
+        color: #323233 !important;
+        border-color: #ddd !important;
+    }
+    
+    /* Force text elements to dark color but preserve backgrounds */
+    .viewer-project-title,
+    .project-info-header h1, 
+    .project-info-header h2, 
+    .project-info-header h3,
+    .text-primary:not(.department-tag):not(.area-tag):not(.script-value),
+    .text-secondary:not(.department-tag):not(.area-tag):not(.script-value) {
+        color: #323233 !important;
+    }
+    
+    /* Reset all colors to light theme for printing */
+    .calendar-container {
+      box-shadow: none; 
+      padding: 0.5cm; 
+      width: 100%; 
+      margin: 0;
+      border: none; 
+      background-color: white !important;
+      color: #323233 !important;
+    }
+    
+    .project-info-header {
+      margin-bottom: 0.3cm; 
+      padding-bottom: 0.2cm; 
+      border-bottom: 1pt solid #ccc;
+      page-break-inside: avoid; 
+      display: block; 
+      width: 100%;
+      background-color: white !important;
+      border-bottom-color: #cfd8dc !important;
+    }
+    
+    .project-header-top {
+      display: flex !important; 
+      width: 100%; 
+      flex-direction: row !important;
+      justify-content: space-between !important; 
+      align-items: center !important;
+      margin-bottom: 0.2cm;
+    }
+    
+    .project-title {
+      font-size: 12pt; 
+      font-weight: bold; 
+      color: #546e7a !important; /* Blue-gray */
+    }
+    
+    .project-meta {
+      display: flex !important; 
+      flex-direction: row !important; 
+      flex-wrap: wrap !important;
+      gap: 0.3cm !important; 
+      margin-bottom: 0.2cm !important;
+      justify-content: space-between !important; 
+      width: 100% !important;
+    }
+    
+    .meta-group {
+      display: flex !important; 
+      flex-direction: column !important;
+      min-width: 2cm !important; 
+      flex: 0 0 auto !important;
+    }
+    
+    .meta-label { 
+      font-size: 6pt; 
+      margin-bottom: 1pt; 
+      color: #666 !important; 
+    }
+    
+    .meta-value { 
+      font-size: 8pt; 
+      font-weight: 500; 
+      color: #333 !important;
+    }
+  
+    /* Light-themed information blocks */
+    .script-info,
+    .department-counters,
+    .location-counters,
+    .location-areas {
+      border: 0.5pt solid #ddd !important; 
+      background-color: #f8f9fa !important;
+      padding: 0.15cm !important;
+      margin-bottom: 0.2cm !important;
+      page-break-inside: avoid !important;
+      width: 100% !important;
+      color: #333 !important;
+    }
+    
+    /* Make sure location sections have white background */
+    .location-counters .counter-grid,
+    .location-areas .area-tags {
+        background-color: transparent !important;
+    }
+
+        /* Make sure department counter section has white background */
+    .department-counters .counter-grid {
+        background-color: transparent !important;
+    }
+
+    .script-item { 
+      display: flex !important; 
+      align-items: center !important; /* Ensure vertical alignment */
+      margin-right: 0.2cm !important; 
+      flex: 0 0 auto !important;
+      line-height: 1 !important; /* Consistent line height */
+    }
+    
+    .script-label { 
+      font-weight: 500 !important; 
+      color: #165dd8 !important; 
+      font-size: 8pt !important;
+      margin-bottom: 0 !important; /* Remove any bottom margin */
+      padding: 0 !important; /* Remove any padding */
+    }
+    
+    .script-value { 
+      font-size: 8pt !important; 
+      color: #000000 !important;
+      font-weight: 500 !important;
+      margin-bottom: 0 !important; /* Remove any bottom margin */
+      padding: 0 !important; /* Remove any padding */
+      vertical-align: baseline !important; /* Align text baselines */
+    }
+    
+    /* Uniform title sizing for all counter sections */
+    .counter-title, 
+    .areas-title,
+    .location-counters h4 { 
+      font-size: 10pt !important; 
+      margin-bottom: 0.1cm !important; 
+      color: #546e7a !important;
+      font-weight: 500 !important;
+    }
+    
+    /* Fix counter grid layout and make uniform */
+    .counter-grid, 
+    .area-tags {
+      display: grid !important; 
+      grid-template-columns: repeat(8, 1fr) !important;
+      grid-template-rows: auto !important; 
+      gap: 0.1cm !important; 
+      width: 100% !important;
+    }
+    
+    /* Better counter item styling to match viewer */
+    .counter-item, 
+    .area-tag {
+      min-height: 2rem !important;
+      padding: 0.1cm !important; 
+      border-radius: 2pt !important;
+      display: flex !important; 
+      flex-direction: column !important; 
+      margin: 0 !important;
+      border: 0.5pt solid rgba(0,0,0,0.1) !important; 
+      color: #333 !important;
+      text-align: center !important;
+      align-items: center !important;
+      justify-content: center !important;
+      /* Preserve background colors in print */
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* Fixed sizes for counter labels */
+    .counter-label { 
+      font-size: 7pt !important; 
+      margin-bottom: 3pt !important; 
+      white-space: nowrap !important; 
+      overflow: hidden !important; 
+      text-overflow: ellipsis !important;
+      color: #333 !important;
+      font-weight: 500 !important;
+    }
+    
+    /* Fixed sizes for counter values */
+    .counter-value, 
+    .area-count { 
+      font-size: 10pt !important; 
+      font-weight: 600 !important; 
+      color: #000 !important;
+    }
+  
+    /* Calendar table styles */
+    .calendar-table-wrapper { 
+      overflow: visible; 
+    }
+    
+    .calendar-table { 
+      font-size: 9pt; 
+      width: 100% !important; 
+      page-break-inside: auto; 
+      border-color: #ddd !important;
+    }
+    
+    /* Fix cell padding and ensure all columns are visible */
+    .calendar-table th, 
+    .calendar-table td { 
+      padding: 3pt; 
+      font-size: 8pt; 
+      border: 0.5pt solid #ddd !important;
+      color: #333 !important;
+      display: table-cell !important; /* Ensure all cells are visible */
+    }
+    
+    /* Ensure column headers are visible and styled correctly */
+    .calendar-table th { 
+      background-color: #546e7a !important; 
+      color: white !important; 
+      font-weight: 500 !important;
+      text-align: left !important;
+      padding: 5pt 3pt !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* Ensure the extras and featured extras columns are visible */
+    .extras-col, .featured-extras-col,
+    .extras-cell, .featured-extras-cell {
+      display: table-cell !important;
+      text-align: center !important;
+    }
+    
+    /* Fix column widths to match viewer */
+    .date-col { width: 80px !important; }
+    .day-col { width: 30px !important; text-align: center !important; }
+    .main-unit-col { width: 170px !important; }
+    .extras-col, .featured-extras-col { width: 25px !important; text-align: center !important; }
+    .location-col { width: 110px !important; }
+    .sequence-col { width: 70px !important; }
+    .departments-col { width: 110px !important; }
+    .notes-col { width: 160px !important; }
+    .second-unit-col { width: 90px !important; }
+    
+    /* Row colors for light theme printing */
+    .calendar-row { 
+      background-color: white !important; 
+    }
+    
+    /* ENHANCED: Fix for location area colors - multiple approaches to ensure browser compatibility */
+    .calendar-row.has-area-color { 
+      /* Use multiple approaches for maximum compatibility */
+      background-color: var(--row-area-color, transparent) !important;
+      /* Use attribute selector as backup */
+      background-color: attr(data-color) !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* High-specificity selectors for standard row types */
+    .calendar-table tbody tr.calendar-row.weekend:not(.has-area-color) { 
+      background-color: #f0f0f0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    .calendar-table tbody tr.calendar-row.prep:not(.has-area-color) { 
+      background-color: #e0ffe0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    .calendar-table tbody tr.calendar-row.shoot:not(.has-area-color) { 
+      background-color: #e0f0ff !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    .calendar-table tbody tr.calendar-row.hiatus:not(.has-area-color) { 
+      background-color: #ffe0e0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    .calendar-table tbody tr.calendar-row.holiday:not(.has-area-color) { 
+      background-color: #fff0e0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    .calendar-table tbody tr.calendar-row.working-weekend:not(.has-area-color) { 
+      background-color: #e0f0e0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* CRITICAL: Ensure location area colors take precedence over standard row types */
+    .calendar-table tbody tr.calendar-row.has-area-color.weekend,
+    .calendar-table tbody tr.calendar-row.has-area-color.prep,
+    .calendar-table tbody tr.calendar-row.has-area-color.shoot,
+    .calendar-table tbody tr.calendar-row.has-area-color.hiatus,
+    .calendar-table tbody tr.calendar-row.has-area-color.holiday,
+    .calendar-table tbody tr.calendar-row.has-area-color.working-weekend {
+      /* Inline style precedence without using invalid attr function */
+      background-color: var(--row-area-color, transparent) !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* Fixed date cell display - Make date visible and properly formatted */
+    .date-cell {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 2pt !important;
+    }
+    
+    .date-display {
+      color: #000 !important;
+      font-weight: 500 !important;
+      font-size: 8pt !important;
+      margin-bottom: 2pt !important;
+      display: block !important;
+    }
+    
+    .date-day {
+      color: #444 !important;
+      font-size: 7pt !important;
+      display: block !important;
+    }
+    
+    /* Fixed day cell formatting - Center the day number properly */
+    .day-cell {
+      font-size: 8pt !important;
+      font-weight: 600 !important;
+      color: #000 !important;
+      text-align: center !important;
+      vertical-align: middle !important;
+    }
+    
+    /* Improved main unit cell formatting */
+    .main-unit-cell {
+      font-weight: 500 !important;
+      font-size: 8pt !important;
+      line-height: 1.3 !important;
+      color: #000 !important;
+    }
+    
+    /* Fixed extras cell formatting */
+    .extras-cell,
+    .featured-extras-cell {
+      font-weight: 500 !important;
+      text-align: center !important;
+      font-size: 8pt !important;
+      color: #000 !important;
+    }
+    
+    /* Fixed location cell styling */
+    .location-cell {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 2pt !important;
+    }
+    
+    .location-name {
+      font-weight: 500 !important;
+      font-size: 8pt !important;
+      color: #000 !important;
+      display: block !important;
+    }
+    
+    .location-area {
+      font-size: 7pt !important;
+      color: #1e1d1d !important;
+      font-style: italic !important;
+      display: block !important;
+    }
+    
+    /* Fix department tags for printing */
+    .departments-cell { 
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 2pt !important; 
+      max-height: none !important; 
+      overflow: visible !important;
+      padding: 2pt !important;
+    }
+    
+    .department-tag { 
+      padding: 1pt 3pt !important; 
+      font-size: 6pt !important;
+      font-weight: 600 !important;
+      border: 0.5pt solid rgba(0,0,0,0.2) !important;
+      border-radius: 2pt !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* Better notes cell styling */
+    .notes-cell {
+      font-size: 7pt !important;
+      line-height: 1.3 !important;
+      color: #000 !important;
+    }
+
+    /* Hide UI elements that shouldn't print */
+    .view-toggle-container,
+    .calendar-actions,
+    .filter-panel,
+    .loading-overlay,
+    .admin-calendar .calendar-row,
+    .admin-actions,
+    .calendar-mobile-controls,
+    .zoom-controls,
+    .theme-toggle-btn,
+    .scroll-hint,
+    .version-selector-wrapper,
+    .version-selector,
+    .calendar-viewer-header,
+    .viewer-header-content,
+    .viewer-header-left,
+    .viewer-header-right,
+    .viewer-header-center,
+    .compact-filters,
+    .compact-filters-wrapper,
+    .compact-filters-header,
+    .compact-filters-grid,
+    .compact-filter-group,
+    .compact-search-section,
+    .compact-filter-toggles,
+    .filter-info-container,
+    .location-filter-section,
+    .location-filter-title,
+    .location-filter-help,
+    .filter-help-text,
+    .search-filter,
+    .department-filter,
+    .location-filter,
+    .date-filter,
+    .filter-buttons,
+    .filter-toggle,
+    .toggle-buttons,
+    .filter-controls,
+    .edit-calendar,
+    .btn:not(.print-visible) {
+        display: none !important;
+    }
+    
+    /* Force main header to light mode and remove blur effects */
+    .app-header,
+    .app-header *,
+    .header-content,
+    .header-content *,
+    .logo-section,
+    .logo-section *,
+    .logo-icon,
+    .app-title,
+    .app-title a,
+    .app-subtitle,
+    .main-nav,
+    .nav-list,
+    .nav-item,
+    .nav-link {
+        background-color: white !important;
+        background: white !important;
+        color: #323233 !important;
+        border-color: #ddd !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Clean up any remaining viewer header styling (now hidden) */
+    
+    /* Remove ALL blur effects and filters that could cause print issues */
+    *,
+    *::before,
+    *::after {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        -webkit-filter: none !important;
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+    }
+    
+    /* Override ONLY essential dark mode variables - preserve color functionality */
+    :root,
+    body.dark-theme {
+        --background-primary: white !important;
+        --background-secondary: white !important;
+        --border-color: #ddd !important;
+    }
+    
+    /* Light mode for main containers only - preserve colored elements */
+    .calendar-container,
+    .calendar-table {
+        background-color: white !important;
+    }
+    
+    /* PRESERVE all colored elements - CRITICAL for functionality */
+    .department-tag,
+    .area-tag, 
+    .script-value,
+    .script-item,
+    .counter-item,
+    .counter-label,
+    .counter-value,
+    .area-count,
+    .calendar-row.has-area-color,
+    .calendar-row.weekend,
+    .calendar-row.prep,
+    .calendar-row.shoot,
+    .calendar-row.hiatus,
+    .calendar-row.holiday,
+    .calendar-row.working-weekend,
+    [style*="background-color"],
+    [style*="color"] {
+        /* Do not override background colors - preserve existing functionality */
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Ensure script colors are preserved */
+    .script-label,
+    .script-value,
+    .script-item * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Improve print layout spacing */
+    .app-header {
+        border-bottom: 1pt solid #ddd !important;
+        margin-bottom: 0.3cm !important;
+        padding: 0.2cm 0 !important;
+    }
+    
+    .calendar-viewer-header {
+        border-bottom: 1pt solid #ddd !important;
+        margin-bottom: 0.3cm !important;
+        padding: 0.2cm 0 !important;
+    }
+    
+    /* Beautiful gradient title for print header */
+    .app-title a {
+        text-decoration: none !important;
+        background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 25%, #03A9F4 50%, #0288D1 75%, #0277BD 100%) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        color: transparent !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    
+    /* When printing table view - hide calendar view */
+    body.print-table-view .calendar-view {
+        display: none !important;
+    }
+    
+    body.print-table-view .calendar-table-wrapper {
+        display: block !important;
+    }
+    
+    /* When printing calendar view - hide table view */
+    body.print-calendar-view .calendar-table-wrapper {
+        display: none !important;
+    }
+    
+    body.print-calendar-view .calendar-view {
+        display: block !important;
+    }
+    
+    /* ... your existing rules ... */
+    
+    /* Smart page break for table view - only if needed */
+    body.print-table-view .calendar-table-wrapper {
+        page-break-before: auto !important;
+        page-break-inside: auto !important;
+    }
+    
+    /* Ensure headers and counters stay together on first page */
+    body.print-table-view .project-info-header,
+    body.print-table-view .department-counters,
+    body.print-table-view .location-areas,
+    body.print-table-view .location-counters {
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+    
+    /* Smart page break organization - avoid blank pages */
+    /* Keep sections together on first page */
+    .project-info-header,
+    .department-counters,
+    .location-areas,
+    .location-counters {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+    }
+    
+    /* Only break before table if needed (not forced) */
+    .calendar-table-wrapper {
+        page-break-before: auto !important;
+    }
+    
+    .calendar-table {
+        page-break-before: auto !important;
+    }
+    
+    /* Page layout settings */
+    @page { 
+      size: landscape; 
+      margin: 0.5cm; 
+    }
+    
+    .calendar-row { 
+      page-break-inside: avoid; 
+    }
+    
+    .calendar-table thead { 
+      display: table-header-group; 
+    }
+    
+    /* Special class for when preparing to print - adds by JS */
+    body.preparing-to-print .calendar-row.has-area-color {
+      background-color: var(--row-area-color, transparent) !important;
+    }
+  /* End @media print */

@@ -588,6 +588,7 @@ function applyDepartmentTagColors() {
         "UW": "#d8f8ff", "INCY": "#f542dd", "TEST": "#067bf9"
     };
 
+    // 1) JSON map if present, else fallbacks
     if (departmentDataElement) {
         try {
             departmentColors = JSON.parse(departmentDataElement.textContent.trim());
@@ -601,20 +602,46 @@ function applyDepartmentTagColors() {
         departmentColors = fallbackColors;
     }
 
+    // 2) Merge colors from visible Department Counters (helps new codes like SRG)
+    const deptCounters = document.querySelectorAll('.department-counters .counter-item');
+    deptCounters.forEach(counter => {
+        // Try to discover a code
+        let code =
+            counter.getAttribute('data-dept-code') ||
+            counter.dataset?.deptCode ||
+            '';
+
+        if (!code) {
+            const label = (counter.querySelector('.counter-label')?.textContent || counter.textContent || '').trim();
+            const m = label.match(/\(([A-Za-z0-9]{2,6})\)/); // e.g. "Surgical Adviser (SRG)"
+            if (m) code = m[1];
+        }
+
+        const bg = counter.style.backgroundColor || getComputedStyle(counter).backgroundColor;
+        if (code && bg && bg !== 'rgba(0, 0, 0, 0)') {
+            departmentColors[code.toUpperCase()] = bg;
+        }
+    });
+
+    // 3) Apply to all pills in calendar & table views
     const departmentTags = document.querySelectorAll('.department-tag, .calendar-department-tag');
 
     departmentTags.forEach(tag => {
-        const raw  = tag.getAttribute('data-dept-code') || tag.textContent.trim();
+        const raw  = tag.getAttribute('data-dept-code') || tag.dataset?.deptCode || tag.textContent.trim();
         const code = raw && (departmentColors[raw] ? raw : raw.toUpperCase());
         const col  = departmentColors[code]
             || tag.getAttribute('data-color')
             || tag.style.backgroundColor
             || '#cccccc';
 
-        // Make it win everywhere (fixes light-mode whitening)
+        // Win everywhere (fixes light-mode whitening & helps print)
         tag.style.setProperty('background-color', col, 'important');
         tag.style.setProperty('background',       col, 'important');
         tag.style.setProperty('background-image', 'none', 'important');
+
+        // Expose for print/other CSS
+        tag.style.setProperty('--tag-color', col);
+        tag.setAttribute('data-color', col);
 
         if (typeof ensureTextContrast === 'function') {
             ensureTextContrast(tag);

@@ -575,12 +575,12 @@ class CalendarView {
                 content.appendChild(mainUnit);
             }
 
-            // Department tags (limit to 3)
+            // Department tags (show all)
             if (day.departments && day.departments.length > 0) {
                 const depts = document.createElement('div');
                 depts.className = 'calendar-departments';
                 
-                day.departments.slice(0, 3).forEach(deptCode => {
+                day.departments.forEach(deptCode => {
                     const dept = this.departments?.find(d => d.code === deptCode);
                     if (dept) {
                         const tag = document.createElement('span');

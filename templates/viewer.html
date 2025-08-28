@@ -221,4 +221,58 @@
         }
     }
 </script>
+
+<script>
+  // Minimal contrast helper (keeps text readable on light/dark pills)
+  function ensureTextContrast(el) {
+    try {
+      const rgb = (getComputedStyle(el).backgroundColor.match(/\d+/g) || []).map(Number);
+      if (rgb.length < 3) return;
+      const yiq = (rgb[0]*299 + rgb[1]*587 + rgb[2]*114) / 1000;
+      el.style.color = yiq >= 128 ? '#000' : '#fff';
+    } catch(_) {}
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // 1) Try to load a server-provided map if present
+    let map = {};
+    const fallback = {
+      "SFX":"#ffd8e6","STN":"#ffecd8","CR":"#d8fff2","ST":"#f2d8ff",
+      "PR":"#d8fdff","LL":"#e6ffd8","VFX":"#d8e5ff","ANI":"#ffedd8",
+      "UW":"#d8f8ff"
+    };
+
+    const dd = document.getElementById('department-data');
+    if (dd && dd.textContent) {
+      try { map = JSON.parse(dd.textContent.trim()); } catch(_) {}
+    }
+
+    // 2) If no map yet, try to learn from any visible counters on the page
+    if (!Object.keys(map).length) {
+      document.querySelectorAll('.department-counters .counter-item').forEach(counter => {
+        let code = counter.getAttribute('data-dept-code') || (counter.querySelector('.counter-label')?.textContent || '').match(/\(([A-Za-z0-9]{2,6})\)/)?.[1];
+        const bg  = counter.style.backgroundColor || getComputedStyle(counter).backgroundColor;
+        if (code && bg && bg !== 'rgba(0, 0, 0, 0)') map[code.toUpperCase()] = bg;
+      });
+    }
+
+    if (!Object.keys(map).length) map = fallback;
+
+    // 3) Paint all pills in the viewer
+    document.querySelectorAll('.calendar-department-tag, .department-tag').forEach(tag => {
+      const raw  = tag.getAttribute('data-dept-code') || tag.dataset.deptCode || tag.textContent || '';
+      const code = raw.trim().toUpperCase();
+      const col  = map[code] || tag.getAttribute('data-color') || tag.style.backgroundColor || '#cccccc';
+
+      tag.style.setProperty('background-color', col, 'important');
+      tag.style.setProperty('background',       col, 'important');
+      tag.style.setProperty('background-image', 'none', 'important');
+      tag.style.setProperty('--tag-color', col);
+      tag.setAttribute('data-color', col);
+
+      ensureTextContrast(tag);
+    });
+  });
+</script>
+
 {% endblock %}

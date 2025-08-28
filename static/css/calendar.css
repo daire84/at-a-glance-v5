@@ -2106,3 +2106,12 @@ textarea#mainUnit:focus {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* === BANK HOLIDAY COLORS FOR TABLE VIEW === */
+.calendar-row.bank-holiday,
+.calendar-row[data-type="bank-holiday"],
+.calendar-row[data-day-type="bank-holiday"],
+.calendar-row.holiday[data-is-bank-holiday="true"],
+.calendar-row.special-date.bank-holiday {
+    background-color: var(--holiday-color, color-mix(in srgb, #FF9800 75%, var(--background-alt))) !important;
+}
